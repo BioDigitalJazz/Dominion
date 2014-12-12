@@ -1,5 +1,415 @@
-extends layout
 
-block content
-  h1= title
-  p Welcome to #{title}
+doctype html
+html
+    head
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1')
+        title IndexedDB with Treo
+
+        link(rel='stylesheet', type='text/css', href='build/build.css')
+
+    body
+        article
+
+            section(data-bespoke-state='emphatic')
+                h1 Offline Storage
+                h2 in the Browser
+
+            section
+                div#profile-pic
+
+                h2 James Bunt
+                h3
+                    a(href='https://twitter.com/unkillbob') @unkillbob 
+                br
+                h3 Front End Engineer
+
+                h3#vend-logo
+
+            section
+                h2.bullet Offline? What?
+                br
+                h3.bullet
+                    code userExperience++
+
+            section
+                h2.bullet In the beginning...
+
+                h2.bullet ... there was storage
+
+            section
+                h2 DOM Storage
+
+                br.bullet
+                ul
+                    li key-value (both Strings)
+                    li sessionStorage - duration of session
+                    li localStorage - persistent
+                    li limited capacity
+
+            section
+                h2 WebSQL
+
+                br.bullet
+                ul
+                    li Asynchronous, transactional, relational database
+                    li Much larger capacity
+                    li Deprecated :(
+
+            section
+                h1 IndexedDB
+
+                br.bullet
+                div.bullet
+
+                    blockquote "IndexedDB is an API for client-side storage of significant amounts of structured data, which also enables high performance searches of this data using indexes."
+                        br
+                        br
+                        cite - 
+                            a(href='https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API') MDN
+
+            section(data-bespoke-state='emphatic')
+
+                h2 Asynchronous
+
+            section(data-bespoke-state='emphatic')
+
+                h2 Transactional
+
+                // Container for db operations that ensures consistency and ability to abort, rollback
+            section(data-bespoke-state='emphatic')
+
+                h2 Object Store
+
+                // key-value
+                // keys can be properties of the value
+                // keys can be generated
+            section(data-bespoke-state='emphatic')
+
+                h2 Indexed
+
+                // Any property of the object
+                // Fast lookup or sorted enumeration
+            section
+                h1.bullet API
+
+                pre.bullet
+                    code.language-javascript.
+                        var IDB = window.indexedDB;
+
+            section
+                h2 Open a Database
+                pre
+                    code.language-javascript.
+                        var req = IDB.open('MyDB', 1),
+                            myDB;
+
+                        req.onsuccess = function (event) {
+                            myDB = event.target.result;
+                        };
+
+                        req.onerror = function (event) { ... };
+
+            section
+                h2 Create / Update Schema
+                pre
+                    code.language-javascript.
+                        req.onupgradeneeded = function(event) {
+
+                            if (event.oldVersion < 1) {
+                                // Create some stores & indexes
+
+                            } else if (event.oldVersion < 2) {
+                                 // ...
+                            }
+                        };
+
+            section
+                h2 ... Create Stores
+                pre
+                    code.language-javascript.
+                        var myStore = myDB.createObjectStore('MyStore', {
+
+                            // Key stored in this property on the object
+                            keyPath: 'myKey',
+
+                            // Key is auto generated for you
+                            autoIncrement: true
+                        });
+
+            section
+                h2 ... Create Indexes
+                pre
+                    code.language-javascript.
+                        myStore.createIndex('byId', 'id', {
+                            unique: true,
+                            multiEntry: false
+                        });
+
+                // If `multiEntry` === true - would index all values in array if
+                // keyPath value were array
+            section
+                h2 Add Some Data
+                pre.bullet
+                    code.language-javascript.
+                        var tx = myDB.transaction(['myStore'], 'readwrite');
+
+                        var myStore = tx.objectStore('myStore');
+
+                pre.bullet
+                    code.language-javascript.
+                        var request = myStore.add({ /* some data */ }, key);
+
+                        request.onsuccess = function (event) { ... };
+
+            section
+                h2 ... Or Update/Delete Data
+                pre
+                    code.language-javascript.
+                        // Adds if key doesn't exist, Replaces if does
+                        myStore.put({ /* the data */ }, 'key1');
+
+                        myStore.delete('keyToDelete');
+
+                // put key is optional, will add if key doesn't exist
+            section
+                h2 Read Some Data
+                pre.bullet
+                    code.language-javascript.
+                        myDB.transaction(['myStore'], 'readonly')
+
+                pre.bullet
+                    code.language-javascript.
+                        var request = myStore.get('keyToLookup');
+
+                        request.onsuccess = function (event) {
+                            var data = event.target.result;
+                        };
+
+            section
+                h2 ... Or Iterate
+                pre
+                    code.language-javascript.
+                        var request = myStore.openCursor(/* range, dir */);
+
+                        request.onsuccess = function (event) {
+                            var cursor = event.target.result;
+
+                            console.log(cursor.key + ': ' + cursor.value);
+
+                            cursor.continue();
+                        };
+
+            section
+                h2.bullet Indexes?
+                pre.bullet
+                    code.language-javascript.
+                        var index = myStore.index('byId');
+
+                        index.count(...);
+
+                        index.get(...);
+
+                        index.openCursor(...);
+
+            section
+                h2.bullet Verbose? Raw?
+                br
+                br
+                h2.bullet By Design: Unopinionated
+                br
+                h2.bullet Use a Wrapper
+
+            section
+                h1 Wrapper Libraries
+
+            section
+                h2.bullet Checklist
+                br
+                ul.check-list
+                    li
+                        input(type='checkbox',checked)
+                        h3 Everything
+
+            section
+                h2.bullet No Really
+                br
+                ul.check-list.left-align
+                    li
+                        input(type='checkbox',checked)
+                        h3 Multiple Object Stores
+                    li
+                        input(type='checkbox',checked)
+                        h3 Iteration (cursors or similar)
+                    li
+                        input(type='checkbox',checked)
+                        h3 Multi-store Transactions
+
+            section
+                h2 IDBWrapper
+                a.bullet(href='https://github.com/jensarps/IDBWrapper') https://github.com/jensarps/IDBWrapper
+                br
+                h3.bullet Limited to a single object store
+
+            section
+                h2 DB.js
+                a.bullet(href='https://github.com/aaronpowell/db.js') https://github.com/aaronpowell/db.js
+                br
+                h3.bullet No iteration API or access to cursors
+
+            section
+                h1 Treo
+
+                h3.bullet
+                    a(href='https://github.com/alekseykulikov/treo') https://github.com/alekseykulikov/treo
+                pre.bullet
+                    code.language-javascript.
+                        var treo = require('treo');
+                        var treo = window.treo;
+
+            section
+                h2 Create Schema &amp; Database
+                pre.bullet
+                    code.language-javascript.
+                        var schema = treo.schema()
+                            .version(1)
+                              .addStore('myStore', { key: 'myKey' })
+                              .addIndex('byId', 'id', { unique: true })
+                            .version(2)
+                              .getStore('myStore')
+                              .addIndex('byName', 'name');
+                pre.bullet
+                    code.language-javascript.
+                        var myDB = treo('myDB', schema); // Synchronous
+
+            section
+                h2 Add Some Data
+                pre.bullet
+                    code.language-javascript.
+                        var myStore = myDb.store('myStore');
+                        myStore.put('key', {/* data */}, function (err) {
+                            if (err) { 
+                                // failed
+                            } // else success
+                        });
+                pre.bullet
+                    code.language-javascript.
+                        myStore.put({/* data */}, function(err) { ... });
+
+            section
+                h2 ... Or Lots of Data
+                pre
+                    code.language-javascript.
+                        myStore.batch({
+                            key1: 'new value',
+                            key2: null, // delete
+                            key3: 'updated value'
+                        }, fn);
+
+                        myStore.batch([
+                            { key: 'key1', val: 'value' },
+                            { key: 'key2', val: 'another value'}
+                        ], fn);
+
+            section
+                h2 Read Some Data
+                pre
+                    code.language-javascript.
+                        myStore.get('keyToLookup', function (err, val) {
+                            if (err) {
+                                // failed
+                            } else {
+                                console.log('Found: ' + val);
+                            }
+                        });
+
+            section
+                h2.bullet Synchronous
+                pre.bullet
+                    code.language-javascript.
+                        var schema = treo.schema(), // Sync
+                            db = treo('db', schema), // Sync
+                            store = db.store('store'); // Sync
+
+                        store.get(...) // First async
+
+                ul
+                    li Opens database connection
+                    li Handles onupgradeneeded - creates stores, indexes
+                    li Opens transaction (appropriate for put/get)
+                    li Performs the actual put/get
+
+            section
+                h2 Index!
+                pre
+                    code.language-javascript.
+                        var byYear = myStore.index('byYear');
+
+                        byYear.get(2014, fn);
+                        byYear.get({ gte: 1999 }, fn);
+
+            section
+                h2.bullet Iteration?
+                pre.bullet
+                    code.language-javascript.
+                        store.cursor(opts, fn)
+                        index.cursor(opts, fn)
+                br
+                h2.bullet Transactions?
+                pre.bullet
+                    code.language-javascript.
+                        db.transaction(type, stores, fn)
+
+            section
+                h2.bullet Don't like callbacks?
+                br
+                h3.bullet Promises plugin!
+                pre.bullet
+                    code.language-javascript.
+                        var promise = window.treoPromise;
+                        myDB.use(promise());
+
+                        myDB.store('myStore').get('key1')
+                            .then(function (data) {
+                                // success!
+                            }, function (err) {
+                                // error
+                            });
+
+            section
+                h2.bullet Bonus Wrapper:
+                h2.bullet Dexie.js
+                a.bullet(href='http://www.dexie.org/') http://www.dexie.org/
+                br
+                h3.bullet Beautifully marketed
+                h3.bullet Extensively documented
+                h3.bullet Worth a look
+
+            section
+                h2.bullet Offline? What?
+                br
+                ul.left-align
+                    li
+                        h3 Not for everyone
+                    li
+                        h3
+                            code userExperience++
+                    li
+                        h3
+                            code IndexedDB++
+                    li
+                        h3
+                            code treo++
+
+            section
+                h1#vend-logo-large
+                br
+                br
+                h3 Come build beautiful, fast,
+                    br
+                    | offline-capable apps with me
+                br
+                h3
+                    a(href='https://www.vendhq.com/careers') https://www.vendhq.com/careers
+
+        script(src='build/build.js')
