@@ -6,4 +6,9 @@ router.get('/', function(req, res) {
   res.render('index', { title: 'Express' });
 });
 
+/* GET static play page. */
+router.get('/game', function(req, res) {
+  res.render('game', { title: 'Game Page' });
+});
+
 module.exports = router;

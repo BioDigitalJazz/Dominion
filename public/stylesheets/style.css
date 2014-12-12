@@ -1,8 +1,161 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  width: 1200px;
+  height: 700px;
+  border: 1px solid black;
+  font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+}
+
+#turn-stats p {
+  margin: 0 10px;
+  padding: 5px 0;
+}
+
+#play-prompt p {
+  padding: 5px 10px;
+  font-size: 24px;
+}
+
+div, img {
+  box-sizing: border-box;
+  border: 1px dotted black;
+}
+
+#column-left {
+  float: left;
+  display: flex;
+  flex-direction: column;
+  width: 17.5%;
+  height: 100%;
+}
+
+#column-middle {
+  float: left;
+  display: flex;
+  flex-direction: column;
+  width: 55%;
+  height: 100%;
+}
+
+#column-right {
+  float: left;
+  display: flex;
+  flex-direction: column;
+  width: 27.5%;
+  height: 100%;
+}
+
+#area-supply-nonaction {
+  width: 100%;
+  height: 50%;
+}
+
+.col-supply-nonaction {
+  float: left;
+  width: 50%;
+  height: 100%;
+  flex-direction: column;
+  /*justify-content: flex-start;*/
+  align-items: flex-start;
+}
+
+.supply-curse, .supply-victory, .supply-treasure {
+  width: 90%;
+  height: 23%;
+  margin-top: 8%;
+}
+
+#area-player-aside {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  height: 50%;
+}
+
+.player-aside {
+  width: 45%;
+  height: 44%;
+  margin-top: 12%;
+}
+
+#area-supply-kingdom {
+  width: 100%;
+  height: 31.4%;
+}
+
+.row-supply-kingdom {
+  width: 100%;
+  height: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.supply-kingdom {
+  width: 18%;
+  height: 90%;
+  margin-right: 2%;
+  border: 1px dashed red;
+}
+
+#area-play-center {
+  width: 100%;
+  height: 42.8%;
+}
+
+#turn-stats {
+  float: left;
+  width: 30%;
+  height: 30%;
+}
+
+#play-prompt {
+  float: left;
+  width: 70%;
+  height: 30%;
+}
+
+#play-area {
+  clear: left;
+  width: 100%
+  height: 70%
+}
+
+#area-player-hand {
+  width: 100%;
+  height: 25.8%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
+img.player-action {
+  width: 18%;
+  height: 100%;
+  margin-right: 2%;
+  border: 1px dashed red;
+}
+
+#area-log {
+  width: 100%;
+  height: 74.2%;
+}
+
+#log-box {
+  width: 90%;
+  height: 90%;
+  margin: auto;
+  margin-top: 5%;
+}
+
+#area-player-scroll {
+  width: 100%;
+  height: 25.8%;
 }
