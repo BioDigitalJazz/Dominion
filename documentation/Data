@@ -1,0 +1,48 @@
+* Game
+  - supply_cards
+  - players
+  - current_player
+  
+
+* Player
+  - name
+  ----- array of cards -----
+  - hand
+  - deck
+  - discardPile
+  --------------------------
+  ===== methods =====
+  - gainCard()
+  - gainAction()
+  - gainCoin()
+  - gainBuy()
+  - revealCard()
+  - drawCard()
+  - discard()
+  - trash()
+  (note: reaction cards - check when attacked, negate attack if any)  
+
+
+* Card
+  - id
+  - name
+  - cost
+  - image_file
+  ----- boolean fields -----
+  (note: to allow for expansion sets with multi-type cards in the future)
+  - types {}
+    - kingdom
+    - action
+    - treasure
+    - victory
+    - curse
+    - attack
+    - reaction
+  --------------------------
+  ===== methods =====
+  - play()
+    (note: each SomeCard class implements differently)
+  - getVictoryPoints()
+  - getWorth()
+
+  (note: individual types of cards stored in a JSON file)
