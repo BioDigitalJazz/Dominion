@@ -58,15 +58,24 @@ app.use(function(err, req, res, next) {
 
 // === Ting ===
 // Testing Socket.io
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
 
-server.listen(4000);
+var debug = require('debug')('dominion');
 
-io.on('connection', function (socket) {
+app.set('port', process.env.PORT || 3000);
+
+var server = app.listen(app.get('port'), function() {
+  debug('Express server listening on port ' + server.address().port);
+});
+
+var io = require('socket.io').listen(server);
+
+// server.listen(3000);
+
+io.sockets.on('connection', function (socket) {
   // socket.emit('You are connected!');
+  console.log('Connection!');
 
-  socket.on('Prompt Message', function (msg) {
+  socket.on('prompt message', function (msg) {
     console.log(msg);
   });
 });

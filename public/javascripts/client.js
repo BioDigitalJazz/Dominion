@@ -1,5 +1,7 @@
-var socket = io();
 
-var msg = prompt('Message to Send');
+$('#start-game').on('click', function() {
+  var socket = io();
+  var msg = prompt('Message to Send');
 
-socket.emit('Prompt Message', msg);
+  socket.emit('prompt message', msg);
+});
