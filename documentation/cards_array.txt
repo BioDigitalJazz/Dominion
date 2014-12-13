@@ -1,0 +1,1 @@
+['copper', 'silver', 'gold', 'estate', 'duchy', 'province', 'curse', 'adventurer', 'cellar', 'bureaucrat', 'chancellor', 'chapel', 'council room;, 'feast', 'festival', 'gardens', 'laboratory', 'library', 'market', 'militia', 'mine', 'moat', 'moneylender', 'remodel', 'smithy', 'spy', 'theif', 'throne room', 'village', 'witch', 'woodcutter', 'workshop]
