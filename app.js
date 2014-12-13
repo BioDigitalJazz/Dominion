@@ -56,5 +56,22 @@ app.use(function(err, req, res, next) {
     });
 });
 
+// === Ting ===
+// Testing Socket.io
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
+server.listen(4000);
+
+io.on('connection', function (socket) {
+  // socket.emit('You are connected!');
+
+  socket.on('Prompt Message', function (msg) {
+    console.log(msg);
+  });
+});
+
+// === Ting ===
+
 
 module.exports = app;
