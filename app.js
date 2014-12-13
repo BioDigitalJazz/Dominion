@@ -67,16 +67,17 @@ var server = app.listen(app.get('port'), function() {
   debug('Express server listening on port ' + server.address().port);
 });
 
-var io = require('socket.io').listen(server);
+var io = require('socket.io')(server);
 
 // server.listen(3000);
 
-io.sockets.on('connection', function (socket) {
+io.on('connection', function (socket) {
   // socket.emit('You are connected!');
-  console.log('Connection!');
+  console.log('New connection!');
 
-  socket.on('prompt message', function (msg) {
-    console.log(msg);
+  socket.on('user name', function (user) {
+    console.log(user);
+    io.emit('new user', 'User: ' + user + ' joins the game');
   });
 });
 

@@ -1,7 +1,11 @@
 
 $('#start-game').on('click', function() {
   var socket = io();
-  var msg = prompt('Message to Send');
 
-  socket.emit('prompt message', msg);
+  var user = prompt('User Name:');
+  socket.emit('user name', user);
+
+  socket.on('new user', function (newUserMsg) {
+    $('#start-msg').text(newUserMsg);
+  });
 });
