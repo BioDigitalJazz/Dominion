@@ -1,0 +1,86 @@
+Database:
+  * IndexedDB: Client-side database API
+    (note: new tech in HTML 5)
+    https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API
+
+  * JSON file
+
+User Stories:
+  ./User_Stories
+
+Deployment:
+  * Local
+  * 2 Players for demo. Support for up to 4 players
+
+Data:
+  Save game states in IndexedDB, for pausing/restarting the game
+  Classes:
+    * Game
+    * Player
+    * Card
+
+  ./Data
+
+Server Framework:
+  * Node.js
+  * Express
+  * Angular.js (for UI routing only. Official doc says Angular not fit for games.... Maybe use angular-ui/ui-router)
+
+Routes:
+  (note: Do not track rounds, just current player)
+
+  GET /player/:player_id/turn
+
+  POST /player/:player_id/card/:card_id/play
+
+  POST /player/:player_id/gain
+    (note: Buy and Gain cards. 
+           If Buy, check if enough money on server-side, IDs for the bought cards in the POST body)
+
+  POST /player/:player_id/discard
+
+  POST /player/:player_id/trash
+
+  POST /player/:player_id/card/:card_id/putondeck
+
+Wireframe:
+  ./Wireframe_Landing.png
+  ./Wireframe_Play.png
+
+UI Framework:
+  No framework. Manual styling
+  (SASS?)
+
+JS MVC Framework:
+  Node + Express. Angular for routing
+
+Testing Suite:
+  (note: basic unit testing for Player and Card class. More inf necessary)
+  * Mocha
+    (temp choice)
+
+Git:
+
+Milestones:
+  * Communicate: Email, Call
+  * Trello - (No for now. See how far we get without it)
+  * Build atomically. Commit frequently
+
+Scaffolding:
+  Front-end:
+    * Static pages/layouts first
+    * Views: 
+        index.jade (landing page)
+        game.jade (playing page)
+  Back-end:
+
+
+Game Flow:
+  Client joins game
+  Server initializes game
+
+  Each turn:
+    1. Client performs task(s).
+    2. Client sends message about tasks to server
+    3. Server broadcast message to every client
+    4. Every client executes code according to the message

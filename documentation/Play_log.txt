@@ -1,0 +1,184 @@
+------------ Game Setup ------------
+Supply cards: Cellar, Chapel, Gardens, Militia, Moneylender, Remodel, Smithy, Throne Room, Laboratory, Mine, Copper, Silver, Gold, Estate, Duchy, Province, Curse
+Rating system: pro
+tfc2014 - starting cards: Estate, Estate, Estate, Copper, Copper, Copper, Copper, Copper, Copper, Copper
+Villager Bot - starting cards: Estate, Estate, Estate, Copper, Copper, Copper, Copper, Copper, Copper, Copper
+tfc2014 - shuffles deck
+Villager Bot - shuffles deck
+tfc2014 - draws Copper, Copper, Copper, Copper, Estate
+Villager Bot - draws Estate, Copper, Copper, Copper, Estate
+ 
+---------- tfc2014: turn 1 ----------
+tfc2014 - plays 4 Copper
+tfc2014 - buys Smithy
+tfc2014 - gains Smithy
+tfc2014 - draws Estate, Copper, Copper, Copper, Estate
+ 
+---------- Villager Bot: turn 1 ----------
+Villager Bot - plays 3 Copper
+Villager Bot - buys Silver
+Villager Bot - gains Silver
+Villager Bot - draws Copper, Copper, Estate, Copper, Copper
+ 
+---------- tfc2014: turn 2 ----------
+tfc2014 - plays 3 Copper
+tfc2014 - buys Cellar
+tfc2014 - gains Cellar
+tfc2014 - shuffles deck
+tfc2014 - draws Smithy, Estate, Copper, Estate, Copper
+ 
+---------- Villager Bot: turn 2 ----------
+Villager Bot - plays 4 Copper
+Villager Bot - buys Militia
+Villager Bot - gains Militia
+Villager Bot - shuffles deck
+Villager Bot - draws Copper, Estate, Estate, Copper, Copper
+ 
+---------- tfc2014: turn 3 ----------
+tfc2014 - plays Smithy
+tfc2014 - draws Copper, Copper, Cellar
+tfc2014 - buys Copper
+tfc2014 - gains Copper
+tfc2014 - draws Copper, Copper, Copper, Estate
+tfc2014 - shuffles deck
+tfc2014 - draws Estate
+ 
+---------- Villager Bot: turn 3 ----------
+Villager Bot - plays 3 Copper
+Villager Bot - buys Silver
+Villager Bot - gains Silver
+Villager Bot - draws Estate, Copper, Copper, Militia, Copper
+ 
+---------- tfc2014: turn 4 ----------
+tfc2014 - plays 3 Copper
+tfc2014 - buys Chapel
+tfc2014 - gains Chapel
+tfc2014 - draws Copper, Copper, Cellar, Copper, Estate
+ 
+---------- Villager Bot: turn 4 ----------
+Villager Bot - plays Militia
+tfc2014 - discards Copper
+tfc2014 - discards Copper
+Villager Bot - plays 3 Copper
+Villager Bot - buys Laboratory
+Villager Bot - gains Laboratory
+Villager Bot - draws Silver, Copper
+Villager Bot - shuffles deck
+Villager Bot - draws Estate, Copper, Copper
+ 
+---------- tfc2014: turn 5 ----------
+tfc2014 - plays Cellar
+tfc2014 - discards Copper
+tfc2014 - discards Estate
+tfc2014 - draws Smithy, Copper
+tfc2014 - plays Smithy
+tfc2014 - draws Copper
+tfc2014 - shuffles deck
+tfc2014 - draws Copper, Copper
+tfc2014 - plays 4 Copper
+tfc2014 - buys Militia
+tfc2014 - gains Militia
+tfc2014 - draws Chapel, Copper, Estate, Estate, Copper
+ 
+---------- Villager Bot: turn 5 ----------
+Villager Bot - plays 3 Copper, 1 Silver
+Villager Bot - buys Laboratory
+Villager Bot - gains Laboratory
+Villager Bot - draws Copper, Copper, Copper, Militia, Laboratory
+ 
+---------- tfc2014: turn 6 ----------
+tfc2014 - plays Chapel
+tfc2014 - plays Copper
+tfc2014 - plays Copper
+tfc2014 - buys Chapel
+tfc2014 - gains Chapel
+tfc2014 - draws Copper, Copper, Estate
+tfc2014 - shuffles deck
+tfc2014 - draws Chapel, Copper
+ 
+---------- Villager Bot: turn 6 ----------
+Villager Bot - plays Laboratory
+Villager Bot - draws Silver, Copper
+Villager Bot - plays Militia
+tfc2014 - discards Estate
+tfc2014 - discards Copper
+Villager Bot - plays 4 Copper, 1 Silver
+Villager Bot - buys Province
+Villager Bot - gains Province
+Villager Bot - draws Estate, Estate
+Villager Bot - shuffles deck
+Villager Bot - draws Laboratory, Copper, Copper
+ 
+---------- tfc2014: turn 7 ----------
+tfc2014 - plays 2 Copper
+tfc2014 - buys Cellar
+tfc2014 - gains Cellar
+tfc2014 - draws Cellar, Copper, Smithy, Chapel, Militia
+ 
+---------- Villager Bot: turn 7 ----------
+Villager Bot - plays Laboratory
+Villager Bot - draws Silver, Copper
+Villager Bot - plays 3 Copper, 1 Silver
+Villager Bot - buys Laboratory
+Villager Bot - gains Laboratory
+Villager Bot - draws Copper, Copper, Laboratory, Copper, Estate
+ 
+---------- tfc2014: turn 8 ----------
+tfc2014 - plays 1 Copper
+tfc2014 - draws Copper, Copper, Copper, Copper, Estate
+ 
+---------- Villager Bot: turn 8 ----------
+Villager Bot - plays Laboratory
+Villager Bot - draws Silver, Copper
+Villager Bot - plays 4 Copper, 1 Silver
+Villager Bot - buys Gold
+Villager Bot - gains Gold
+Villager Bot - draws Province, Militia
+Villager Bot - shuffles deck
+Villager Bot - draws Copper, Copper, Estate
+ 
+---------- tfc2014: turn 9 ----------
+tfc2014 - plays 4 Copper
+tfc2014 - buys Smithy
+tfc2014 - gains Smithy
+tfc2014 - draws Estate
+tfc2014 - shuffles deck
+tfc2014 - draws Estate, Copper, Copper, Copper
+ 
+---------- Villager Bot: turn 9 ----------
+Villager Bot - plays Militia
+tfc2014 - discards Estate
+tfc2014 - discards Estate
+Villager Bot - plays 2 Copper
+Villager Bot - buys Throne Room
+Villager Bot - gains Throne Room
+Villager Bot - draws Silver, Copper, Estate, Copper, Copper
+ 
+---------- tfc2014: turn 10 ----------
+tfc2014 - plays 3 Copper
+tfc2014 - buys Chapel
+tfc2014 - gains Chapel
+tfc2014 - draws Copper, Cellar, Estate, Copper, Militia
+ 
+---------- Villager Bot: turn 10 ----------
+Villager Bot - plays 3 Copper, 1 Silver
+Villager Bot - buys Laboratory
+Villager Bot - gains Laboratory
+Villager Bot - draws Estate, Copper, Gold, Laboratory, Laboratory
+ 
+---------- tfc2014: turn 11 ----------
+tfc2014 - plays Cellar
+ 
+------------ Game Over ------------
+Villager Bot - cards: 4 Laboratory, 1 Throne Room, 1 Militia, 7 Copper, 2 Silver, 1 Gold, 3 Estate, 1 Province
+Villager Bot - total victory points: 9
+Villager Bot - turns: 10
+ 
+tfc2014 - resigned
+tfc2014 - cards: 3 Chapel, 2 Smithy, 1 Militia, 1 Cellar, 8 Copper, 3 Estate
+tfc2014 - total victory points: 3
+tfc2014 - turns: 10
+ 
+1st place: Villager Bot
+2nd place: tfc2014
+ 

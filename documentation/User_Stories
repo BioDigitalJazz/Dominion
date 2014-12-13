@@ -1,0 +1,45 @@
+As a player:
+
+  1) I put down my name and wait for enough people to join the game
+
+  2) I can start the game once there are 2-4 players
+
+--------------------
+
+As a player in a game:
+
+  3) I get a starting deck
+     (note: starting set of ten Action cards, randomly selected)
+
+  4) I get to play in turn
+
+--------------------
+
+As a player who has the turn:
+
+  5) I can play Action cards (if in hand)
+
+  6) I can buy cards (if enough money)
+
+  ./User_Stories_Action_Cards
+--------------------
+
+As a player at the end of my turn
+
+  7) I discard all cards in play
+
+  8) I draw five new cards from my deck
+
+--------------------
+
+As a player who does not have the turn:
+
+9) I see what the other player(s) does
+
+--------------------
+
+As a player
+
+10) I play until the game ends
+
+11) I see who wins when the game ends
