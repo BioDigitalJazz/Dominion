@@ -1,1 +1,3 @@
 node_modules
+lib/card_json.js
+lib/cards.json
