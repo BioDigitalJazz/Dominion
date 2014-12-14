@@ -5,9 +5,15 @@ var pInputs = $('.joined-players');
 var btnStart = $('#btn-start-game');
 btnStart.hide();
 
+$('#btn-join-game').on('click', function() {
+  var input = $(this).prev();
+  socket.emit('player joins', input.val());
+  input.prop('disabled', true);
+  $(this).hide();
+});
 
-socket.on('player joined', function (curPlayers) {
-  players = curPlayers;
+socket.on('player joined', function (data) {
+  players = data.curPlayers;
 
   players.forEach( function (player, index) {
     pInputs.eq(index).val(player);
@@ -16,19 +22,11 @@ socket.on('player joined', function (curPlayers) {
 });
 
 
-$('#btn-join-game').on('click', function() {
-  var input = $(this).prev();
-  socket.emit('player joins', input.val());
-  input.prop('disabled', true);
-  $(this).hide();
+btnStart.on('click', function() {
+  socket.emit('start game');
 });
 
-
-btnStart.on('click', function() {
-  var user = prompt('User Name:');
-  socket.emit('user name', user);
-
-  socket.on('new user', function (newUserMsg) {
-    $('#start-msg').text(newUserMsg);
-  });
+socket.on('game starts', function () {
+  console.log('game starts');
+  window.location.href = '/game';
 });
