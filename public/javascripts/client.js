@@ -6,9 +6,8 @@ var btnStart = $('#btn-start-game');
 btnStart.hide();
 
 
-socket.on('player joined', function (newPlayerName) {
-  players.push(newPlayerName);
-  console.log(players);
+socket.on('player joined', function (curPlayers) {
+  players = curPlayers;
 
   players.forEach( function (player, index) {
     pInputs.eq(index).val(player);

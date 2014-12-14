@@ -76,7 +76,7 @@ io.on('connection', function (socket) {
 
   socket.on('player joins', function (playerName) {
     players.push(playerName);
-    io.emit('player joined', playerName);
+    io.emit('player joined', { curPlayers: players });
   });
 });
 
