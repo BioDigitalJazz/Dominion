@@ -14,8 +14,44 @@ body {
   font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-a {
-  color: #00B7FF;
+@font-face {
+  font-family: "BlackChancery";
+  src: local("BlackChancery"),
+       url('/fonts/black_chancery.ttf');
+}
+
+h1 {
+  width: 60%;
+  height: 20%;
+  margin: auto;
+  padding-top: 30px;
+/*  border: 1px solid black;*/
+
+  color: #000033;
+  font: 90px "BlackChancery", Georgia, Times, serif;
+  text-align: center;
+  letter-spacing: 0.1em;
+}
+
+#init-game {
+  width: 50%;
+  margin: auto;
+  border: 1px solid black;
+  font-size: 18px;
+}
+
+input[type="text"] {
+  display: block;
+  margin: 20px;
+  width: 70%;
+  font-size: 18px;
+  border: solid 1px #dcdcdc;
+  transition: box-shadow 0.3s, border 0.3s;
+}
+
+input[type="text"]:focus {
+  border: solid 1px #000033;
+  box-shadow: 0 0 5px 1px #969696;
 }
 
 #turn-stats p {
