@@ -68,16 +68,15 @@ var server = app.listen(app.get('port'), function() {
 });
 
 var io = require('socket.io')(server);
-
-// server.listen(3000);
+var players = [];
 
 io.on('connection', function (socket) {
   // socket.emit('You are connected!');
   console.log('New connection!');
 
-  socket.on('user name', function (user) {
-    console.log(user);
-    io.emit('new user', 'User: ' + user + ' joins the game');
+  socket.on('player joins', function (playerName) {
+    players.push(playerName);
+    io.emit('player joined', playerName);
   });
 });
 
