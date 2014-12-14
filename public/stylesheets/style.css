@@ -41,17 +41,27 @@ h1 {
 }
 
 input[type="text"] {
-  display: block;
-  margin: 20px;
+  display: inline-block;
+  margin: 20px 30px;
   width: 70%;
-  font-size: 18px;
   border: solid 1px #dcdcdc;
   transition: box-shadow 0.3s, border 0.3s;
+  font-size: 20px;
 }
 
 input[type="text"]:focus {
   border: solid 1px #000033;
   box-shadow: 0 0 5px 1px #969696;
+}
+
+button {
+  border-radius: 10px;
+  padding: 5px 15px;
+  font-size: 18px;
+}
+
+button#start-game {
+  margin: 10px 40px;
 }
 
 #turn-stats p {

@@ -7,11 +7,16 @@ block content
       Welcome to #{title}. Please enter your name and click the Join button to join a game. The first person who joined can start the game after two to four people have joined.
     input(name="player-name[]" type="text" 
           placeholder="Player 1: Enter your name")
+    button(class="join-game") Join
     input(name="player-name[]" type="text"
           placeholder="Player 2: Enter your name")
+    button(class="join-game") Join
     input(name="player-name[]" type="text"
           placeholder="Player 3: Enter your name")
+    button(class="join-game") Join
     input(name="player-name[]" type="text"
           placeholder="Player 4: Enter your name")
+    button(class="join-game") Join
+    <br />
     button(id="start-game") Start Game
     p(id="start-msg")
