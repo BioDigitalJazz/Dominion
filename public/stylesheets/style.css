@@ -10,7 +10,7 @@ body {
   width: 1200px;
   height: 700px;
   margin: auto;
-  border: 1px solid black;
+  /*border: 1px solid black;*/
   font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -25,7 +25,6 @@ h1 {
   height: 20%;
   margin: auto;
   padding-top: 30px;
-/*  border: 1px solid black;*/
 
   color: #000033;
   font: 90px "BlackChancery", Georgia, Times, serif;
@@ -36,7 +35,7 @@ h1 {
 #init-game {
   width: 50%;
   margin: auto;
-  border: 1px solid black;
+  border: none;
   font-size: 18px;
 }
 
@@ -61,7 +60,7 @@ button {
 }
 
 button#start-game {
-  margin: 10px 40px;
+  margin: 20px 40px;
 }
 
 #turn-stats p {
