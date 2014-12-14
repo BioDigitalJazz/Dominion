@@ -81,7 +81,12 @@ io.on('connection', function (socket) {
 
   socket.on('start game', function (playerName) {
     console.log('Game starts')
-    io.emit('game starts');
+
+    var demoCards = ['ChancellorCard', 'CouncilRoomCard', 'FestivalCard', 
+      'MarketCard', 'LaboratoryCard', 'SmithyCard', 'VillageCard', 
+      'WoodcutterCard', 'WitchCard', 'WorkshopCArd'];
+
+    io.emit('game starts', { kingdomCards: demoCards } );
   });
 });
 
