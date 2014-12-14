@@ -5,21 +5,20 @@ block content
   div(id="init-game")
     p. 
       Welcome to #{title}. Please enter your name and click the Join button to join a game. The first person who joined can start the game after two to four people have joined.
-    input(name="player-name[]" type="text" 
-          placeholder="Player 1: Enter your name")
-    button(class="join-game") Join
+    input(type="text" placeholder="Enter your name")
+    button(id="btn-join-game") Join
 
-    input(name="player-name[]" type="text" disabled
-          placeholder="Player 2: Enter your name")
-    button(class="join-game") Join
+    input(class="joined-players" name="player-name[]" type="text" disabled
+          placeholder="Waiting for player")
 
-    input(name="player-name[]" type="text" disabled
-          placeholder="Player 3: Enter your name")
-    button(class="join-game") Join
+    input(class="joined-players" name="player-name[]" type="text" disabled
+          placeholder="Waiting for player")
 
-    input(name="player-name[]" type="text" disabled
-          placeholder="Player 4: Enter your name")
-    button(class="join-game") Join
+    input(class="joined-players" name="player-name[]" type="text" disabled
+          placeholder="Waiting for player")
+
+    input(class="joined-players" name="player-name[]" type="text" disabled
+          placeholder="Waiting for player")
     <br />
-    button(id="start-game") Start Game
+    button(id="btn-start-game") Start Game
   script(src='/javascripts/client.js')
