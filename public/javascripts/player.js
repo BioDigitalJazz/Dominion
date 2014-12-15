@@ -76,7 +76,8 @@ Player.prototype.drawCards = function(num) {
 
 Player.prototype.gainCard = function (cardName) {
   this.game.supply[cardName]--;
-  this.discardPile.push(new card[cardName]);
+  var newCard = new cardConstructors[cardName]();
+  this.discardPile.push(newCard);
 };
 
 Player.prototype.gainAction = function(num) {

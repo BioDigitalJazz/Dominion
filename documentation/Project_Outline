@@ -84,3 +84,6 @@ Game Flow:
     2. Client sends message about tasks to server
     3. Server broadcast message to every client
     4. Every client executes code according to the message
+
+  * Client sends message to Server with every click
+  * Server broadcast the change to every client
