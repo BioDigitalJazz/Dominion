@@ -27,11 +27,11 @@ Game.prototype.createPlayers = function(playerNames) {
 }
 
 Game.prototype.getCurrentPlayer = function() {
-  return players[currentPlayerIndex];
+  return this.players[currentPlayerIndex];
 };
 
 Game.prototype.nextPlayer = function(){
-  if (currentPlayerIndex == players.length - 1) {
+  if (currentPlayerIndex == this.players.length - 1) {
     currentPlayerIndex = 0;
   } else {
     currentPlayerIndex++;
@@ -54,8 +54,12 @@ Game.prototype.gameEnd = function(){
 
 // };
 
-var client = require(./client);
-var players = client.players;
+var gamePlayers = window.players;
+var kingdomCards = window.kingdomCards;
 
+var game = Game(kingdomCards);
+game.createPlayers(gamePlayers);
 
-exports.Game = Game;
+console.log(game.getCurrentPlayer());
+game.nextPlayer();
+console.log(game.getCurrentPlayer());
