@@ -53,12 +53,13 @@ Game.prototype.gameEnd = function(){
 // };
 
 // === Ting ===
-var dbName = 'dominion_game';
-var objStore = 'game';
-var openRequest = indexedDB.open(dbName, 1);
 
 var playerID = sessionStorage.playerID;
 console.log(playerID);
+
+// var dbName = 'dominion_game';
+// var objStore = 'game';
+// var openRequest = indexedDB.open(dbName, 1);
 
 // openRequest.onsuccess = function(e) {
 //   var db = e.target.result;
@@ -79,6 +80,9 @@ console.log(playerID);
 // openRequest.onerror = function(e) {
 //   console.log('Error: Failed to open indexedDB');
 // };
+
+var socket = io();
+socket.emit('player starts', playerID);
 
 // === Ting ===
 

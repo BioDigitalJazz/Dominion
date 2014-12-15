@@ -57,8 +57,8 @@ app.use(function(err, req, res, next) {
 });
 
 // === Ting ===
-// Testing Socket.io
 
+// = Socket.io =
 var debug = require('debug')('dominion');
 app.set('port', process.env.PORT || 3000);
 
@@ -66,6 +66,7 @@ var server = app.listen(app.get('port'), function() {
   debug('Express server listening on port ' + server.address().port);
 });
 var io = require('socket.io')(server);
+// = Socket.io =
 
 var players = [];
 var demoCards = ['ChancellorCard', 'CouncilRoomCard', 'FestivalCard', 
@@ -82,8 +83,17 @@ io.on('connection', function (socket) {
   });
 
   socket.on('start game', function (playerName) {
-    console.log('Game starts')
+    console.log('Game starts');
     io.emit('game starts', { players: players } );
+  });
+
+  socket.on('player starts', function (playerID) {
+    console.log('Player ' + playerID + ' starts');
+    if (playerID == 0) {
+      io.emit('game starts', { players: players } );
+    } else {
+
+    };
   });
 });
 
