@@ -53,26 +53,26 @@ Game.prototype.gameEnd = function(){
 // };
 
 // === Ting ===
-var gamePlayers;
 var dbName = 'dominion_game';
+var objStore = 'game';
 var openRequest = indexedDB.open(dbName, 1);
+
+var playerID;
+var socket = io();
 
 openRequest.onsuccess = function(e) {
   var db = e.target.result;
-  console.log('before transaction');
-  var transaction = db.transaction([dbName]);
-  console.log('after transaction');
-  var playersStore = transaction.objectStore("players");
-  console.log('after store');
-  var playersRequest = playersStore.get(1);
-  console.log('after request');
+  var transaction = db.transaction([objStore]);
+  var store = transaction.objectStore(objStore);
+  var idRequest = store.get('playerID');
 
-  playersRequest.onerror = function(event) {
-    console.log('Error: ')
+  idRequest.onsuccess = function(event) {
+    playerID = idRequest.result;
+    console.log(playerID);
   };
-  playersRequest.onsuccess = function(event) {
-    gamePlayers = playersRequest.result;
-    console.log(gamePlayers);
+
+  idRequest.onerror = function(event) {
+    console.log('Error: ')
   };
 };
 
