@@ -69,6 +69,7 @@ var io = require('socket.io')(server);
 // = Socket.io =
 
 var players = [];
+var messages = [];
 var demoCards = ['ChancellorCard', 'CouncilRoomCard', 'FestivalCard', 
       'MarketCard', 'LaboratoryCard', 'SmithyCard', 'VillageCard', 
       'WoodcutterCard', 'WitchCard', 'WorkshopCArd'];
@@ -89,17 +90,16 @@ io.on('connection', function (socket) {
 
   socket.on('player starts', function (playerID) {
     console.log('Player ' + playerID + ' starts');
-    var messages = [];
-    messages[0] = 'The game begins';
+    messages[playerID] = 'The game begins.';
 
     if (playerID == 0) {
-      messages[1] = "Your turn. You can play an action or buy";
+      messages[playerID] += " Your turn. You can play an action or buy";
     } else {
-      messages[1] = "The other player's turn. Please wait.";
+      messages[playerID] += " The other player's turn. Please wait.";
     };
 
-    io.emit('player starts', 
-            { messages: messages, kingdomCards: demoCards, players: players });
+    socket.emit('player starts', 
+            { message: messages[playerID], kingdomCards: demoCards, players: players });
   });
 });
 

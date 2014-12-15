@@ -28,6 +28,10 @@ Game.prototype.getCurrentPlayer = function() {
   return this.players[this.currentPlayerIndex];
 };
 
+Game.prototype.displayMessage = function(message) {
+  $('#play-prompt').text(message);
+};
+
 Game.prototype.nextPlayer = function(){
   if (this.currentPlayerIndex == this.players.length - 1) {
     this.currentPlayerIndex = 0;
@@ -85,16 +89,18 @@ var socket = io();
 socket.emit('player starts', playerID);
 
 socket.on('player starts', function (data) {
-  var messages = data.messages;
+  var message = data.message;
   var kingdomCards = data.kingdomCards;
   var players = data.players;
 
   var game = new Game(kingdomCards);
   game.createPlayers(players);
 
-  console.log(game.getCurrentPlayer());
-  game.nextPlayer();
-  console.log(game.getCurrentPlayer());
+  game.displayMessage(message);
+
+  // console.log(game.getCurrentPlayer());
+  // game.nextPlayer();
+  // console.log(game.getCurrentPlayer());
 });
 
 // var gamePlayers = window.gameLib.players;
