@@ -21,6 +21,7 @@ $('#btn-join-game').on('click', function() {
 socket.on('player joined', function (data) {
   players = data.curPlayers;
   myPlayerID = players.indexOf(myPlayerName);
+  sessionStorage.playerID = myPlayerID;
 
   players.forEach( function (player, index) {
     pInputs.eq(index).val(player);

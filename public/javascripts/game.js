@@ -57,28 +57,28 @@ var dbName = 'dominion_game';
 var objStore = 'game';
 var openRequest = indexedDB.open(dbName, 1);
 
-var playerID;
-var socket = io();
+var playerID = sessionStorage.playerID;
+console.log(playerID);
 
-openRequest.onsuccess = function(e) {
-  var db = e.target.result;
-  var transaction = db.transaction([objStore]);
-  var store = transaction.objectStore(objStore);
-  var idRequest = store.get('playerID');
+// openRequest.onsuccess = function(e) {
+//   var db = e.target.result;
+//   var transaction = db.transaction([objStore]);
+//   var store = transaction.objectStore(objStore);
+//   var idRequest = store.get('playerID');
 
-  idRequest.onsuccess = function(event) {
-    playerID = idRequest.result;
-    console.log(playerID);
-  };
+//   idRequest.onsuccess = function(event) {
+//     playerID = idRequest.result;
+//     console.log(playerID);
+//   };
 
-  idRequest.onerror = function(event) {
-    console.log('Error: ')
-  };
-};
+//   idRequest.onerror = function(event) {
+//     console.log('Error: ')
+//   };
+// };
 
-openRequest.onerror = function(e) {
-  console.log('Error: Failed to open indexedDB');
-};
+// openRequest.onerror = function(e) {
+//   console.log('Error: Failed to open indexedDB');
+// };
 
 // === Ting ===
 
