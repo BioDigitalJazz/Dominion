@@ -83,7 +83,7 @@ io.on('connection', function (socket) {
     io.emit('player joined', { curPlayers: players });
   });
 
-  socket.on('start game', function (playerName) {
+  socket.on('start game', function () {
     console.log('Game starts');
     io.emit('game starts', { players: players } );
   });
