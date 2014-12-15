@@ -89,11 +89,17 @@ io.on('connection', function (socket) {
 
   socket.on('player starts', function (playerID) {
     console.log('Player ' + playerID + ' starts');
-    if (playerID == 0) {
-      io.emit('game starts', { players: players } );
-    } else {
+    var messages = [];
+    messages[0] = 'The game begins';
 
+    if (playerID == 0) {
+      messages[1] = "Your turn. You can play an action or buy";
+    } else {
+      messages[1] = "The other player's turn. Please wait.";
     };
+
+    io.emit('player starts', 
+            { messages: messages, kingdomCards: demoCards, players: players });
   });
 });
 
