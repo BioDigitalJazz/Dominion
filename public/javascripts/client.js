@@ -1,6 +1,7 @@
-var socket = io();
+// window.gameLib = {};
 
-var players = [];
+var socket = io();
+var players;
 var kingdomCards;
 var dbName = 'dominion_game';
 
@@ -47,13 +48,9 @@ socket.on('game starts', function (cards) {
 
 function saveGame() {
   if (!indexedDB) return false;
-
-  console.log('firing saveGame');
-
   var openRequest = indexedDB.open(dbName, 1);
 
   openRequest.onupgradeneeded = function(e) {
-    console.log('firing onupgradeneeded');
     var thisDB = e.target.result;
 
     if(!thisDB.objectStoreNames.contains('players')) {
@@ -84,9 +81,12 @@ function saveToDB(items, storeName, db) {
   request.onsuccess = function(e) {
     console.log("Saved to " + storeName);
 
-    window.players = players;
-    window.kingdomCards = kingdomCards;
-    window.location.href = '/game';
+    // window.gameLib.socket = socket;
+    // window.gameLib.players = players;
+    // window.gameLib.kingdomCards = kingdomCards;
+    // console.log(window.gameLib);
+
+    window.location.assign('/game');
   };
 
   request.onerror = function(e) {

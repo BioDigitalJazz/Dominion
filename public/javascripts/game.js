@@ -1,5 +1,3 @@
-var player = require('./player');
-
 function Game(kingdomCards){
   this.players = [];
   this.currentPlayerIndex = 0;
@@ -54,12 +52,46 @@ Game.prototype.gameEnd = function(){
 
 // };
 
-var gamePlayers = window.players;
-var kingdomCards = window.kingdomCards;
+// === Ting ===
+var gamePlayers;
+var dbName = 'dominion_game';
+var openRequest = indexedDB.open(dbName, 1);
 
-var game = Game(kingdomCards);
-game.createPlayers(gamePlayers);
+openRequest.onsuccess = function(e) {
+  var db = e.target.result;
+  console.log('before transaction');
+  var transaction = db.transaction([dbName]);
+  console.log('after transaction');
+  var playersStore = transaction.objectStore("players");
+  console.log('after store');
+  var playersRequest = playersStore.get(1);
+  console.log('after request');
 
-console.log(game.getCurrentPlayer());
-game.nextPlayer();
-console.log(game.getCurrentPlayer());
+  playersRequest.onerror = function(event) {
+    console.log('Error: ')
+  };
+  playersRequest.onsuccess = function(event) {
+    gamePlayers = playersRequest.result;
+    console.log(gamePlayers);
+  };
+};
+
+openRequest.onerror = function(e) {
+  console.log('Error: Failed to open indexedDB');
+};
+
+
+
+// var gamePlayers = window.gameLib.players;
+// var kingdomCards = window.gameLib.kingdomCards;
+
+
+// console.log(kingdomCards);
+
+
+// var game = Game(kingdomCards);
+// game.createPlayers(gamePlayers);
+
+// console.log(game.getCurrentPlayer());
+// game.nextPlayer();
+// console.log(game.getCurrentPlayer());
