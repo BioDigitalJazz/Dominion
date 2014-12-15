@@ -1,9 +1,10 @@
 // window.gameLib = {};
 
 var socket = io();
-var players;
+var players, myPlayerName, myPlayerID;
 var kingdomCards;
 var dbName = 'dominion_game';
+var objStore = 'game';
 
 var pInputs = $('.joined-players');
 var btnStart = $('#btn-start-game');
@@ -11,13 +12,15 @@ btnStart.hide();
 
 $('#btn-join-game').on('click', function() {
   var input = $(this).prev();
-  socket.emit('player joins', input.val());
+  myPlayerName = input.val();
+  socket.emit('player joins', myPlayerName);
   input.prop('disabled', true);
   $(this).hide();
 });
 
 socket.on('player joined', function (data) {
   players = data.curPlayers;
+  myPlayerID = players.indexOf(myPlayerName);
 
   players.forEach( function (player, index) {
     pInputs.eq(index).val(player);
@@ -30,11 +33,7 @@ btnStart.on('click', function() {
   socket.emit('start game');
 });
 
-socket.on('game starts', function (cards) {
-  // console.log('game starts');
-  // console.log(kingdomCards);
-  kingdomCards = cards;
-
+socket.on('game starts', function (players) {
   var deleteRequest = indexedDB.deleteDatabase(dbName);
 
   deleteRequest.onsuccess = function(e) {
@@ -53,19 +52,14 @@ function saveGame() {
   openRequest.onupgradeneeded = function(e) {
     var thisDB = e.target.result;
 
-    if(!thisDB.objectStoreNames.contains('players')) {
-      thisDB.createObjectStore('players');
-    };
-
-    if(!thisDB.objectStoreNames.contains('kingdom_cards')) {
-      thisDB.createObjectStore('kingdom_cards');
+    if(!thisDB.objectStoreNames.contains(objStore)) {
+      thisDB.createObjectStore(objStore);
     };
   };
 
   openRequest.onsuccess = function(e) {
     var db = e.target.result;
-    saveToDB(players, "players", db);
-    saveToDB(kingdomCards, "kingdom_cards", db);
+    saveToDB(db);
   } ;
 
   openRequest.onerror = function(e) {
@@ -73,13 +67,13 @@ function saveGame() {
   };
 };
 
-function saveToDB(items, storeName, db) {
-  var transaction = db.transaction([storeName],"readwrite");
-  var store = transaction.objectStore(storeName);
-  var request = store.add(items, 1);
+function saveToDB(db) {
+  var transaction = db.transaction([objStore],"readwrite");
+  var store = transaction.objectStore(objStore);
+  var request = store.add(myPlayerID, 'playerID');
 
   request.onsuccess = function(e) {
-    console.log("Saved to " + storeName);
+    console.log("Saved to " + objStore);
 
     // window.gameLib.socket = socket;
     // window.gameLib.players = players;
@@ -90,6 +84,6 @@ function saveToDB(items, storeName, db) {
   };
 
   request.onerror = function(e) {
-    console.log("Error: Failed to save to " + storeName);
+    console.log("Error: Failed to save to " + objStore);
   };
 };

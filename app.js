@@ -60,15 +60,17 @@ app.use(function(err, req, res, next) {
 // Testing Socket.io
 
 var debug = require('debug')('dominion');
-
 app.set('port', process.env.PORT || 3000);
 
 var server = app.listen(app.get('port'), function() {
   debug('Express server listening on port ' + server.address().port);
 });
-
 var io = require('socket.io')(server);
+
 var players = [];
+var demoCards = ['ChancellorCard', 'CouncilRoomCard', 'FestivalCard', 
+      'MarketCard', 'LaboratoryCard', 'SmithyCard', 'VillageCard', 
+      'WoodcutterCard', 'WitchCard', 'WorkshopCArd'];
 
 io.on('connection', function (socket) {
   // socket.emit('You are connected!');
@@ -81,12 +83,7 @@ io.on('connection', function (socket) {
 
   socket.on('start game', function (playerName) {
     console.log('Game starts')
-
-    var demoCards = ['ChancellorCard', 'CouncilRoomCard', 'FestivalCard', 
-      'MarketCard', 'LaboratoryCard', 'SmithyCard', 'VillageCard', 
-      'WoodcutterCard', 'WitchCard', 'WorkshopCArd'];
-
-    io.emit('game starts', { kingdomCards: demoCards } );
+    io.emit('game starts', { players: players } );
   });
 });
 
