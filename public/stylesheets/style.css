@@ -213,3 +213,7 @@ img.player-action {
   width: 100%;
   height: 25.8%;
 }
+
+#curseCard {
+  style="background-image: url(./public/images/cards/curse.jpg)"
+}
