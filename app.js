@@ -69,8 +69,9 @@ var io = require('socket.io')(server);
 // = Socket.io =
 
 var players = [];
+var whosReady = [];
 var messages = [];
-var demoCards = ['ChancellorCard', 'CouncilRoomCard', 'FestivalCard', 
+var randomCards = ['ChancellorCard', 'CouncilRoomCard', 'FestivalCard', 
       'MarketCard', 'LaboratoryCard', 'SmithyCard', 'VillageCard', 
       'WoodcutterCard', 'WitchCard', 'WorkshopCArd'];
 
@@ -83,12 +84,19 @@ io.on('connection', function (socket) {
     io.emit('player joined', { curPlayers: players });
   });
 
-  socket.on('start game', function (playerName) {
+  socket.on('start game', function () {
     console.log('Game starts');
-    io.emit('game starts', { players: players } );
+    io.emit('game starts');
   });
 
-  socket.on('player starts', function (playerID) {
+  socket.on('game created, ready to play', function (playerID) {
+    whosReady.push(playerID);
+    if (players.size == whosReady.size) {
+      io.emit("player turn");
+    }
+  });
+
+  socket.on('player on game page', function (playerID) {
     console.log('Player ' + playerID + ' starts');
     messages[playerID] = 'The game begins.';
 
@@ -98,12 +106,14 @@ io.on('connection', function (socket) {
       messages[playerID] += " The other player's turn. Please wait.";
     };
 
-    socket.emit('player starts', 
-            { message: messages[playerID], kingdomCards: demoCards, players: players });
+    socket.emit('ready to start', 
+            { message: messages[playerID], kingdomCards: randomCards, players: players });
   });
+
 });
 
 // === Ting ===
+
 
 
 module.exports = app;

@@ -34,7 +34,7 @@ btnStart.on('click', function() {
   socket.emit('start game');
 });
 
-socket.on('game starts', function (players) {
+socket.on('game starts', function () {
   var deleteRequest = indexedDB.deleteDatabase(dbName);
 
   deleteRequest.onsuccess = function(e) {

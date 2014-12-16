@@ -86,9 +86,9 @@ var playerID = sessionStorage.playerID;
 console.log(playerID);
 
 var socket = io();
-socket.emit('player starts', playerID);
+socket.emit('player on game page', playerID);
 
-socket.on('player starts', function (data) {
+socket.on('ready to start', function (data) {
   var message = data.message;
   var kingdomCards = data.kingdomCards;
   var players = data.players;
@@ -97,11 +97,19 @@ socket.on('player starts', function (data) {
   game.createPlayers(players);
 
   game.displayMessage(message);
-
-  // console.log(game.getCurrentPlayer());
-  // game.nextPlayer();
-  // console.log(game.getCurrentPlayer());
+  socket.emit('game created, ready to play', PlayerID);
 });
+
+socket.on('player turn', function() {
+  if (PlayerID == game.currentPlayerIndex){
+    game.displayMessage("It is your turn, play an action, or buy a card")
+  }
+});
+
+
+
+
+
 
 // var gamePlayers = window.gameLib.players;
 // var kingdomCards = window.gameLib.kingdomCards;
