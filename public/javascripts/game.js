@@ -83,32 +83,35 @@ Game.prototype.gameEnd = function(){
 // };
 
 var playerID = sessionStorage.playerID;
-console.log(playerID);
+var game;
 
 var socket = io();
 socket.emit('player on game page', playerID);
 
 socket.on('ready to start', function (data) {
-  var message = data.message;
   var kingdomCards = data.kingdomCards;
   var players = data.players;
-
-  var game = new Game(kingdomCards);
+  game = new Game(kingdomCards);
   game.createPlayers(players);
 
-  game.displayMessage(message);
-  socket.emit('game created, ready to play', PlayerID);
+  socket.emit('game created ready to play', playerID);
 });
 
 socket.on('player turn', function() {
-  if (PlayerID == game.currentPlayerIndex){
+  if (parseInt(playerID) !== game.currentPlayerIndex){
+    game.displayMessage("Not your turn, please wait.")
+  } else {
     game.displayMessage("It is your turn, play an action, or buy a card")
+    showMyHand();
   }
 });
 
-
-
-
+var showMyHand = function() {
+  var hand = $("#area-player-hand");
+  var cardsInHand = game.players[playerID].hand;
+  console.log(cardsInHand);
+  hand.append("<p>Test</p>");
+};
 
 
 // var gamePlayers = window.gameLib.players;
