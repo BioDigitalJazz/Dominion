@@ -71,8 +71,8 @@ var io = require('socket.io')(server);
 var players = [];
 var messages = [];
 var demoCards = ['ChancellorCard', 'CouncilRoomCard', 'FestivalCard', 
-      'MarketCard', 'LaboratoryCard', 'SmithyCard', 'VillageCard', 
-      'WoodcutterCard', 'WitchCard', 'WorkshopCArd'];
+      'LaboratoryCard', 'MarketCard', 'SmithyCard', 'VillageCard', 
+      'WitchCard', 'WoodcutterCard', 'WorkshopCArd'];
 
 io.on('connection', function (socket) {
   // socket.emit('You are connected!');
@@ -83,7 +83,7 @@ io.on('connection', function (socket) {
     io.emit('player joined', { curPlayers: players });
   });
 
-  socket.on('start game', function (playerName) {
+  socket.on('start game', function () {
     console.log('Game starts');
     io.emit('game starts', { players: players } );
   });
