@@ -29,7 +29,7 @@ div, img {
 
 #area-supply-nonaction {
   width: 100%;
-  height: 50%;
+  height: 60%;
 }
 
 .col-supply-nonaction {
@@ -49,12 +49,12 @@ div, img {
 }
 
 #area-player-aside {
+  width: 100%;
+  height: 40%;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
-  width: 100%;
-  height: 50%;
 }
 
 .player-aside {
@@ -135,12 +135,12 @@ img.supply-kingdom-orig {
   align-items: flex-end;
 }
 
-/*img.player-action {
+img.handcard {
   width: 18%;
   height: 100%;
   margin-right: 2%;
   border: 1px dashed red;
-}*/
+}
 
 #area-log {
   width: 100%;
