@@ -92,24 +92,30 @@ Game.prototype.gameEnd = function(){
 // };
 
 var playerID = sessionStorage.playerID;
-console.log(playerID);
+var game;
 
 var socket = io();
-socket.emit('player starts', playerID);
+socket.emit('player on game page', playerID);
 
-socket.on('player starts', function (data) {
-  var message = data.message;
+socket.on('ready to start', function (data) {
   var kingdomCards = data.kingdomCards;
   var players = data.players;
-
-  var game = new Game(kingdomCards);
+  
+  game = new Game(kingdomCards);
   game.createPlayers(players);
   game.showKingdomCards(kingdomCards);
   game.displayMessage(message);
 
-  // console.log(game.getCurrentPlayer());
-  // game.nextPlayer();
-  // console.log(game.getCurrentPlayer());
+  socket.emit('game created ready to play', playerID);
+});
+
+socket.on('player turn', function() {
+  if (parseInt(playerID) !== game.currentPlayerIndex){
+    game.displayMessage("Not your turn, please wait.")
+  } else {
+    game.displayMessage("It is your turn, play an action, or buy a card")
+    showMyHand();
+  }
 });
 
 $('.supply-kingdom-orig').hide();
@@ -128,8 +134,9 @@ function hideOrig() {
   $(this).next().hide(400);
 };
 
-
-// var gamePlayers = window.gameLib.players;
-// var kingdomCards = window.gameLib.kingdomCards;
-
-// === Ting ===
+var showMyHand = function() {
+  var hand = $("#area-player-hand");
+  var cardsInHand = game.players[playerID].hand;
+  console.log(cardsInHand);
+  hand.append("<p>Test</p>");
+};

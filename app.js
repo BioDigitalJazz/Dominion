@@ -69,8 +69,9 @@ var io = require('socket.io')(server);
 // = Socket.io =
 
 var players = [];
+var whosReady = [];
 var messages = [];
-var demoCards = ['ChancellorCard', 'CouncilRoomCard', 'FestivalCard', 
+var randomCards = ['ChancellorCard', 'CouncilRoomCard', 'FestivalCard', 
       'LaboratoryCard', 'MarketCard', 'SmithyCard', 'VillageCard', 
       'WitchCard', 'WoodcutterCard', 'WorkshopCArd'];
 
@@ -85,22 +86,23 @@ io.on('connection', function (socket) {
 
   socket.on('start game', function () {
     console.log('Game starts');
-    io.emit('game starts', { players: players } );
+    io.emit('game starts');
   });
 
-  socket.on('player starts', function (playerID) {
+  socket.on('game created ready to play', function (playerID) {
+    whosReady.push(playerID);
+    if (players.size == whosReady.size) {
+      io.emit('player turn');
+    }
+  });
+
+  socket.on('player on game page', function (playerID) {
     console.log('Player ' + playerID + ' starts');
-    messages[playerID] = 'The game begins.';
 
-    if (playerID == 0) {
-      messages[playerID] += " Your turn. You can play an action or buy";
-    } else {
-      messages[playerID] += " The other player's turn. Please wait.";
-    };
-
-    socket.emit('player starts', 
-            { message: messages[playerID], kingdomCards: demoCards, players: players });
+    socket.emit('ready to start', 
+            { message: messages[playerID], kingdomCards: randomCards, players: players });
   });
+
 });
 
 // === Ting ===

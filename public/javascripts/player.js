@@ -107,7 +107,8 @@ Player.prototype.trash = function(card, cardLocation) {
 
 Player.prototype.shuffleDeck = function(){ //v1.0
   var deck = this.deck;
-  for(var j, x, i = deck.length; i; j = Math.floor(Math.random() * i)) {
+  for(var j, x, i = deck.length; i; j = 0) {
+    j= Math.floor(Math.random() * i);
     x = deck[--i];
     deck[i] = deck[j];
     deck[j] = x;
