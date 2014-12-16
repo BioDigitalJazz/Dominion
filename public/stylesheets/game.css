@@ -91,7 +91,7 @@ img.supply-kingdom-orig {
   position: absolute;
   width: 243px;
   height: 382px;
-};
+}
 
 #area-play-center {
   width: 100%;
@@ -122,8 +122,8 @@ img.supply-kingdom-orig {
 
 #play-area {
   clear: left;
-  width: 100%
-  height: 70%
+  width: 100%;
+  height: 70%;
 }
 
 #area-player-hand {
@@ -135,12 +135,12 @@ img.supply-kingdom-orig {
   align-items: flex-end;
 }
 
-img.player-action {
+/*img.player-action {
   width: 18%;
   height: 100%;
   margin-right: 2%;
   border: 1px dashed red;
-}
+}*/
 
 #area-log {
   width: 100%;
