@@ -104,7 +104,6 @@ socket.on('ready to start', function (data) {
   game = new Game(kingdomCards);
   game.createPlayers(players);
   game.showKingdomCards(kingdomCards);
-
   socket.emit('game created ready to play', playerID);
 });
 
@@ -141,7 +140,8 @@ var showMyHand = function() {
     var aCard = cardsInHand[i]
     var imagesrc = "/images/cards/" + aCard.name.toLowerCase() + ".jpg";
     var imageid = "handcard" + i;
-    hand.append('<img src= \"' + imagesrc + '\" id=\"' + imageid + '\">');
+    var imageClass = "handcard";
+    hand.append('<img src= \"' + imagesrc + '\" class=\"' + imageClass + '\" id=\"' + imageid + '\">');
   };
 };
 
