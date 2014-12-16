@@ -128,12 +128,13 @@ socket.on('update DB', function(cardLocation, cardIndex, player, functionToPass)
 })
 
 var playCard = function(card, handIndex, playerid) {
-  if (playerid == game.getCurrentPlayer.id)
-    if (card.types["Treasure"] == true) {
-      adviseServer("hand", handIndex, player, "moveToPlayArea")
+  // if (playerid == game.getCurrentPlayer().id) {
+    if (card.types.Treasure) {
+      $('.handcard').eq(handIndex).hide();
+      $('<img>').attr('src', card.image).addClass('hand-to-play').appendTo('#play-area');
+  //     adviseServer("hand", handIndex, player, "moveToPlayArea");
     }
-
-  }
+  // }
 };
 
 // var moveToPlayArea = function(card, handIndex, player) {
