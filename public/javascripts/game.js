@@ -128,11 +128,13 @@ socket.on('update DB', function(cardLocation, cardIndex, player, functionToPass)
 })
 
 var playCard = function(card, handIndex, playerid) {
-  if (playerid == game.getCurrentPlayer.id)
-    if (card.types["Treasure"] == true) {
-      adviseServer("hand", handIndex, player, "moveToPlayArea")
+  if (playerid == game.getCurrentPlayer().id) {
+    if (card.types.Treasure) {
+      $('.handcard').eq(handIndex).hide(400);
+      var moveCard = $('<img>').attr('src', card.image).addClass('hand-to-play');
+      moveCard.hide().appendTo('#play-area').show(400);
+      adviseServer("hand", handIndex, player, "moveToPlayArea");
     }
-
   }
 };
 
