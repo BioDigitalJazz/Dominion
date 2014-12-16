@@ -5,17 +5,24 @@ block content
     div(id="column-left")
       div(id="area-supply-nonaction")
         div(class="col-supply-nonaction")
-          img(class="supply-curse" id="curseCard" src="/images/cards/curse.jpg")
-          img(class="supply-victory" id="estateCard" src="/images/cards/estate.jpg")
-          img(class="supply-victory" id="duchyCard" src="/images/cards/duchy.jpg")
-          img(class="supply-victory" id="provinceCard" src="/images/cards/province.jpg")
+          img(class="supply-nonaction" id="curseCard" src="/images/cards/curse.jpg")
+          img(class="supply-nonaction-big" src="/images/cards/curse.jpg")
+          img(class="supply-nonaction" id="estateCard" src="/images/cards/estate.jpg")
+          img(class="supply-nonaction-big" src="/images/cards/estate.jpg")
+          img(class="supply-nonaction" id="duchyCard" src="/images/cards/duchy.jpg")
+          img(class="supply-nonaction-big" src="/images/cards/duchy.jpg")
+          img(class="supply-nonaction" id="provinceCard" src="/images/cards/province.jpg")
+          img(class="supply-nonaction-big" src="/images/cards/province.jpg")
         div(class="col-supply-nonaction")
-          img(class="supply-treasure" id="copperCard" src="/images/cards/copper.jpg")
-          img(class="supply-treasure" id="silverCard" src="/images/cards/silver.jpg")
-          img(class="supply-treasure" id="goldCard" src="/images/cards/gold.jpg")
+          img(class="supply-nonaction" id="copperCard" src="/images/cards/copper.jpg")
+          img(class="supply-nonaction-big" src="/images/cards/copper.jpg")
+          img(class="supply-nonaction" id="silverCard" src="/images/cards/silver.jpg")
+          img(class="supply-nonaction-big" src="/images/cards/silver.jpg")
+          img(class="supply-nonaction" id="goldCard" src="/images/cards/gold.jpg")
+          img(class="supply-nonaction-big" src="/images/cards/gold.jpg")
       div(id="area-player-aside")
-        div(class="player-aside")
-        div(class="player-aside")
+        img(class="player-aside" id="discard-pile" src="/images/cards/feast.jpg")
+        img(class="player-aside" id="deck" src="/images/cards/back.jpg")
     div(id="column-middle")
       div(id="area-supply-kingdom")
         div(class="row-supply-kingdom")
@@ -42,11 +49,18 @@ block content
           img(class="supply-kingdom-orig")
       div(id="area-play-center")
         div(id="turn-stats")
-          p Action: 1 <br />
-          p Buy: 1 <br />
-          p Coins: 3 <br />
+          table
+            tr 
+              td Action:
+              td 1
+            tr
+              td Buy:
+              td 1
+            tr
+              td Coins:
+              td 3
         div(id="play-prompt")
-          p Your turn! Play an action.
+          Your turn! Play an action.
         div(id="play-area")
       div(id="area-player-hand")
     div(id="column-right")
@@ -57,14 +71,16 @@ block content
             tfc2014 - plays 4 Copper <br />
             tfc2014 - buys Smithy <br />
             tfc2014 - gains Smithy <br />
-            tfc2014 - draws Estate, Copper, Copper, Copper, Estate <br />
+            tfc2014 - draws Estate, Copper, Copper, Copper, Estate
           p.
             ---------- Villager Bot: turn 1 ---------- <br />
             Villager Bot - plays 3 Copper <br />
             Villager Bot - buys Silver <br />
             Villager Bot - gains Silver <br />
-            Villager Bot - draws Copper, Copper, Estate, Copper, Copper <br />
+            Villager Bot - draws Copper, Copper, Estate, Copper, Copper
       div(id="area-player-scroll")
+        img(class="scroll-button" src="/images/scroll_left.jpg")
+        img(class="scroll-button" src="/images/scroll_right.jpg")
     script(src='/javascripts/card.js')
     script(src='/javascripts/player.js')     
     script(src='/javascripts/game.js')

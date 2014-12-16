@@ -65,31 +65,6 @@ Game.prototype.gameEnd = function(){
 
 // };
 
-// === Ting ===
-
-// var dbName = 'dominion_game';
-// var objStore = 'game';
-// var openRequest = indexedDB.open(dbName, 1);
-
-// openRequest.onsuccess = function(e) {
-//   var db = e.target.result;
-//   var transaction = db.transaction([objStore]);
-//   var store = transaction.objectStore(objStore);
-//   var idRequest = store.get('playerID');
-
-//   idRequest.onsuccess = function(event) {
-//     playerID = idRequest.result;
-//     console.log(playerID);
-//   };
-
-//   idRequest.onerror = function(event) {
-//     console.log('Error: ')
-//   };
-// };
-
-// openRequest.onerror = function(e) {
-//   console.log('Error: Failed to open indexedDB');
-// };
 
 var playerID = sessionStorage.playerID;
 var game;
@@ -116,7 +91,10 @@ socket.on('player turn', function() {
   }
 });
 
+$('.supply-nonaction-orig').hide();
 $('.supply-kingdom-orig').hide();
+
+$('.supply-nonaction').hover(showOrig, hideOrig);
 $('.supply-kingdom').hover(showOrig, hideOrig);
 
 function showOrig() {
