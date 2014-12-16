@@ -164,7 +164,12 @@ img.handcard {
   height: 90%;
   margin: auto;
   margin-top: 5%;
-  background: #BAD1F0;
+  background-image: url(/images/parchment_paper.jpg);
+  border-radius: 10px;
+}
+
+#log-box p {
+  padding: 15px;
 }
 
 #area-player-scroll {
