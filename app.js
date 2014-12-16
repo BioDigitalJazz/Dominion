@@ -71,7 +71,7 @@ var io = require('socket.io')(server);
 var players = [];
 var messages = [];
 var demoCards = ['ChancellorCard', 'CouncilRoomCard', 'FestivalCard', 
-      'MarketCard', 'LaboratoryCard', 'SmithyCard', 'VillageCard', 
+      'LaboratoryCard', 'MarketCard', 'SmithyCard', 'VillageCard', 
       'WitchCard', 'WoodcutterCard', 'WorkshopCArd'];
 
 io.on('connection', function (socket) {
