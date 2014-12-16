@@ -25,7 +25,7 @@ Game.prototype.createPlayers = function(playerNames) {
 };
 
 Game.prototype.getCurrentPlayer = function() {
-  return this.players[this.currentPlayerIndex];
+  return game.players[game.currentPlayerIndex];
 };
 
 Game.prototype.showKingdomCards = function(kingdomCards) {
@@ -144,6 +144,39 @@ var showMyHand = function() {
     hand.append('<img src= \"' + imagesrc + '\" class=\"' + imageClass + '\" id=\"' + imageid + '\">');
   };
 };
+
+socket.on('update DB', function(cardLocation, cardIndex, player, functionToPass) {
+  
+})
+
+var playCard = function(card, handIndex, playerid) {
+  if (playerid == game.getCurrentPlayer.id)
+    if (card.types["Treasure"] == true) {
+      adviseServer("hand", handIndex, player, "moveToPlayArea")
+    }
+
+  }
+};
+
+// var moveToPlayArea = function(card, handIndex, player) {
+//   var imgIdentifier = "img#handcard" + handIndex
+//   var imgsrc = $(imgIdentifier).attr('src');
+//   game.getCurrentPlayer.play
+
+//   console.log(imgsrc);
+// };
+
+var adviseServer = function(cardLocation, cardIndex, player, functionToPass) {
+  socket.emit('player action', cardLocation, cardIndex, player, functionToPass);
+};
+
+$(function(){
+  console.log("ready");
+  $("#area-player-hand").on("click", ".handcard", function(event) {
+    var handIndex = event.target.id.slice(-1);
+    playCard(game.getCurrentPlayer().hand[handIndex], handIndex, playerID);
+  });
+});
 
 
 // var gamePlayers = window.gameLib.players;
