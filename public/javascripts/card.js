@@ -4,13 +4,13 @@ function Card (id, name, cost, image) {
   this.cost = cost;
   this.image = image;
   this.types = {
-    "kingdom": false,
-    "action": false,
-    "treasure": false,
-    "victory": false,
-    "curse": false,
-    "attack": false,
-    "reaction": false
+    "Kingdom": false,
+    "Action": false,
+    "Treasure": false,
+    "Victory": false,
+    "Curse": false,
+    "Attack": false,
+    "Reaction": false
   };
 };
 
