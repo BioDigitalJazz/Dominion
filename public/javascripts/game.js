@@ -138,5 +138,17 @@ var showMyHand = function() {
   var hand = $("#area-player-hand");
   var cardsInHand = game.players[playerID].hand;
   console.log(cardsInHand);
-  hand.append("<p>Test</p>");
+  for (var i = 0; i < cardsInHand.length; i++) {
+    var aCard = cardsInHand[i]
+    var imagesrc = "../public/images/cards/" + aCard.name.toLowerCase() + ".jpg";
+    var imageid = "handcard" + i;
+    hand.append('<img src= \"' + imagesrc + '\" id=\"' + imageid + '\">');
+  };
 };
+
+
+// var gamePlayers = window.gameLib.players;
+// var kingdomCards = window.gameLib.kingdomCards;
+
+// === Ting ===
+
