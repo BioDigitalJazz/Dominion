@@ -32,7 +32,7 @@ Game.prototype.showKingdomCards = function(kingdomCards) {
   var kCardPiles = $('.supply-kingdom');
 
   kingdomCards.forEach( function(card, index) {
-    var cardPath = '/images/cards/' + card.slice(0, -4).toLowerCase() + '.jpg';
+    var cardPath = '/images/cards/' + card.slice(0, -4).toLowerCase() + '_crop.jpg';
     kCardPiles.eq(index).attr('src', cardPath);
   });
 };
