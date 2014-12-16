@@ -42,10 +42,19 @@ div, img {
   align-items: flex-start;
 }
 
-.supply-curse, .supply-victory, .supply-treasure {
+.supply-nonaction {
+  z-index: 1;
   width: 90%;
   height: 23%;
   margin-bottom: 8%;
+}
+
+.supply-nonaction-big {
+  display: none;
+  z-index: 2;
+  position: absolute;
+  width: 150px;
+  height: 240px;
 }
 
 #area-player-aside {
