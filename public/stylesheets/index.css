@@ -7,11 +7,18 @@ html {
 }
 
 body {
-  width: 1200px;
+/*  width: 1200px;
   height: 700px;
-  margin: auto;
+  margin: auto;*/
   /*border: 1px solid black;*/
   font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+.container {
+  width: 1200px;
+  height: 700px;
+  margin: 15px; 
+  background-color: rgba(159, 159, 159, 0.26);
 }
 
 @font-face {
