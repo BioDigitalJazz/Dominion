@@ -15,17 +15,26 @@ function Game(kingdomCards){
   kingdomCards.forEach(function(kcard) {
     theSupply[kcard] = 10;
   });
-}
+};
 
 Game.prototype.createPlayers = function(playerNames) {
   theGame = this;
   playerNames.forEach( function(name) {
     theGame.players.push(new Player(name, theGame));
   })
-}
+};
 
 Game.prototype.getCurrentPlayer = function() {
   return this.players[this.currentPlayerIndex];
+};
+
+Game.prototype.showKingdomCards = function(kingdomCards) {
+  var kCardPiles = $('.supply-kingdom');
+
+  kingdomCards.forEach( function(card, index) {
+    var cardPath = '/images/cards/' + card.slice(0, -4).toLowerCase() + '.jpg';
+    kCardPiles.eq(index).attr('src', cardPath);
+  });
 };
 
 Game.prototype.displayMessage = function(message) {
@@ -95,6 +104,8 @@ socket.on('player starts', function (data) {
 
   var game = new Game(kingdomCards);
   game.createPlayers(players);
+
+  game.showKingdomCards(kingdomCards);
 
   game.displayMessage(message);
 

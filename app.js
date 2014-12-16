@@ -72,7 +72,7 @@ var players = [];
 var messages = [];
 var demoCards = ['ChancellorCard', 'CouncilRoomCard', 'FestivalCard', 
       'MarketCard', 'LaboratoryCard', 'SmithyCard', 'VillageCard', 
-      'WoodcutterCard', 'WitchCard', 'WorkshopCArd'];
+      'WitchCard', 'WoodcutterCard', 'WorkshopCArd'];
 
 io.on('connection', function (socket) {
   // socket.emit('You are connected!');
