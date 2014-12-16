@@ -103,8 +103,8 @@ io.on('connection', function (socket) {
             { message: messages[playerID], kingdomCards: randomCards, players: players });
   });
 
-  socket.on('player action', function(cardLocation, cardIndex, player, functionToPass) {
-    io.emit('update DB', cardLocation, cardIndex, player, functionToPass);
+  socket.on('player action', function(data) {
+    io.emit('update DB', data);
   });
 
 });

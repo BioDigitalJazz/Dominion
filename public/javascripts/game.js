@@ -87,8 +87,8 @@ socket.on('player turn', function() {
     game.displayMessage("Not your turn, please wait.")
   } else {
     game.displayMessage("It is your turn, play an action, or buy a card")
-    showMyHand();
   }
+  showMyHand();
 });
 
 $('.supply-nonaction-orig').hide();
@@ -113,7 +113,6 @@ function hideOrig() {
 var showMyHand = function() {
   var hand = $("#area-player-hand");
   var cardsInHand = game.players[playerID].hand;
-  console.log(cardsInHand);
   for (var i = 0; i < cardsInHand.length; i++) {
     var aCard = cardsInHand[i]
     var imagesrc = "/images/cards/" + aCard.name.toLowerCase() + ".jpg";
@@ -123,17 +122,16 @@ var showMyHand = function() {
   };
 };
 
-socket.on('update DB', function(cardLocation, cardIndex, player, functionToPass) {
-  
-})
-
 var playCard = function(card, handIndex, playerid) {
-  if (playerid == game.getCurrentPlayer().id) {
+  if (game.players[playerid] == game.getCurrentPlayer()) {
+    var thePlayer = game.players[playerID];
+
     if (card.types.Treasure) {
       $('.handcard').eq(handIndex).hide(400);
       var moveCard = $('<img>').attr('src', card.image).addClass('hand-to-play');
       moveCard.hide().appendTo('#play-area').show(400);
-      adviseServer("hand", handIndex, player, "moveToPlayArea");
+
+      adviseServer("hand", handIndex, thePlayer, "moveToPlayArea");
     }
   }
 };
@@ -146,9 +144,27 @@ var playCard = function(card, handIndex, playerid) {
 //   console.log(imgsrc);
 // };
 
-var adviseServer = function(cardLocation, cardIndex, player, functionToPass) {
-  socket.emit('player action', cardLocation, cardIndex, player, functionToPass);
+var adviseServer = function(theCardLocation, theCardIndex, thePlayer, theFunctionToPass) {
+  console.log("advise server");
+  console.log(theCardLocation);
+  console.log(theCardIndex);
+  console.log(thePlayer);
+  console.log(theFunctionToPass);
+  socket.emit('player action', { cardLocation: theCardLocation, cardIndex: theCardIndex, 
+               playerIndex: game.players.indexOf(thePlayer), functionToPass: theFunctionToPass });
+  console.log("server advised");
 };
+
+socket.on('update DB', function(data) {
+  console.log(data);
+  var theCardLocation = data.cardLocation;
+  var theCardIndex = data.cardIndex;
+  var thePlayerIndex = data.playerIndex;
+  var theFunctionToPass = data.functionToPass;
+  console.log(theCardLocation);
+  console.log("update DB");
+  
+})
 
 $(function(){
   console.log("ready");
