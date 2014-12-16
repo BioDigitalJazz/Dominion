@@ -217,3 +217,9 @@ img.player-action {
 #curseCard {
   style="background-image: url(./public/images/cards/curse.jpg)"
 }
+.container {
+  width: 1200px;
+  height: 700px;
+  margin: 15px; 
+  background-color: rgba(159, 159, 159, 0.26);
+}
