@@ -77,12 +77,21 @@ div, img {
   align-items: flex-start;
 }
 
-.supply-kingdom {
+img.supply-kingdom {
+  z-index: 1;
   width: 18%;
   height: 90%;
   margin-right: 2%;
   border: 1px dashed red;
 }
+
+img.supply-kingdom-orig {
+  display: none;
+  z-index: 2;
+  position: absolute;
+  width: 243px;
+  height: 382px;
+};
 
 #area-play-center {
   width: 100%;

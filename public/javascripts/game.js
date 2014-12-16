@@ -104,15 +104,30 @@ socket.on('player starts', function (data) {
 
   var game = new Game(kingdomCards);
   game.createPlayers(players);
-
   game.showKingdomCards(kingdomCards);
-
   game.displayMessage(message);
 
   // console.log(game.getCurrentPlayer());
   // game.nextPlayer();
   // console.log(game.getCurrentPlayer());
 });
+
+$('.supply-kingdom-orig').hide();
+$('.supply-kingdom').hover(showOrig, hideOrig);
+
+function showOrig() {
+  var cropImg = $(this);
+  var origImg = cropImg.next();
+  var origUrl = cropImg.attr('src').replace('_crop', '');
+
+  origImg.attr('src', origUrl);
+  origImg.show(400);
+};
+
+function hideOrig() {
+  $(this).next().hide(400);
+};
+
 
 // var gamePlayers = window.gameLib.players;
 // var kingdomCards = window.gameLib.kingdomCards;
