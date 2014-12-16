@@ -112,12 +112,14 @@ img.supply-kingdom-orig {
   width: 25%;
   height: 30%;
   margin-right: 5%;
-  background: #BAD1F0;
+  background-image: url(/images/cloud_stats.jpg);
+  border-radius: 5px;
 }
 
-#turn-stats p {
-  margin: 0 10px;
-  padding: 5px 0;
+#turn-stats td {
+  /*margin: 0 10px;*/
+  padding: 5px 0 5px 20px;
+  font-weight: bold;
 }
 
 #play-prompt {
@@ -169,7 +171,7 @@ img.handcard {
 }
 
 #log-box p {
-  padding: 15px;
+  padding: 25px 15px 0 15px;
 }
 
 #area-player-scroll {
@@ -178,7 +180,8 @@ img.handcard {
 }
 
 .scroll-button {
-  width: 18%;
-  height: 100%;
+  width: 14%;
+  height: 80%;
+  margin-top: 10%;
   margin-left: 5%;
 }
