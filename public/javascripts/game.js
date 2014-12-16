@@ -15,17 +15,26 @@ function Game(kingdomCards){
   kingdomCards.forEach(function(kcard) {
     theSupply[kcard] = 10;
   });
-}
+};
 
 Game.prototype.createPlayers = function(playerNames) {
   theGame = this;
   playerNames.forEach( function(name) {
     theGame.players.push(new Player(name, theGame));
   })
-}
+};
 
 Game.prototype.getCurrentPlayer = function() {
   return this.players[this.currentPlayerIndex];
+};
+
+Game.prototype.showKingdomCards = function(kingdomCards) {
+  var kCardPiles = $('.supply-kingdom');
+
+  kingdomCards.forEach( function(card, index) {
+    var cardPath = '/images/cards/' + card.slice(0, -4).toLowerCase() + '_crop.jpg';
+    kCardPiles.eq(index).attr('src', cardPath);
+  });
 };
 
 Game.prototype.displayMessage = function(message) {
@@ -91,8 +100,11 @@ socket.emit('player on game page', playerID);
 socket.on('ready to start', function (data) {
   var kingdomCards = data.kingdomCards;
   var players = data.players;
+  
   game = new Game(kingdomCards);
   game.createPlayers(players);
+  game.showKingdomCards(kingdomCards);
+  game.displayMessage(message);
 
   socket.emit('game created ready to play', playerID);
 });
@@ -105,6 +117,22 @@ socket.on('player turn', function() {
     showMyHand();
   }
 });
+
+$('.supply-kingdom-orig').hide();
+$('.supply-kingdom').hover(showOrig, hideOrig);
+
+function showOrig() {
+  var cropImg = $(this);
+  var origImg = cropImg.next();
+  var origUrl = cropImg.attr('src').replace('_crop', '');
+
+  origImg.attr('src', origUrl);
+  origImg.show(400);
+};
+
+function hideOrig() {
+  $(this).next().hide(400);
+};
 
 var showMyHand = function() {
   var hand = $("#area-player-hand");
@@ -123,3 +151,4 @@ var showMyHand = function() {
 // var kingdomCards = window.gameLib.kingdomCards;
 
 // === Ting ===
+

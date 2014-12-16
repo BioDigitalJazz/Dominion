@@ -72,8 +72,8 @@ var players = [];
 var whosReady = [];
 var messages = [];
 var randomCards = ['ChancellorCard', 'CouncilRoomCard', 'FestivalCard', 
-      'MarketCard', 'LaboratoryCard', 'SmithyCard', 'VillageCard', 
-      'WoodcutterCard', 'WitchCard', 'WorkshopCArd'];
+      'LaboratoryCard', 'MarketCard', 'SmithyCard', 'VillageCard', 
+      'WitchCard', 'WoodcutterCard', 'WorkshopCArd'];
 
 io.on('connection', function (socket) {
   // socket.emit('You are connected!');
@@ -106,7 +106,6 @@ io.on('connection', function (socket) {
 });
 
 // === Ting ===
-
 
 
 module.exports = app;

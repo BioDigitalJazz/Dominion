@@ -1,0 +1,71 @@
+html { 
+  background: url(/images/landing_merlin.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+body {
+/*  width: 1200px;
+  height: 700px;
+  margin: auto;*/
+  /*border: 1px solid black;*/
+  font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+.container {
+  width: 1200px;
+  height: 700px;
+  margin: 15px; 
+  background-color: rgba(159, 159, 159, 0.26);
+}
+
+@font-face {
+  font-family: "BlackChancery";
+  src: local("BlackChancery"),
+       url('/fonts/black_chancery.ttf');
+}
+
+h1 {
+  width: 60%;
+  height: 20%;
+  margin: auto;
+  padding-top: 30px;
+
+  color: #000033;
+  font: 90px "BlackChancery", Georgia, Times, serif;
+  text-align: center;
+  letter-spacing: 0.1em;
+}
+
+#init-game {
+  width: 50%;
+  margin: auto;
+  border: none;
+  font-size: 18px;
+}
+
+input[type="text"] {
+  display: inline-block;
+  margin: 20px 30px;
+  width: 70%;
+  border: solid 1px #dcdcdc;
+  transition: box-shadow 0.3s, border 0.3s;
+  font-size: 20px;
+}
+
+input[type="text"]:focus {
+  border: solid 1px #000033;
+  box-shadow: 0 0 5px 1px #969696;
+}
+
+button {
+  border-radius: 10px;
+  padding: 5px 15px;
+  font-size: 18px;
+}
+
+button#btn-start-game {
+  margin: 20px 40px;
+}
