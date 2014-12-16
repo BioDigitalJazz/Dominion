@@ -8,9 +8,9 @@ var Player = function (name, game) {
 
   for (var i = 1; i <= 10; i++) {
     if (i <= 7) {
-      this.gainCard('FestivalCard');
+      this.gainCard('CopperCard');
     } else {
-      this.gainCard('VillageCard');
+      this.gainCard('EstateCard');
     }
   };
   // console.log("discard pile should have 10 before drawing and shuffling : " + this.discardPile.length);
