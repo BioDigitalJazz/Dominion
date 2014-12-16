@@ -215,7 +215,7 @@ img.player-action {
 }
 
 #curseCard {
-  style="background-image: url(./public/images/cards/curse.jpg)"
+  style="background-image: url(../public/images/cards/curse.jpg)"
 }
 .container {
   width: 1200px;
