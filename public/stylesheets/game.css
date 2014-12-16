@@ -113,7 +113,7 @@ img.supply-kingdom-orig {
   height: 30%;
   margin-right: 5%;
   background-image: url(/images/cloud_stats.jpg);
-  border-radius: 5px;
+  border-radius: 10px;
 }
 
 #turn-stats td {
@@ -126,13 +126,16 @@ img.supply-kingdom-orig {
   float: left;
   width: 70%;
   height: 30%;
-  background: #BAD1F0;
-}
+  background-image: url(/images/cloud_prompt.jpg);
+  border-radius: 10px;
 
-#play-prompt p {
   padding: 5px 10px;
   font-size: 24px;
 }
+
+/*#play-prompt p {
+  
+}*/
 
 #play-area {
   clear: left;
