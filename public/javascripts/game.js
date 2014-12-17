@@ -116,6 +116,9 @@ var playCard = function(card, handIndex, playerid) {
         moveCard.hide().appendTo('#play-area').show(300);
       }, 300);
 
+      $("#coinCount").text(Number($("coinCount").text) + card.worth);
+      console.log($("coinCount").html);
+
       adviseServer("hand", handIndex, thePlayer, "moveToPlayArea");
     }
   }
@@ -130,11 +133,6 @@ var playCard = function(card, handIndex, playerid) {
 // };
 
 var adviseServer = function(theCardLocation, theCardIndex, thePlayer, theFunctionToPass) {
-  console.log("advise server");
-  console.log(theCardLocation);
-  console.log(theCardIndex);
-  console.log(thePlayer);
-  console.log(theFunctionToPass);
   socket.emit('player action', { cardLocation: theCardLocation, cardIndex: theCardIndex, 
                playerIndex: game.players.indexOf(thePlayer), functionToPass: theFunctionToPass });
   console.log("server advised");
