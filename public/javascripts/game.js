@@ -144,10 +144,13 @@ socket.on('update DB', function(data) {
   console.log(data);
   var theCardLocation = data.cardLocation;
   var theCardIndex = data.cardIndex;
-  var thePlayerIndex = data.playerIndex;
-  var theFunctionToPass = data.functionToPass;
-  console.log(theCardLocation);
-  console.log("update DB");
+  var thePlayer = game.players[data.playerIndex];
+  var theFunction = data.functionToPass;
+  
+  if (theFunction == "moveToPlayArea") {
+    thePlayer.playArea.push(thePlayer.hand[theCardIndex]);
+    thePlayer.hand.splice(theCardIndex, 1);
+  }
   
 })
 
