@@ -41,11 +41,28 @@ Game.prototype.displayMessage = function(message) {
   $('#play-prompt').text(message);
 };
 
+Game.prototype.cleanUp = function() {
+  $( ".handcard" ).remove();
+  $( ".hand-to-play" ).remove();
+};
+
 Game.prototype.nextPlayer = function(){
-  if (this.currentPlayerIndex == this.players.length - 1) {
-    this.currentPlayerIndex = 0;
+  if(game.currentPlayerIndex == Number(playerID)) {
+    game.cleanUp();
+    game.getCurrentPlayer().cleanUpPhase();
+    showMyHand();
+  }
+
+  if (game.currentPlayerIndex == game.players.length - 1) {
+    game.currentPlayerIndex = 0;
   } else {
-    this.currentPlayerIndex++;
+    game.currentPlayerIndex++;
+  }
+
+  if(game.currentPlayerIndex == Number(playerID)) {
+    game.displayMessage("It is your turn, play an action, or buy a card.");
+  } else {
+    game.displayMessage("Not your turn, please wait.");
   }
 };
 
@@ -117,7 +134,7 @@ var playCard = function(card, handIndex, playerid) {
       }, 400);
 
       $("#coinCount").text(Number($("#coinCount").text()) + card.worth);
-      console.log($("#coinCount").text());
+
 
       adviseServerAction("hand", handIndex, thePlayer, "moveToPlayArea");
     }
@@ -134,6 +151,14 @@ var buyCard = function(cardName) {
       console.log("You can't afford that!");
     } else {
       adviseServerBuy(game.players.indexOf(game.getCurrentPlayer()), supplyName);
+      $("#coinCount").text(Number($("#coinCount").text()) - cardToBuy.cost);
+      if (Number($("#buyCount").text()) <= 1) {
+        adviseServerNextPlayer();
+      } else {
+        $("#actionCount").text(Number($("#actionCount").text()) - 1);
+        console.log("still more buys:" + $("#coinCount").text());
+      }
+
     }
   }
 };
@@ -147,6 +172,10 @@ var buyCard = function(cardName) {
 //   console.log(imgsrc);
 // };
 
+var adviseServerNextPlayer = function() {
+  socket.emit('next player');
+}
+
 var adviseServerBuy = function(thePlayer, theCard) {
   socket.emit('player buy', { playerIndex: thePlayer, card: theCard });
 }
@@ -156,13 +185,15 @@ var adviseServerAction = function(theCardLocation, theCardIndex, thePlayer, theF
                playerIndex: game.players.indexOf(thePlayer), functionToPass: theFunctionToPass });
 };
 
+socket.on('update DB next player', function() {
+  game.nextPlayer();
+});
+
 socket.on('update DB buy', function(data) {
   var player = game.players[data.playerIndex];
   var card = data.card;
-  console.log(player.discardPile);
   player.gainCard(card);
-  console.log(player.discardPile);
-})
+});
 
 socket.on('update DB action', function(data) {
   var theCardLocation = data.cardLocation;
