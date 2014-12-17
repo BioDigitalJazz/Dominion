@@ -71,7 +71,7 @@ var io = require('socket.io')(server);
 var players = [];
 var whosReady = [];
 var messages = [];
-var randomCards = ['ChancellorCard', 'CouncilRoomCard', 'FestivalCard', 
+var randomCards = ['ChancellorCard', 'CouncilroomCard', 'FestivalCard', 
       'LaboratoryCard', 'MarketCard', 'SmithyCard', 'VillageCard', 
       'WitchCard', 'WoodcutterCard', 'WorkshopCArd'];
 
@@ -104,7 +104,11 @@ io.on('connection', function (socket) {
   });
 
   socket.on('player action', function(data) {
-    io.emit('update DB', data);
+    io.emit('update DB action', data);
+  });
+
+  socket.on('player buy', function(data) {
+    io.emit('update DB buy', data);
   });
 
 });
