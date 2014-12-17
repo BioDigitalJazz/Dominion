@@ -109,12 +109,12 @@ var playCard = function(card, handIndex, playerid) {
 
     if (card.types.Treasure) {
       var oldCard = $('.handcard').eq(handIndex);
-      oldCard.hide(300);
+      oldCard.hide(400);
       setTimeout( function() {
         oldCard.remove();
         var moveCard = $('<img>').attr('src', card.image).addClass('hand-to-play');
-        moveCard.hide().appendTo('#play-area').show(300);
-      }, 300);
+        moveCard.hide().appendTo('#play-area').show(400);
+      }, 400);
 
       $("#coinCount").text(Number($("coinCount").text) + card.worth);
       console.log($("coinCount").html);
@@ -178,7 +178,9 @@ $(function(){
   initCardDisplay();
 
   $("#area-player-hand").on("click", ".handcard", function(event) {
-    var handIndex = event.target.id.slice(-1);
+    // var handIndex = event.target.id.slice(-1);
+    var handIndex = $(".handcard").index(this);
+    console.log(handIndex);
     playCard(game.getCurrentPlayer().hand[handIndex], handIndex, playerID);
   });
 });
