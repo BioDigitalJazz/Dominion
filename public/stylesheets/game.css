@@ -1,6 +1,6 @@
 div, img {
   box-sizing: border-box;
- /* border: 1px dotted black;*/
+  border: 1px dotted black;
 }
 
 #column-left {
@@ -23,7 +23,7 @@ div, img {
 
 #area-supply-nonaction {
   width: 100%;
-  height: 60%;
+  height: 72.4%;
 }
 
 .col-supply-nonaction {
@@ -56,19 +56,19 @@ img.supply-nonaction-big {
 }
 
 #div-copper {
-  margin-top: 103%;
+  margin-top: 119%;
 }
 
-#area-player-aside {
+#area-player-deck {
   width: 100%;
-  height: 40%;
+  height: 27.6%;
 }
 
-.player-aside {
+img#deck {
   display: block;
-  width: 45%;
-  height: 45%;
-  margin-left: 25%;
+  width: 56%;
+  height: 90%;
+  margin-left: 20%;
   margin-top: 5%;
 }
 
@@ -132,10 +132,6 @@ img.supply-kingdom-orig {
   font-size: 24px;
 }
 
-/*#play-prompt p {
-  
-}*/
-
 #play-area {
   clear: left;
   width: 100%;
@@ -169,7 +165,7 @@ img.handcard {
 #area-log {
   z-index: 1;
   width: 100%;
-  height: 74.2%;
+  height: 72.4%;
 }
 
 #log-box {
@@ -185,14 +181,15 @@ img.handcard {
   padding: 25px 15px 0 15px;
 }
 
-#area-player-scroll {
+#area-discard-pile {
   width: 100%;
-  height: 25.8%;
+  height: 27.6%;
 }
 
-.scroll-button {
-  width: 10%;
-  height: 60%;
-  margin-top: 10%;
-  margin-left: 4%;
+img#discard-pile {
+  display: block;
+  width: 35.6%;
+  height: 90%;
+  margin-bottom: 5%;
+  margin-left: 15%;
 }
