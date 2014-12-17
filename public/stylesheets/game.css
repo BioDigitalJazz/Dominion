@@ -1,28 +1,22 @@
 div, img {
   box-sizing: border-box;
-  /*border: 1px dotted black;*/
+  border: 1px dotted black;
 }
 
 #column-left {
   float: left;
-  display: flex;
-  flex-direction: column;
   width: 17.5%;
   height: 100%;
 }
 
 #column-middle {
   float: left;
-  display: flex;
-  flex-direction: column;
   width: 55%;
   height: 100%;
 }
 
 #column-right {
   float: left;
-  display: flex;
-  flex-direction: column;
   width: 27.5%;
   height: 100%;
 }
@@ -36,40 +30,46 @@ div, img {
   float: left;
   width: 50%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-start;
 }
 
-.supply-nonaction {
-  z-index: 1;
+.div-supply-nonaction {
+  position: relative;
   width: 90%;
   height: 23%;
   margin-bottom: 8%;
 }
 
-.supply-nonaction-big {
+img.supply-nonaction {
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+img.supply-nonaction-big {
   display: none;
   z-index: 2;
   position: absolute;
+  top: 0;
+  left: 110%;
   width: 150px;
   height: 240px;
+}
+
+#div-copper {
+  margin-top: 103%;
 }
 
 #area-player-aside {
   width: 100%;
   height: 40%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
 }
 
 .player-aside {
+  display: block;
   width: 45%;
-  height: 46%;
-  margin-top: 8%;
+  height: 45%;
+  margin-left: 25%;
+  margin-top: 5%;
 }
 
 #area-supply-kingdom {
@@ -91,7 +91,6 @@ img.supply-kingdom {
   width: 18%;
   height: 90%;
   margin-right: 2%;
-/*  border: 1px dashed red;*/
 }
 
 img.supply-kingdom-orig {
@@ -142,11 +141,6 @@ img.supply-kingdom-orig {
   width: 100%;
   height: 70%;
   border: 1px solid black;
-
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
 }
 
 img.hand-to-play {
@@ -158,20 +152,19 @@ img.hand-to-play {
 #area-player-hand {
   width: 100%;
   height: 25.8%;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-end;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
 }
 
 img.handcard {
   width: 18%;
   height: 100%;
   margin-right: 2%;
-/*  border: 1px dashed red;*/
 }
 
 #area-log {
+  z-index: 1;
   width: 100%;
   height: 74.2%;
 }
