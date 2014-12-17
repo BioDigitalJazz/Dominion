@@ -1,6 +1,6 @@
 div, img {
   box-sizing: border-box;
-  border: 1px dotted black;
+ /* border: 1px dotted black;*/
 }
 
 #column-left {
@@ -103,13 +103,13 @@ img.supply-kingdom-orig {
 
 #area-play-center {
   width: 100%;
-  height: 42.8%;
+  height: 41%;
 }
 
 #turn-stats {
   float: left;
   width: 25%;
-  height: 30%;
+  height: 32%;
   margin-right: 5%;
   background-image: url(/images/cloud_stats.jpg);
   border-radius: 10px;
@@ -124,7 +124,7 @@ img.supply-kingdom-orig {
 #play-prompt {
   float: left;
   width: 70%;
-  height: 30%;
+  height: 32%;
   background-image: url(/images/cloud_prompt.jpg);
   border-radius: 10px;
 
@@ -139,19 +139,22 @@ img.supply-kingdom-orig {
 #play-area {
   clear: left;
   width: 100%;
-  height: 70%;
-  border: 1px solid black;
+  height: 68%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
 }
 
 img.hand-to-play {
   width: 18%;
-  height: 85.7%;
+  height: 90%;
+  margin-top: 5px;
   margin-right: 2%;
 }
 
 #area-player-hand {
   width: 100%;
-  height: 25.8%;
+  height: 27.6%;
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;

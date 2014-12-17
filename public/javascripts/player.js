@@ -15,7 +15,7 @@ var Player = function (name, game) {
   };
   // console.log("discard pile should have 10 before drawing and shuffling : " + this.discardPile.length);
   // console.log("hand should be empty before drawing : " + this.hand.length);
-  this.drawCards(6);
+  this.drawCards(9);
   // console.log("hand should have 5 cards after drawing : " + this.hand.length);
 };
 
