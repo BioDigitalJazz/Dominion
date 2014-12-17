@@ -116,13 +116,28 @@ var playCard = function(card, handIndex, playerid) {
         moveCard.hide().appendTo('#play-area').show(400);
       }, 400);
 
-      $("#coinCount").text(Number($("coinCount").text) + card.worth);
-      console.log($("coinCount").html);
+      $("#coinCount").text(Number($("#coinCount").text()) + card.worth);
+      console.log($("#coinCount").text());
 
-      adviseServer("hand", handIndex, thePlayer, "moveToPlayArea");
+      adviseServerAction("hand", handIndex, thePlayer, "moveToPlayArea");
     }
   }
 };
+var buyCard = function(cardName) {
+  // name format is CouncilroomCard
+  var supplyName = cardName.charAt(0).toUpperCase() + cardName.substring(1) + "Card";
+  var cardToBuy = new cardConstructors[supplyName]();
+  if (game.players[playerID] !== game.getCurrentPlayer()) {
+    console.log("Wait your goddamn turn!");
+  } else {
+    if (cardToBuy.cost > Number($("#coinCount").text())) {
+      console.log("You can't afford that!");
+    } else {
+      adviseServerBuy(game.players.indexOf(game.getCurrentPlayer()), supplyName);
+    }
+  }
+};
+
 
 // var moveToPlayArea = function(card, handIndex, player) {
 //   var imgIdentifier = "img#handcard" + handIndex
@@ -132,14 +147,24 @@ var playCard = function(card, handIndex, playerid) {
 //   console.log(imgsrc);
 // };
 
-var adviseServer = function(theCardLocation, theCardIndex, thePlayer, theFunctionToPass) {
+var adviseServerBuy = function(thePlayer, theCard) {
+  socket.emit('player buy', { playerIndex: thePlayer, card: theCard });
+}
+
+var adviseServerAction = function(theCardLocation, theCardIndex, thePlayer, theFunctionToPass) {
   socket.emit('player action', { cardLocation: theCardLocation, cardIndex: theCardIndex, 
                playerIndex: game.players.indexOf(thePlayer), functionToPass: theFunctionToPass });
-  console.log("server advised");
 };
 
-socket.on('update DB', function(data) {
-  console.log(data);
+socket.on('update DB buy', function(data) {
+  var player = game.players[data.playerIndex];
+  var card = data.card;
+  console.log(player.discardPile);
+  player.gainCard(card);
+  console.log(player.discardPile);
+})
+
+socket.on('update DB action', function(data) {
   var theCardLocation = data.cardLocation;
   var theCardIndex = data.cardIndex;
   var thePlayer = game.players[data.playerIndex];
@@ -149,8 +174,7 @@ socket.on('update DB', function(data) {
     thePlayer.playArea.push(thePlayer.hand[theCardIndex]);
     thePlayer.hand.splice(theCardIndex, 1);
   }
-  
-})
+});
 
 function showOrig() {
   var cropImg = $(this);
@@ -174,14 +198,22 @@ function initCardDisplay() {
 };
 
 $(function(){
-  console.log("ready");
   initCardDisplay();
-
   $("#area-player-hand").on("click", ".handcard", function(event) {
     // var handIndex = event.target.id.slice(-1);
     var handIndex = $(".handcard").index(this);
-    console.log(handIndex);
     playCard(game.getCurrentPlayer().hand[handIndex], handIndex, playerID);
   });
+
+  $("#area-supply-kingdom").on("click", ".supply-kingdom", function(event) {
+    var supplyIndex = $(".supply-kingdom").index(this);
+    var imgSource = $(this).attr('src');
+    console.log(imgSource);
+    // src="/images/cards/councilroom_crop.jpg
+    //index=0123456789012345678901234567890123
+    var cardName = imgSource.substring(14, (imgSource.length - 9));
+    buyCard(cardName);
+  });
+
 });
 
