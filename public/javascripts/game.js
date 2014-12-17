@@ -91,25 +91,6 @@ socket.on('player turn', function() {
   showMyHand();
 });
 
-$('.supply-nonaction-orig').hide();
-$('.supply-kingdom-orig').hide();
-
-$('.supply-nonaction').hover(showOrig, hideOrig);
-$('.supply-kingdom').hover(showOrig, hideOrig);
-
-function showOrig() {
-  var cropImg = $(this);
-  var origImg = cropImg.next();
-  var origUrl = cropImg.attr('src').replace('_crop', '');
-
-  origImg.attr('src', origUrl);
-  origImg.show(400);
-};
-
-function hideOrig() {
-  $(this).next().hide(400);
-};
-
 var showMyHand = function() {
   var hand = $("#area-player-hand");
   var cardsInHand = game.players[playerID].hand;
@@ -127,9 +108,13 @@ var playCard = function(card, handIndex, playerid) {
     var thePlayer = game.players[playerID];
 
     if (card.types.Treasure) {
-      $('.handcard').eq(handIndex).hide(400);
-      var moveCard = $('<img>').attr('src', card.image).addClass('hand-to-play');
-      moveCard.hide().appendTo('#play-area').show(400);
+      var oldCard = $('.handcard').eq(handIndex);
+      oldCard.hide(300);
+      setTimeout( function() {
+        oldCard.remove();
+        var moveCard = $('<img>').attr('src', card.image).addClass('hand-to-play');
+        moveCard.hide().appendTo('#play-area').show(300);
+      }, 300);
 
       adviseServer("hand", handIndex, thePlayer, "moveToPlayArea");
     }
@@ -166,17 +151,34 @@ socket.on('update DB', function(data) {
   
 })
 
+function showOrig() {
+  var cropImg = $(this);
+  var origImg = cropImg.next();
+  var origUrl = cropImg.attr('src').replace('_crop', '');
+
+  origImg.attr('src', origUrl);
+  origImg.show(400);
+};
+
+function hideOrig() {
+  $(this).next().hide(400);
+};
+
+function initCardDisplay() {
+  $('.supply-nonaction-orig').hide();
+  $('.supply-kingdom-orig').hide();
+
+  $('.supply-nonaction').hover(showOrig, hideOrig);
+  $('.supply-kingdom').hover(showOrig, hideOrig);
+};
+
 $(function(){
   console.log("ready");
+  initCardDisplay();
+
   $("#area-player-hand").on("click", ".handcard", function(event) {
     var handIndex = event.target.id.slice(-1);
     playCard(game.getCurrentPlayer().hand[handIndex], handIndex, playerID);
   });
 });
-
-
-// var gamePlayers = window.gameLib.players;
-// var kingdomCards = window.gameLib.kingdomCards;
-
-// === Ting ===
 
