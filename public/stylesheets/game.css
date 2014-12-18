@@ -48,11 +48,11 @@ img.supply-nonaction {
 img.supply-nonaction-big {
   display: none;
   z-index: 2;
+  width: 150px;
+  height: 240px;
   position: absolute;
   top: 0;
   left: 110%;
-  width: 150px;
-  height: 240px;
 }
 
 #div-copper {
@@ -95,13 +95,17 @@ div.supply-kingdom {
 
 div.supply-count {
   z-index: 2;
+  width: 25px;
+  height: 25px;
   position: absolute;
-  width: 27px;
-  height: 27px;
+  top: 64%;
+  left: 77%;
   border-radius: 50%;
-  margin-top: 5%;
-  margin-left: 6%;
-  background: red;
+  background: #000033;
+  color: white;
+  font-size: 18px;
+  text-align: center;
+  vertical-align: center;
 }
 
 img.supply-kingdom {
@@ -113,9 +117,9 @@ img.supply-kingdom {
 img.supply-kingdom-orig {
   display: none;
   z-index: 3;
-  position: absolute;
   width: 243px;
   height: 382px;
+  position: absolute;
   top: 0;
   left: 110%;
 }
