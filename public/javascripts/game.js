@@ -44,6 +44,9 @@ Game.prototype.displayMessage = function(message) {
 Game.prototype.cleanUp = function() {
   $( ".handcard" ).remove();
   $( ".hand-to-play" ).remove();
+  $("#actionCount").text("1");
+  $("#buyCount").text("1");
+  $("#coinCount").text("0");
 };
 
 Game.prototype.nextPlayer = function(){
@@ -120,23 +123,28 @@ var showMyHand = function() {
   };
 };
 
+var moveCardToPlay = function(jqueryCard, card) {
+  jqueryCard.hide(400);
+  setTimeout( function() {
+    jqueryCard.remove();
+    var moveCard = $('<img>').attr('src', card.image).addClass('hand-to-play');
+    moveCard.hide().appendTo('#play-area').show(400);
+  }, 400);
+}
+
 var playCard = function(card, handIndex, playerid) {
   if (game.players[playerid] == game.getCurrentPlayer()) {
-    var thePlayer = game.players[playerID];
+    var thePlayer = game.players[playerid];
 
     if (card.types.Treasure) {
-      var oldCard = $('.handcard').eq(handIndex);
-      oldCard.hide(400);
-      setTimeout( function() {
-        oldCard.remove();
-        var moveCard = $('<img>').attr('src', card.image).addClass('hand-to-play');
-        moveCard.hide().appendTo('#play-area').show(400);
-      }, 400);
-
+      moveCardToPlay($('.handcard').eq(handIndex), card);
       $("#coinCount").text(Number($("#coinCount").text()) + card.worth);
-
-
       adviseServerAction("hand", handIndex, thePlayer, "moveToPlayArea");
+    }
+
+    if (card.types.action) {
+      moveCardToPlay($('.handcard').eq(handIndex), card);
+      console.log(card.effects);
     }
   }
 };
@@ -239,10 +247,18 @@ $(function(){
   $("#area-supply-kingdom").on("click", ".supply-kingdom", function(event) {
     var supplyIndex = $(".supply-kingdom").index(this);
     var imgSource = $(this).attr('src');
-    console.log(imgSource);
     // src="/images/cards/councilroom_crop.jpg
     //index=0123456789012345678901234567890123
     var cardName = imgSource.substring(14, (imgSource.length - 9));
+    buyCard(cardName);
+  });
+
+  $("#area-supply-nonaction").on("click", ".supply-nonaction", function(event) {
+    var supplyIndex = $(".supply-nonaction").index(this);
+    var imgSource = $(this).attr('src');
+    // src="/images/cards/duchy.jpg"
+    //index=01234567890123456789012
+    var cardName = imgSource.substring(14, (imgSource.length - 4));
     buyCard(cardName);
   });
 

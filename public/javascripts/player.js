@@ -15,7 +15,7 @@ var Player = function (name, game) {
   };
   // console.log("discard pile should have 10 before drawing and shuffling : " + this.discardPile.length);
   // console.log("hand should be empty before drawing : " + this.hand.length);
-  this.drawCards(9);
+  this.drawCards(5);
   // console.log("hand should have 5 cards after drawing : " + this.hand.length);
 };
 
@@ -45,15 +45,17 @@ Player.prototype.cleanUpPhase = function() {
   var theDiscardPile = this.discardPile;
   var theHand = this.hand;
   var thePlayArea = this.playArea;
-  for (var i = 0; i < thePlayArea.length; i++) {
-    theDiscardPile.push(thePlayArea[i]);
-  }
-  thePlayArea = [];
-  var handLength = theHand.length;
+
+  var numPlayAreaCards = thePlayArea.length;
+  for (var i = 0; i < numPlayAreaCards; i++) {
+    theDiscardPile.push(thePlayArea.pop());
+  };
+  this.playArea = [];
+  var handLength = this.hand.length;
   for (var j = 0; j < handLength; j++) {
     theDiscardPile.push(theHand.pop());
   }
-  theHand = [];
+  this.hand = []
   this.drawCards(5);
 }
 
@@ -61,6 +63,7 @@ Player.prototype.drawCards = function(num) {
   var theHand = this.hand;
   var theDiscardPile = this.discardPile;
   var theDeck = this.deck;
+
   for (var i = 1; i <= num; i++) {
     if (theDeck.length == 0) {
       var discards = theDiscardPile.length;
