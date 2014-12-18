@@ -18,7 +18,7 @@ function Game(kingdomCards){
 };
 
 Game.prototype.createPlayers = function(playerNames) {
-  theGame = this;
+  var theGame = this;
   playerNames.forEach( function(name) {
     theGame.players.push(new Player(name, theGame));
   })
@@ -112,14 +112,16 @@ socket.on('player turn', function() {
 });
 
 var showMyHand = function() {
-  var hand = $("#area-player-hand");
+  var handArea = $("#area-player-hand");
+  $(".handcard").remove();
   var cardsInHand = game.players[playerID].hand;
+  console.log(cardsInHand);
   for (var i = 0; i < cardsInHand.length; i++) {
     var aCard = cardsInHand[i]
     var imagesrc = "/images/cards/" + aCard.name.toLowerCase() + ".jpg";
     var imageid = "handcard" + i;
     var imageClass = "handcard";
-    hand.append('<img src= \"' + imagesrc + '\" class=\"' + imageClass + '\" id=\"' + imageid + '\">');
+    handArea.append('<img src= \"' + imagesrc + '\" class=\"' + imageClass + '\" id=\"' + imageid + '\">');
   };
 };
 
