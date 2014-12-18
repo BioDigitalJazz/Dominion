@@ -59,6 +59,15 @@ Player.prototype.cleanUpPhase = function() {
   this.drawCards(5);
 }
 
+Player.prototype.gainCard = function (cardName) {
+  this.game.supply[cardName]--;
+  var newCard = new cardConstructors[cardName]();
+  this.discardPile.push(newCard);
+
+  var cardPath = '/images/cards/' + cardName.toLowerCase() + '_crop.jpg';
+  $('img.supply-kingdom[src$=cardPath]').show();
+};
+
 Player.prototype.drawCards = function(num) {
   var theHand = this.hand;
   var theDiscardPile = this.discardPile;
@@ -76,12 +85,6 @@ Player.prototype.drawCards = function(num) {
     theHand.push(theDeck.pop());
   };
 }; 
-
-Player.prototype.gainCard = function (cardName) {
-  this.game.supply[cardName]--;
-  var newCard = new cardConstructors[cardName]();
-  this.discardPile.push(newCard);
-};
 
 Player.prototype.gainAction = function(num) {
   actions += num;
