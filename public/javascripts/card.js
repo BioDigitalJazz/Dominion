@@ -128,7 +128,7 @@ ActionCard.prototype.constructor = ActionCard;
 
 ActionCard.prototype.play = function(player) { 
   var ef = this.effects;
-  if (ef["drawCard"])   { player.drawCard(ef["drawCard"]); };
+  if (ef["drawCard"])   { player.drawCards(ef["drawCard"]); };
  
   if (ef["gainCard"])   { player.gainCard(ef["gainCard"]); };
   if (ef["gainAction"]) { player.gainAction(ef["gainAction"]); };

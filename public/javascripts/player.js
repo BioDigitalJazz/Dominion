@@ -64,6 +64,8 @@ Player.prototype.drawCards = function(num) {
   var theDiscardPile = this.discardPile;
   var theDeck = this.deck;
 
+  console.log("drawing " + num + " cards");
+
   for (var i = 1; i <= num; i++) {
     if (theDeck.length == 0) {
       var discards = theDiscardPile.length;
@@ -72,9 +74,9 @@ Player.prototype.drawCards = function(num) {
       };
       this.shuffleDeck();
     };
-
     theHand.push(theDeck.pop());
   };
+  console.log(theHand);
 }; 
 
 Player.prototype.gainCard = function (cardName) {
@@ -84,15 +86,15 @@ Player.prototype.gainCard = function (cardName) {
 };
 
 Player.prototype.gainAction = function(num) {
-  actions += num;
+  $("#actionCount").text(Number($("#actionCount").text()) + Number(num));
 };
 
 Player.prototype.gainCoin = function(num) {
-  coins += num;
+  $("#coinCount").text(Number($("#coinCount").text()) + Number(num));
 };
 
 Player.prototype.gainBuy = function(num) {
-  buys += num;
+  $("#buyCount").text(Number($("#buyCount").text()) + Number(num));
 };
 
 Player.prototype.revealCard = function(card) {
