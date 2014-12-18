@@ -18,7 +18,7 @@ function Game(kingdomCards){
 };
 
 Game.prototype.createPlayers = function(playerNames) {
-  theGame = this;
+  var theGame = this;
   playerNames.forEach( function(name) {
     theGame.players.push(new Player(name, theGame));
   })
@@ -41,11 +41,31 @@ Game.prototype.displayMessage = function(message) {
   $('#play-prompt').text(message);
 };
 
+Game.prototype.cleanUp = function() {
+  $( ".handcard" ).remove();
+  $( ".hand-to-play" ).remove();
+  $("#actionCount").text("1");
+  $("#buyCount").text("1");
+  $("#coinCount").text("0");
+};
+
 Game.prototype.nextPlayer = function(){
-  if (this.currentPlayerIndex == this.players.length - 1) {
-    this.currentPlayerIndex = 0;
+  if(game.currentPlayerIndex == Number(playerID)) {
+    game.cleanUp();
+    game.getCurrentPlayer().cleanUpPhase();
+    showMyHand();
+  }
+
+  if (game.currentPlayerIndex == game.players.length - 1) {
+    game.currentPlayerIndex = 0;
   } else {
-    this.currentPlayerIndex++;
+    game.currentPlayerIndex++;
+  }
+
+  if(game.currentPlayerIndex == Number(playerID)) {
+    game.displayMessage("It is your turn, play an action, or buy a card.");
+  } else {
+    game.displayMessage("Not your turn, please wait.");
   }
 };
 
@@ -92,34 +112,41 @@ socket.on('player turn', function() {
 });
 
 var showMyHand = function() {
-  var hand = $("#area-player-hand");
+  var handArea = $("#area-player-hand");
+  $(".handcard").remove();
   var cardsInHand = game.players[playerID].hand;
+  console.log(cardsInHand);
   for (var i = 0; i < cardsInHand.length; i++) {
     var aCard = cardsInHand[i]
     var imagesrc = "/images/cards/" + aCard.name.toLowerCase() + ".jpg";
     var imageid = "handcard" + i;
     var imageClass = "handcard";
-    hand.append('<img src= \"' + imagesrc + '\" class=\"' + imageClass + '\" id=\"' + imageid + '\">');
+    handArea.append('<img src= \"' + imagesrc + '\" class=\"' + imageClass + '\" id=\"' + imageid + '\">');
   };
 };
 
+var moveCardToPlay = function(jqueryCard, card) {
+  jqueryCard.hide(400);
+  setTimeout( function() {
+    jqueryCard.remove();
+    var moveCard = $('<img>').attr('src', card.image).addClass('hand-to-play');
+    moveCard.hide().appendTo('#play-area').show(400);
+  }, 400);
+}
+
 var playCard = function(card, handIndex, playerid) {
   if (game.players[playerid] == game.getCurrentPlayer()) {
-    var thePlayer = game.players[playerID];
+    var thePlayer = game.players[playerid];
 
     if (card.types.Treasure) {
-      var oldCard = $('.handcard').eq(handIndex);
-      oldCard.hide(400);
-      setTimeout( function() {
-        oldCard.remove();
-        var moveCard = $('<img>').attr('src', card.image).addClass('hand-to-play');
-        moveCard.hide().appendTo('#play-area').show(400);
-      }, 400);
-
+      moveCardToPlay($('.handcard').eq(handIndex), card);
       $("#coinCount").text(Number($("#coinCount").text()) + card.worth);
-      console.log($("#coinCount").text());
-
       adviseServerAction("hand", handIndex, thePlayer, "moveToPlayArea");
+    }
+
+    if (card.types.action) {
+      moveCardToPlay($('.handcard').eq(handIndex), card);
+      console.log(card.effects);
     }
   }
 };
@@ -134,6 +161,14 @@ var buyCard = function(cardName) {
       console.log("You can't afford that!");
     } else {
       adviseServerBuy(game.players.indexOf(game.getCurrentPlayer()), supplyName);
+      $("#coinCount").text(Number($("#coinCount").text()) - cardToBuy.cost);
+      if (Number($("#buyCount").text()) <= 1) {
+        adviseServerNextPlayer();
+      } else {
+        $("#actionCount").text(Number($("#actionCount").text()) - 1);
+        console.log("still more buys:" + $("#coinCount").text());
+      }
+
     }
   }
 };
@@ -147,6 +182,10 @@ var buyCard = function(cardName) {
 //   console.log(imgsrc);
 // };
 
+var adviseServerNextPlayer = function() {
+  socket.emit('next player');
+}
+
 var adviseServerBuy = function(thePlayer, theCard) {
   socket.emit('player buy', { playerIndex: thePlayer, card: theCard });
 }
@@ -156,13 +195,15 @@ var adviseServerAction = function(theCardLocation, theCardIndex, thePlayer, theF
                playerIndex: game.players.indexOf(thePlayer), functionToPass: theFunctionToPass });
 };
 
+socket.on('update DB next player', function() {
+  game.nextPlayer();
+});
+
 socket.on('update DB buy', function(data) {
   var player = game.players[data.playerIndex];
   var card = data.card;
-  console.log(player.discardPile);
   player.gainCard(card);
-  console.log(player.discardPile);
-})
+});
 
 socket.on('update DB action', function(data) {
   var theCardLocation = data.cardLocation;
@@ -208,10 +249,18 @@ $(function(){
   $("#area-supply-kingdom").on("click", ".supply-kingdom", function(event) {
     var supplyIndex = $(".supply-kingdom").index(this);
     var imgSource = $(this).attr('src');
-    console.log(imgSource);
     // src="/images/cards/councilroom_crop.jpg
     //index=0123456789012345678901234567890123
     var cardName = imgSource.substring(14, (imgSource.length - 9));
+    buyCard(cardName);
+  });
+
+  $("#area-supply-nonaction").on("click", ".supply-nonaction", function(event) {
+    var supplyIndex = $(".supply-nonaction").index(this);
+    var imgSource = $(this).attr('src');
+    // src="/images/cards/duchy.jpg"
+    //index=01234567890123456789012
+    var cardName = imgSource.substring(14, (imgSource.length - 4));
     buyCard(cardName);
   });
 

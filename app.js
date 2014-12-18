@@ -111,6 +111,9 @@ io.on('connection', function (socket) {
     io.emit('update DB buy', data);
   });
 
+  socket.on('next player', function() {
+    io.emit('update DB next player');
+  });
 });
 
 // === Ting ===
