@@ -64,9 +64,9 @@ Player.prototype.gainCard = function (cardName) {
   var newCard = new cardConstructors[cardName]();
   this.discardPile.push(newCard);
 
-  var cardPath = '/images/cards/' + cardName.slice(0, -4).toLowerCase() + '_crop.jpg';
+  // update card count on page
+  var cardPath = getCardPath(cardName, true);
   var cardSelect = 'img.supply-kingdom[src="' + cardPath + '"]';
-  console.log(cardSelect);
   $(cardSelect).prev().text(this.game.supply[cardName]);
 };
 

@@ -476,6 +476,14 @@ cardConstructors.WitchCard       = WitchCard;
 cardConstructors.WoodcutterCard  = WoodcutterCard;
 cardConstructors.WorkshopCard    = WorkshopCard; 
 
+
+// return the path to the cropped card img
+function getCardPath(cardName, cropped) {
+  var path = '/images/cards/' + cardName.slice(0, -4).toLowerCase();
+  var file = (cropped ? '_crop.jpg' : '.jpg'); 
+  return path + file;
+};
+
 // exports.CopperCard      = CopperCard;
 // exports.SilverCard      = SilverCard;
 // exports.GoldCard        = GoldCard;

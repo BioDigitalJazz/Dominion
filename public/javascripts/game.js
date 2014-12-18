@@ -33,10 +33,22 @@ Game.prototype.showKingdomCards = function(kingdomCards) {
 
   kingdomCards.forEach( function(card, index) {
     var kCard = kCardPiles.eq(index);
-    var cardPath = '/images/cards/' + card.slice(0, -4).toLowerCase() + '_crop.jpg';
+    var cardPath = getCardPath(card, true);
     kCard.attr('src', cardPath);
     kCard.prev().text(10);
   });
+};
+
+Game.prototype.showCardCounts = function() {
+  for (var cardName in this.supply) {
+    var count = this.supply[cardName];
+    var cardPath = getCardPath(cardName, false);
+    var cardSelect = 'img.supply-nonaction[src="' + cardPath + '"]';
+    console.log(cardSelect);
+    
+    if ( $(cardSelect) )
+      $(cardSelect).prev().text(this.supply[cardName]);
+  };
 };
 
 Game.prototype.displayMessage = function(message) {
@@ -101,6 +113,7 @@ socket.on('ready to start', function (data) {
   game = new Game(kingdomCards);
   game.createPlayers(players);
   game.showKingdomCards(kingdomCards);
+  game.showCardCounts();
   socket.emit('game created ready to play', playerID);
 });
 
