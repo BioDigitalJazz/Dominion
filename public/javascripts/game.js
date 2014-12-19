@@ -86,6 +86,12 @@ Game.prototype.gameEnd = function(){
   return (supply['province'] == 0);
 };
 
+Game.prototype.triggerShowHand = function() {
+  showMyHand();
+};
+
+
+
 // Game.prototype.makePlayerReveal(targetPlayer, numOfCards) {
 
 // };
@@ -129,7 +135,6 @@ var showMyHand = function() {
   var handArea = $("#area-player-hand");
   $(".handcard").remove();
   var cardsInHand = game.players[playerID].hand;
-  console.log(cardsInHand);
   for (var i = 0; i < cardsInHand.length; i++) {
     var aCard = cardsInHand[i]
     var imagesrc = "/images/cards/" + aCard.name.toLowerCase() + ".jpg";
@@ -159,8 +164,17 @@ var playCard = function(card, handIndex, playerid) {
     }
 
     if (card.types.action) {
-      moveCardToPlay($('.handcard').eq(handIndex), card);
-      console.log(card.effects);
+      if (Number($("#actionCount").text()) == 0) {
+        game.displayMessage("You have no actions left, please buy a card.")
+      } else {
+        moveCardToPlay($('.handcard').eq(handIndex), card);
+        card.play(thePlayer);
+        adviseServerAction("hand", handIndex, thePlayer, "moveToPlayArea");
+        setTimeout(function() {
+          showMyHand();
+        }, 400);
+        $("#actionCount").text(Number($("#actionCount").text()) - 1);
+      }
     }
   }
 };

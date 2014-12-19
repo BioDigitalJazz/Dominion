@@ -73,7 +73,7 @@ var whosReady = [];
 var messages = [];
 var randomCards = ['ChancellorCard', 'CouncilroomCard', 'FestivalCard', 
       'LaboratoryCard', 'MarketCard', 'SmithyCard', 'VillageCard', 
-      'WitchCard', 'WoodcutterCard', 'WorkshopCArd'];
+      'WitchCard', 'WoodcutterCard', 'WorkshopCard'];
 
 io.on('connection', function (socket) {
   // socket.emit('You are connected!');
