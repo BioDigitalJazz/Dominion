@@ -74,6 +74,13 @@ Player.prototype.gainCard = function (cardName) {
   };
 
   $(cardSelect).prev().text(this.game.supply[cardName]);
+  
+  // when card count reaches 0, change img to back.jpg and remove click event
+  if (this.game.supply[cardName] == 0) {
+    $(cardSelect).attr('src', '/images/cards/back.jpg');
+    $(cardSelect).unbind('click'); 
+    $(cardSelect).unbind('hover');
+  };
 };
 
 Player.prototype.drawCards = function(num) {
