@@ -92,6 +92,8 @@ Player.prototype.drawCards = function(num) {
 
     theHand.push(theDeck.pop());
   };
+
+  $('img#deck').prev().text(theDeck.length);
 }; 
 
 Player.prototype.gainAction = function(num) {

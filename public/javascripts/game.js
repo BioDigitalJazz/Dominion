@@ -231,28 +231,37 @@ socket.on('update DB action', function(data) {
   }
 });
 
-function showOrig() {
-  var cropImg = $(this);
-  cropImg.prev().show(400);
+function showMore() {
+  var smallImg = $(this);
+  smallImg.prev().show(400);
 
-  var origImg = cropImg.next();
-  var origUrl = cropImg.attr('src').replace('_crop', '');
+  var origImg = smallImg.next();
+  var origUrl = smallImg.attr('src').replace('_crop', '');
   origImg.attr('src', origUrl);
   origImg.show(400);
 };
 
-function hideOrig() {
+function hideMore() {
   $(this).prev().hide(400);
   $(this).next().hide(400);
 };
 
+function showCount() {
+  $(this).prev().show(400);
+};
+
+function hideCount() {
+  $(this).prev().hide(400);
+};
+
 function initCardDisplay() {
-  $('div.supply-count').hide();
+  $('div.card-count').hide();
   $('img.supply-nonaction-orig').hide();
   $('img.supply-kingdom-orig').hide();
 
-  $('img.supply-nonaction').hover(showOrig, hideOrig);
-  $('img.supply-kingdom').hover(showOrig, hideOrig);
+  $('img.supply-nonaction').hover(showMore, hideMore);
+  $('img.supply-kingdom').hover(showMore, hideMore);
+  $('img#deck').hover(showCount, hideCount);
 };
 
 $(function(){
