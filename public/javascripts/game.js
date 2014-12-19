@@ -44,9 +44,8 @@ Game.prototype.showCardCounts = function() {
     var count = this.supply[cardName];
     var cardPath = getCardPath(cardName, false);
     var cardSelect = 'img.supply-nonaction[src="' + cardPath + '"]';
-    console.log(cardSelect);
     
-    if ( $(cardSelect) )
+    if ( $(cardSelect).length > 0 )
       $(cardSelect).prev().text(this.supply[cardName]);
   };
 };

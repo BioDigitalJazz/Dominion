@@ -67,7 +67,17 @@ Player.prototype.gainCard = function (cardName) {
   // update card count on page
   var cardPath = getCardPath(cardName, true);
   var cardSelect = 'img.supply-kingdom[src="' + cardPath + '"]';
-  $(cardSelect).prev().text(this.game.supply[cardName]);
+  // HACK
+  console.log('gainCard');
+  if ( $(cardSelect).length > 0 ) {
+    console.log(cardSelect);
+    $(cardSelect).prev().text(game.supply[cardName]);
+  } else {
+    cardPath = getCardPath(cardName, false);
+    cardSelect = 'img.supply-nonaction[src="' + cardPath + '"]';
+    console.log(cardSelect);
+    $(cardSelect).prev().text(game.supply[cardName]);
+  };
 };
 
 Player.prototype.drawCards = function(num) {
