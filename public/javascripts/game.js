@@ -233,18 +233,21 @@ socket.on('update DB action', function(data) {
 
 function showOrig() {
   var cropImg = $(this);
+  cropImg.prev().show(400);
+
   var origImg = cropImg.next();
   var origUrl = cropImg.attr('src').replace('_crop', '');
-
   origImg.attr('src', origUrl);
   origImg.show(400);
 };
 
 function hideOrig() {
+  $(this).prev().hide(400);
   $(this).next().hide(400);
 };
 
 function initCardDisplay() {
+  $('div.supply-count').hide();
   $('img.supply-nonaction-orig').hide();
   $('img.supply-kingdom-orig').hide();
 
