@@ -59,6 +59,23 @@ Player.prototype.cleanUpPhase = function() {
   this.drawCards(5);
 }
 
+Player.prototype.gainCard = function (cardName) {
+  this.game.supply[cardName]--;
+  var newCard = new cardConstructors[cardName]();
+  this.discardPile.push(newCard);
+
+  // update card count on page
+  var cardPath = getCardPath(cardName, true);
+  var cardSelect = 'img.supply-kingdom[src="' + cardPath + '"]';
+  // HACK
+  if ( $(cardSelect).length == 0 ) {
+    cardPath = getCardPath(cardName, false);
+    cardSelect = 'img.supply-nonaction[src="' + cardPath + '"]';
+  };
+
+  $(cardSelect).prev().text(game.supply[cardName]);
+};
+
 Player.prototype.drawCards = function(num) {
   var theHand = this.hand;
   var theDiscardPile = this.discardPile;
@@ -75,13 +92,9 @@ Player.prototype.drawCards = function(num) {
 
     theHand.push(theDeck.pop());
   };
-}; 
 
-Player.prototype.gainCard = function (cardName) {
-  this.game.supply[cardName]--;
-  var newCard = new cardConstructors[cardName]();
-  this.discardPile.push(newCard);
-};
+  $('img#deck').prev().text(theDeck.length);
+}; 
 
 Player.prototype.gainAction = function(num) {
   actions += num;

@@ -128,9 +128,9 @@ ActionCard.prototype.constructor = ActionCard;
 
 ActionCard.prototype.play = function(player) { 
   var ef = this.effects;
-  if (ef["drawCard"])   { player.drawCard(ef["drawCard"]); };
- 
   if (ef["gainCard"])   { player.gainCard(ef["gainCard"]); };
+
+  if (ef["drawCard"])   { player.drawCard(ef["drawCard"]); };
   if (ef["gainAction"]) { player.gainAction(ef["gainAction"]); };
   if (ef["gainCoin"])   { player.gainCoin(ef["gainCoin"]); };
   if (ef["gainBuy"])    { player.gainBuy(ef["gainBuy"]); };
@@ -475,6 +475,14 @@ cardConstructors.VillageCard     = VillageCard;
 cardConstructors.WitchCard       = WitchCard;
 cardConstructors.WoodcutterCard  = WoodcutterCard;
 cardConstructors.WorkshopCard    = WorkshopCard; 
+
+
+// return the path to the cropped card img
+function getCardPath(cardName, cropped) {
+  var path = '/images/cards/' + cardName.slice(0, -4).toLowerCase();
+  var file = (cropped ? '_crop.jpg' : '.jpg'); 
+  return path + file;
+};
 
 // exports.CopperCard      = CopperCard;
 // exports.SilverCard      = SilverCard;

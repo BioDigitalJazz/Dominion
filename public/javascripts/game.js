@@ -29,12 +29,25 @@ Game.prototype.getCurrentPlayer = function() {
 };
 
 Game.prototype.showKingdomCards = function(kingdomCards) {
-  var kCardPiles = $('.supply-kingdom');
+  var kCardPiles = $('img.supply-kingdom');
 
   kingdomCards.forEach( function(card, index) {
-    var cardPath = '/images/cards/' + card.slice(0, -4).toLowerCase() + '_crop.jpg';
-    kCardPiles.eq(index).attr('src', cardPath);
+    var kCard = kCardPiles.eq(index);
+    var cardPath = getCardPath(card, true);
+    kCard.attr('src', cardPath);
+    kCard.prev().text(10);
   });
+};
+
+Game.prototype.showCardCounts = function() {
+  for (var cardName in this.supply) {
+    var count = this.supply[cardName];
+    var cardPath = getCardPath(cardName, false);
+    var cardSelect = 'img.supply-nonaction[src="' + cardPath + '"]';
+    
+    if ( $(cardSelect).length > 0 )
+      $(cardSelect).prev().text(this.supply[cardName]);
+  };
 };
 
 Game.prototype.displayMessage = function(message) {
@@ -99,6 +112,7 @@ socket.on('ready to start', function (data) {
   game = new Game(kingdomCards);
   game.createPlayers(players);
   game.showKingdomCards(kingdomCards);
+  game.showCardCounts();
   socket.emit('game created ready to play', playerID);
 });
 
@@ -217,25 +231,37 @@ socket.on('update DB action', function(data) {
   }
 });
 
-function showOrig() {
-  var cropImg = $(this);
-  var origImg = cropImg.next();
-  var origUrl = cropImg.attr('src').replace('_crop', '');
+function showMore() {
+  var smallImg = $(this);
+  smallImg.prev().show(400);
 
+  var origImg = smallImg.next();
+  var origUrl = smallImg.attr('src').replace('_crop', '');
   origImg.attr('src', origUrl);
   origImg.show(400);
 };
 
-function hideOrig() {
+function hideMore() {
+  $(this).prev().hide(400);
   $(this).next().hide(400);
 };
 
-function initCardDisplay() {
-  $('.supply-nonaction-orig').hide();
-  $('.supply-kingdom-orig').hide();
+function showCount() {
+  $(this).prev().show(400);
+};
 
-  $('.supply-nonaction').hover(showOrig, hideOrig);
-  $('.supply-kingdom').hover(showOrig, hideOrig);
+function hideCount() {
+  $(this).prev().hide(400);
+};
+
+function initCardDisplay() {
+  $('div.card-count').hide();
+  $('img.supply-nonaction-orig').hide();
+  $('img.supply-kingdom-orig').hide();
+
+  $('img.supply-nonaction').hover(showMore, hideMore);
+  $('img.supply-kingdom').hover(showMore, hideMore);
+  $('img#deck').hover(showCount, hideCount);
 };
 
 $(function(){
@@ -246,8 +272,8 @@ $(function(){
     playCard(game.getCurrentPlayer().hand[handIndex], handIndex, playerID);
   });
 
-  $("#area-supply-kingdom").on("click", ".supply-kingdom", function(event) {
-    var supplyIndex = $(".supply-kingdom").index(this);
+  $("#area-supply-kingdom").on("click", "img.supply-kingdom", function(event) {
+    var supplyIndex = $("img.supply-kingdom").index(this);
     var imgSource = $(this).attr('src');
     // src="/images/cards/councilroom_crop.jpg
     //index=0123456789012345678901234567890123
@@ -255,8 +281,8 @@ $(function(){
     buyCard(cardName);
   });
 
-  $("#area-supply-nonaction").on("click", ".supply-nonaction", function(event) {
-    var supplyIndex = $(".supply-nonaction").index(this);
+  $("#area-supply-nonaction").on("click", "img.supply-nonaction", function(event) {
+    var supplyIndex = $("img.supply-nonaction").index(this);
     var imgSource = $(this).attr('src');
     // src="/images/cards/duchy.jpg"
     //index=01234567890123456789012
