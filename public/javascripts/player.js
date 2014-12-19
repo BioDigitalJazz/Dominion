@@ -68,16 +68,12 @@ Player.prototype.gainCard = function (cardName) {
   var cardPath = getCardPath(cardName, true);
   var cardSelect = 'img.supply-kingdom[src="' + cardPath + '"]';
   // HACK
-  console.log('gainCard');
-  if ( $(cardSelect).length > 0 ) {
-    console.log(cardSelect);
-    $(cardSelect).prev().text(game.supply[cardName]);
-  } else {
+  if ( $(cardSelect).length == 0 ) {
     cardPath = getCardPath(cardName, false);
     cardSelect = 'img.supply-nonaction[src="' + cardPath + '"]';
-    console.log(cardSelect);
-    $(cardSelect).prev().text(game.supply[cardName]);
   };
+
+  $(cardSelect).prev().text(game.supply[cardName]);
 };
 
 Player.prototype.drawCards = function(num) {

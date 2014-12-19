@@ -51,7 +51,7 @@ img.supply-nonaction {
 
 img.supply-nonaction-big {
   display: none;
-  z-index: 2;
+  z-index: 3;
   width: 150px;
   height: 240px;
   position: absolute;
@@ -102,10 +102,10 @@ div.supply-count {
   width: 25px;
   height: 25px;
   position: absolute;
-  top: 64%;
-  left: 70%;
+  top: 65%;
+  left: 71%;
   border-radius: 50%;
-  background: #CCFFFF;
+  background: #CCCCFF;
   color: #000033;
   font-size: 18px;
   text-align: center;
