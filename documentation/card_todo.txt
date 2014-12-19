@@ -1,0 +1,45 @@
+Basic:
+  Festival
+  Laboratory
+  Market
+  Smithy
+  Village
+  Woodcutter
+
+Easy [from hand]:
+  Adventurer
+  Cellar
+  Chapel
+  Feast
+  Mine
+  Moneylender
+  ThroneRoom
+
+Easy [affects other players, no interaction window]:
+  CouncilRoom
+
+Medium [choose from *some supply cards]
+  Remodel
+  Workshop
+
+Medium [interaction window ]
+  Chancellor
+  Library
+
+
+Attack Cards
+------------
+Easy [affects other players, no click]
+  Witch
+
+Medium [affects other players, click but no interaction window]
+  Militia
+
+Hard [affects other players, interaction window]
+  (asc. difficulty)
+  Spy 
+  Bureaucrat
+  Thief
+
+Reaction Card
+  Moat
