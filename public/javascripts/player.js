@@ -73,7 +73,7 @@ Player.prototype.gainCard = function (cardName) {
     cardSelect = 'img.supply-nonaction[src="' + cardPath + '"]';
   };
 
-  $(cardSelect).prev().text(game.supply[cardName]);
+  $(cardSelect).prev().text(this.game.supply[cardName]);
 };
 
 Player.prototype.drawCards = function(num) {
