@@ -61,10 +61,13 @@ Player.prototype.cleanUpPhase = function() {
 
 Player.prototype.gainCard = function (cardName) {
   this.game.supply[cardName]--;
+  updateCardCount(cardName);
+
   var newCard = new cardConstructors[cardName]();
   this.discardPile.push(newCard);
 
-  updateCardCount(cardName);
+  if (Number(sessionStorage.playerID) == this.game.currentPlayerIndex)
+    $("img#discard-pile").attr('src', getCardPath(cardName));
 };
 
 Player.prototype.drawCards = function(num) {
