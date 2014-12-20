@@ -1,6 +1,6 @@
 div, img {
   box-sizing: border-box;
-  /*border: 1px dotted black;*/
+/*  border: 1px dotted black;*/
 }
 
 img {
@@ -130,6 +130,12 @@ img.supply-kingdom-orig {
   left: 110%;
 }
 
+img.supply-none {
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
 #area-play-center {
   width: 100%;
   height: 41%;
@@ -215,16 +221,16 @@ img.handcard {
   height: 27.6%;
 }
 
+button#skip-action {
+  float: left;
+  margin-top: 10%;
+  margin-left: 5%;
+}
+
 img#discard-pile {
-  display: block;
+  display: inline-block;
   width: 35.6%;
   height: 90%;
   margin-bottom: 5%;
-  margin-left: 15%;
-}
-
-img.supply-none {
-  z-index: 1;
-  width: 100%;
-  height: 100%;
+  margin-left: 10%;
 }
