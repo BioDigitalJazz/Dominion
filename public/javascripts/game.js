@@ -289,6 +289,7 @@ $(function(){
 
   $("button#skip-action").on("click", function(event) {
     $("#actionCount").text(0);
+    $(this).hide(400);
   });
 
   $("#area-supply-kingdom").on("click", "img.supply-kingdom", function(event) {
