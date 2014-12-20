@@ -5,7 +5,7 @@ function Game(kingdomCards){
   
   this.supply['ProvinceCard'] = 8;
   this.supply['DuchyCard'] = 8;
-  this.supply['EstateCard'] = 14;
+  this.supply['EstateCard'] = 8;
   this.supply['GoldCard'] = 30;
   this.supply['SilverCard'] = 40;
   this.supply['CopperCard'] = 60;
