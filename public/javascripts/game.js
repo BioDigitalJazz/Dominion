@@ -288,8 +288,13 @@ $(function(){
   });
 
   $("button#skip-action").on("click", function(event) {
-    $("#actionCount").text(0);
-    $(this).hide(400);
+    if (game.players[playerID] == game.getCurrentPlayer())
+      $("#actionCount").text(0);
+  });
+
+  $("button#end-turn").on("click", function(event) {
+    if (game.players[playerID] == game.getCurrentPlayer())
+      adviseServerNextPlayer();
   });
 
   $("#area-supply-kingdom").on("click", "img.supply-kingdom", function(event) {
