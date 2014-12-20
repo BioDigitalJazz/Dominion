@@ -474,45 +474,4 @@ cardConstructors.ThroneRoomCard  = ThroneRoomCard;
 cardConstructors.VillageCard     = VillageCard;
 cardConstructors.WitchCard       = WitchCard;
 cardConstructors.WoodcutterCard  = WoodcutterCard;
-cardConstructors.WorkshopCard    = WorkshopCard; 
-
-
-// return the path to the cropped card img
-function getCardPath(cardName, cropped) {
-  var path = '/images/cards/' + cardName.slice(0, -4).toLowerCase();
-  var file = (cropped ? '_crop.jpg' : '.jpg'); 
-  return path + file;
-};
-
-// exports.CopperCard      = CopperCard;
-// exports.SilverCard      = SilverCard;
-// exports.GoldCard        = GoldCard;
-// exports.EstateCard      = EstateCard;
-// exports.DuchyCard       = DuchyCard;
-// exports.ProvinceCard    = ProvinceCard;
-// exports.GardensCard     = GardensCard;
-// exports.CurseCard       = CurseCard;
-// exports.AdventurerCard  = AdventurerCard;
-// exports.BureaucratCard  = BureaucratCard;
-// exports.CellarCard      = CellarCard;
-// exports.ChancellorCard  = ChancellorCard;
-// exports.ChapelCard      = ChapelCard;
-// exports.CouncilRoomCard = CouncilRoomCard;
-// exports.FeastCard       = FeastCard;
-// exports.FestivalCard    = FestivalCard;
-// exports.LaboratoryCard  = LaboratoryCard;
-// exports.LibraryCard     = LibraryCard;
-// exports.MarketCard      = MarketCard;
-// exports.MilitiaCard     = MilitiaCard;
-// exports.MineCard        = MineCard;
-// exports.MoatCard        = MoatCard;
-// exports.MoneyLenderCard = MoneyLenderCard;
-// exports.RemodelCard     = RemodelCard;
-// exports.SmithyCard      = SmithyCard;
-// exports.SpyCard         = SpyCard;
-// exports.ThiefCard       = ThiefCard;
-// exports.ThroneRoomCard  = ThroneRoomCard;
-// exports.VillageCard     = VillageCard;
-// exports.WitchCard       = WitchCard;
-// exports.WoodcutterCard  = WoodcutterCard;
-// exports.WorkshopCard    = WorkshopCard;
+cardConstructors.WorkshopCard    = WorkshopCard;

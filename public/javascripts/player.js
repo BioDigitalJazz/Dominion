@@ -64,66 +64,7 @@ Player.prototype.gainCard = function (cardName) {
   var newCard = new cardConstructors[cardName]();
   this.discardPile.push(newCard);
 
-  // update card count on page
-  var isKingdom = true;
-  var cardPath = getCardPath(cardName, true);
-  var cardSelect = 'img.supply-kingdom[src="' + cardPath + '"]';
-  // HACK
-  if ( $(cardSelect).length == 0 ) {
-    isKingdom = false;
-    cardPath = getCardPath(cardName, false);
-    cardSelect = 'img.supply-nonaction[src="' + cardPath + '"]';
-  };
-
-  $(cardSelect).prev().text(this.game.supply[cardName]);
-  
-  // when card count reaches 0, change img to back.jpg and remove click event
-  if (this.game.supply[cardName] == 0) {
-    var noCard = $(cardSelect);
-    cardPath = '/images/cards/back.jpg';
-    noCard.attr('src', cardPath);
-
-    // don't unbind mouseleave event, since the player buying the card has the
-    // mouse on the card and has to 'leave' to hide the big version
-    noCard.off('mouseenter');
-    noCard.removeClass('supply-nonaction');
-    noCard.removeClass('supply-kingdom');
-    noCard.addClass('supply-none');
-
-    // var noCard = $(cardSelect);
-    // cardPath = '/images/cards/back.jpg';
-    // noCard.attr('src', cardPath);
-    // noCard.off('mouseenter');
-
-    // if (isKingdom) {
-    //   cardSelect = 'img.supply-kingdom[src="' + cardPath + '"]';
-    //   noCard.parents('#area-supply-kingdom').off('click', cardSelect);
-    //   console.log(noCard.parents('#area-supply-kingdom'));
-    // } else {
-    //   cardSelect = 'img.supply-nonaction[src="' + cardPath + '"]';
-    //   noCard.parents('#area-supply-nonaction').off('click', cardSelect);
-    //   console.log(noCard.parents('#area-supply-nonaction'));
-    // };
-
-    // noCard.off('click');
-    // noCard.off('mouseover');
-    // console.log(noCard);
-    
-    // if (isKingdom) {
-    //   cardSelect = 'img.supply-kingdom[src="' + cardPath + '"]';
-    //   noCard.parents('#area-supply-kingdom').off('click', cardSelect);
-    //   console.log(noCard.parents('#area-supply-kingdom'));
-    // } else {
-    //   cardSelect = 'img.supply-nonaction[src="' + cardPath + '"]';
-    //   noCard.parents('#area-supply-nonaction').off('click', cardSelect);
-    //   console.log(noCard.parents('#area-supply-nonaction'));
-    // };
-
-    // console.log('after parents');
-
-    // noCard.off('mouseover');
-    // noCard.off('mouseout');
-  };
+  updateCardCount(cardName);
 };
 
 Player.prototype.drawCards = function(num) {
@@ -181,4 +122,41 @@ Player.prototype.shuffleDeck = function(){ //v1.0
     deck[i] = deck[j];
     deck[j] = x;
   }
+};
+
+
+// return the path to the cropped card img
+function getCardPath(cardName, cropped) {
+  var path = '/images/cards/' + cardName.slice(0, -4).toLowerCase();
+  var file = (cropped ? '_crop.jpg' : '.jpg'); 
+  return path + file;
+};
+
+// update card counts on game page
+function updateCardCount(cardName) {
+  var isKingdom = true;
+  var cardPath = getCardPath(cardName, true);
+  var cardSelect = 'img.supply-kingdom[src="' + cardPath + '"]';
+  // HACK
+  if ( $(cardSelect).length == 0 ) {
+    isKingdom = false;
+    cardPath = getCardPath(cardName, false);
+    cardSelect = 'img.supply-nonaction[src="' + cardPath + '"]';
+  };
+
+  $(cardSelect).prev().text(this.game.supply[cardName]);
+  
+  // when card count reaches 0, change img to back.jpg and remove click event
+  if (this.game.supply[cardName] == 0) {
+    var noCard = $(cardSelect);
+    cardPath = '/images/cards/back.jpg';
+    noCard.attr('src', cardPath);
+
+    // don't unbind mouseleave event, since the player buying the card has the
+    // mouse on the card and has to 'leave' to hide the big version
+    noCard.off('mouseenter');
+    noCard.removeClass('supply-nonaction');
+    noCard.removeClass('supply-kingdom');
+    noCard.addClass('supply-none');
+  };
 };
