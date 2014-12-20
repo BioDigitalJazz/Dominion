@@ -5,7 +5,7 @@ function Game(kingdomCards){
   
   this.supply['ProvinceCard'] = 8;
   this.supply['DuchyCard'] = 8;
-  this.supply['EstateCard'] = 8;
+  this.supply['EstateCard'] = 14;
   this.supply['GoldCard'] = 30;
   this.supply['SilverCard'] = 40;
   this.supply['CopperCard'] = 60;
@@ -280,10 +280,15 @@ function initCardDisplay() {
 
 $(function(){
   initCardDisplay();
+
   $("#area-player-hand").on("click", ".handcard", function(event) {
     // var handIndex = event.target.id.slice(-1);
     var handIndex = $(".handcard").index(this);
     playCard(game.getCurrentPlayer().hand[handIndex], handIndex, playerID);
+  });
+
+  $("button#skip-action").on("click", function(event) {
+    $("#actionCount").text(0);
   });
 
   $("#area-supply-kingdom").on("click", "img.supply-kingdom", function(event) {
