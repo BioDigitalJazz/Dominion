@@ -1,6 +1,7 @@
 function Game(kingdomCards){
   this.players = [];
   this.currentPlayerIndex = 0;
+  this.turnLog = "";
   this.supply = {};
   
   this.supply['ProvinceCard'] = 8;
@@ -147,6 +148,7 @@ socket.on('player turn', function() {
     game.displayMessage("Not your turn, please wait.")
   } else {
     game.displayMessage("It is your turn, play an action, or buy a card")
+    game.turnLog = ("=== " + game.players[playerID].name + " === >br />");
   }
   showMyHand();
 });
@@ -155,6 +157,7 @@ var showMyHand = function() {
   var handArea = $("#area-player-hand");
   $(".handcard").remove();
   var cardsInHand = game.players[playerID].hand;
+
   for (var i = 0; i < cardsInHand.length; i++) {
     var aCard = cardsInHand[i]
     var imagesrc = "/images/cards/" + aCard.name.toLowerCase() + ".jpg";
@@ -188,12 +191,11 @@ var playCard = function(card, handIndex, playerid) {
         game.displayMessage("You have no actions left, please buy a card.")
       } else {
         moveCardToPlay($('.handcard').eq(handIndex), card);
+        $("#actionCount").text(Number($("#actionCount").text()) - 1);
         card.play(thePlayer);
         adviseServerAction("hand", handIndex, thePlayer, "moveToPlayArea");
-        setTimeout(function() {
-          showMyHand();
-        }, 400);
-        $("#actionCount").text(Number($("#actionCount").text()) - 1);
+
+        setTimeout(function() { showMyHand(); }, 400);    
       }
     }
   }
