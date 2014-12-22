@@ -51,12 +51,12 @@ Game.prototype.showCardCounts = function() {
 };
 
 Game.prototype.startLog = function(pNames, kCards) {
-  var logContent = "<u>Players</u><br />";
+  var logContent = "<u>Players</u>: ";
   pNames.forEach( function(name) {
     logContent += (name + ', ');
   });
 
-  logContent = logContent.slice(0, -2) + "<br /> <u>Kingdom Cards</u><br /> ";
+  logContent = logContent.slice(0, -2) + "<br /><u>Kingdom Cards</u><br /> &nbsp;";
   kCards.forEach( function(kCard) {
     logContent += (kCard.slice(0, -4) + ', ');
   });
