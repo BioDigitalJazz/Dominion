@@ -209,10 +209,13 @@ img.handcard {
   margin: auto;
   background-image: url(/images/parchment_paper.jpg);
   border-radius: 10px;
+  white-space: pre-wrap;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 #log-box p {
-  padding: 25px 15px 0 15px;
+  padding: 20px 15px 0 15px;
 }
 
 #area-misc {

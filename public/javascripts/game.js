@@ -50,6 +50,20 @@ Game.prototype.showCardCounts = function() {
   };
 };
 
+Game.prototype.startLog = function(kCards) {
+  var logContent = "  Kingdom Cards: <br />";
+
+  kCards.forEach( function(kCard) {
+    logContent += (kCard.slice(0, -4) + ', ');
+  });
+  this.addLog("The Game Starts", logContent.slice(0, -2));
+};
+
+Game.prototype.addLog = function(title, content) {
+  var logStr = "=== " + title + ' === <br />' + content;
+  $('<p>').html(logStr).appendTo('#log-box');
+};
+
 Game.prototype.displayMessage = function(message) {
   $('#play-prompt').text(message);
 };
@@ -119,6 +133,7 @@ socket.on('ready to start', function (data) {
   game.createPlayers(players);
   game.showKingdomCards(kingdomCards);
   game.showCardCounts();
+  game.startLog(kingdomCards);
   socket.emit('game created ready to play', playerID);
 });
 
