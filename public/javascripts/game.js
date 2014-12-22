@@ -25,7 +25,7 @@ Game.prototype.createPlayers = function(playerNames) {
 };
 
 Game.prototype.getCurrentPlayer = function() {
-  return game.players[game.currentPlayerIndex];
+  return this.players[this.currentPlayerIndex];
 };
 
 Game.prototype.showKingdomCards = function(kingdomCards) {
@@ -50,12 +50,17 @@ Game.prototype.showCardCounts = function() {
   };
 };
 
-Game.prototype.startLog = function(kCards) {
-  var logContent = "  Kingdom Cards: <br />";
+Game.prototype.startLog = function(pNames, kCards) {
+  var logContent = "<u>Players</u><br />";
+  pNames.forEach( function(name) {
+    logContent += (name + ', ');
+  });
 
+  logContent = logContent.slice(0, -2) + "<br /> <u>Kingdom Cards</u><br /> ";
   kCards.forEach( function(kCard) {
     logContent += (kCard.slice(0, -4) + ', ');
   });
+
   this.addLog("The Game Starts", logContent.slice(0, -2));
 };
 
@@ -77,22 +82,22 @@ Game.prototype.cleanUp = function() {
 };
 
 Game.prototype.nextPlayer = function(){
-  if(game.currentPlayerIndex == Number(playerID)) {
-    game.cleanUp();
-    game.getCurrentPlayer().cleanUpPhase();
+  if(this.currentPlayerIndex == Number(playerID)) {
+    this.cleanUp();
+    this.getCurrentPlayer().cleanUpPhase();
     showMyHand();
   }
 
-  if (game.currentPlayerIndex == game.players.length - 1) {
-    game.currentPlayerIndex = 0;
+  if (this.currentPlayerIndex == this.players.length - 1) {
+    this.currentPlayerIndex = 0;
   } else {
-    game.currentPlayerIndex++;
+    this.currentPlayerIndex++;
   }
 
-  if(game.currentPlayerIndex == Number(playerID)) {
-    game.displayMessage("It is your turn, play an action, or buy a card.");
+  if(this.currentPlayerIndex == Number(playerID)) {
+    this.displayMessage("It is your turn, play an action, or buy a card.");
   } else {
-    game.displayMessage("Not your turn, please wait.");
+    this.displayMessage("Not your turn, please wait.");
   }
 };
 
@@ -133,7 +138,7 @@ socket.on('ready to start', function (data) {
   game.createPlayers(players);
   game.showKingdomCards(kingdomCards);
   game.showCardCounts();
-  game.startLog(kingdomCards);
+  game.startLog(players, kingdomCards);
   socket.emit('game created ready to play', playerID);
 });
 
