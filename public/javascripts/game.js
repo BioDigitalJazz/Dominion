@@ -1,7 +1,6 @@
 function Game(kingdomCards){
   this.players = [];
   this.currentPlayerIndex = 0;
-  this.turnLog = "";
   this.supply = {};
   
   this.supply['ProvinceCard'] = 8;
@@ -57,7 +56,7 @@ Game.prototype.startLog = function(pNames, kCards) {
     logContent += (name + ', ');
   });
 
-  logContent = logContent.slice(0, -2) + "<br /><u>Kingdom Cards</u><br /> &nbsp;";
+  logContent = logContent.slice(0, -2) + "<br /><u>Kingdom Cards</u><br />&nbsp;&nbsp;";
   kCards.forEach( function(kCard) {
     logContent += (kCard.slice(0, -4) + ', ');
   });
@@ -97,6 +96,8 @@ Game.prototype.nextPlayer = function(){
 
   if(this.currentPlayerIndex == Number(playerID)) {
     this.displayMessage("It is your turn, play an action, or buy a card.");
+    game.logTitle = game.players[playerID].name ;
+    game.logContent = "<u>Play</u>: ";
   } else {
     this.displayMessage("Not your turn, please wait.");
   }
@@ -148,7 +149,8 @@ socket.on('player turn', function() {
     game.displayMessage("Not your turn, please wait.")
   } else {
     game.displayMessage("It is your turn, play an action, or buy a card")
-    game.turnLog = ("=== " + game.players[playerID].name + " === >br />");
+    game.logTitle = game.players[playerID].name ;
+    game.logContent = "<u>Play</u>: ";
   }
   showMyHand();
 });
@@ -169,6 +171,7 @@ var showMyHand = function() {
 
 var moveCardToPlay = function(jqueryCard, card) {
   jqueryCard.hide(400);
+
   setTimeout( function() {
     jqueryCard.remove();
     var moveCard = $('<img>').attr('src', card.image).addClass('hand-to-play');
@@ -194,8 +197,12 @@ var playCard = function(card, handIndex, playerid) {
         $("#actionCount").text(Number($("#actionCount").text()) - 1);
         card.play(thePlayer);
         adviseServerAction("hand", handIndex, thePlayer, "moveToPlayArea");
-
-        setTimeout(function() { showMyHand(); }, 400);    
+        
+        // Issue: This is synched to moveCardToPlay(), but this shows wrong results if 
+        // adviseServerAction above and socket.on('update DB action') take longer than 
+        // 400 milliseconds
+        setTimeout(function() { showMyHand(); }, 400);
+        game.turnLog += card.Name;
       }
     }
   }
@@ -235,7 +242,7 @@ var buyCard = function(cardName) {
 // };
 
 var adviseServerNextPlayer = function() {
-  socket.emit('next player');
+  socket.emit('next player', { logTitle: game.logTitle, logContent: game.logContent });
 }
 
 var adviseServerBuy = function(thePlayer, theCard) {
@@ -247,7 +254,8 @@ var adviseServerAction = function(theCardLocation, theCardIndex, thePlayer, theF
                playerIndex: game.players.indexOf(thePlayer), functionToPass: theFunctionToPass });
 };
 
-socket.on('update DB next player', function() {
+socket.on('update DB next player', function(data) {
+  game.addLog(data.logTitle, data.logContent);
   game.nextPlayer();
 });
 

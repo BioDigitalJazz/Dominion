@@ -111,8 +111,8 @@ io.on('connection', function (socket) {
     io.emit('update DB buy', data);
   });
 
-  socket.on('next player', function() {
-    io.emit('update DB next player');
+  socket.on('next player', function(data) {
+    io.emit('update DB next player', data);
   });
 });
 
