@@ -15,7 +15,7 @@ var Player = function (name, game) {
   };
   // console.log("discard pile should have 10 before drawing and shuffling : " + this.discardPile.length);
   // console.log("hand should be empty before drawing : " + this.hand.length);
-  this.drawCards(5);
+  this.drawCard(5);
   // console.log("hand should have 5 cards after drawing : " + this.hand.length);
 };
 
@@ -56,7 +56,7 @@ Player.prototype.cleanUpPhase = function() {
     theDiscardPile.push(theHand.pop());
   }
   this.hand = []
-  this.drawCards(5);
+  this.drawCard(5);
 }
 
 Player.prototype.gainCard = function (cardName) {
@@ -71,7 +71,7 @@ Player.prototype.gainCard = function (cardName) {
     $("img#discard-pile").attr('src', getCardPath(cardName));
 };
 
-Player.prototype.drawCards = function(num) {
+Player.prototype.drawCard = function(num) {
   var theHand = this.hand;
   var theDiscardPile = this.discardPile;
   var theDeck = this.deck;

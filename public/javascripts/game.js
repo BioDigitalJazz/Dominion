@@ -205,7 +205,7 @@ var playCard = function(card, handIndex, playerid) {
         // adviseServerAction above and socket.on('update DB action') take longer than 
         // 400 milliseconds
         setTimeout(function() { showMyHand(); }, 400);
-        game.turnLog += card.Name;
+        game.logContent += card.name;
       }
     }
   }

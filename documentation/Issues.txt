@@ -1,0 +1,9 @@
+Issues:
+
+1) After playing an Action card, the player can no longer click on Treasure Cards to move them to the play area => Coins remain 0 => Can't buy
+
+2) game.js | playCard function
+(see comment in the function)
+
+
+
