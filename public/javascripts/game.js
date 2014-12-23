@@ -90,6 +90,7 @@ Game.prototype.nextPlayer = function(){
 
   if (this.currentPlayerIndex == this.players.length - 1) {
     this.currentPlayerIndex = 0;
+    sessionStorage.gameRound++;
   } else {
     this.currentPlayerIndex++;
   }
@@ -136,11 +137,13 @@ socket.on('ready to start', function (data) {
   var kingdomCards = data.kingdomCards;
   var players = data.players;
   
+  sessionStorage.gameRound = 0;
   game = new Game(kingdomCards);
   game.createPlayers(players);
   game.showKingdomCards(kingdomCards);
   game.showCardCounts();
   game.startLog(players, kingdomCards);
+  sessionStorage.gameRound = 1;
   socket.emit('game created ready to play', playerID);
 });
 

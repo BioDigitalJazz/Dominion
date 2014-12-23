@@ -66,7 +66,8 @@ Player.prototype.gainCard = function (cardName) {
   var newCard = new cardConstructors[cardName]();
   this.discardPile.push(newCard);
 
-  if (Number(sessionStorage.playerID) == this.game.currentPlayerIndex)
+  if (Number(playerID) == this.game.currentPlayerIndex &&
+      Number(sessionStorage.gameRound) > 0)
     $("img#discard-pile").attr('src', getCardPath(cardName));
 };
 
@@ -111,6 +112,10 @@ Player.prototype.revealCard = function(card) {
 Player.prototype.discard = function(card, cardLocation) {
   this.discardPile.push(card);
   cardLocation.splice(cardLocation.indexOf(card), 1);
+
+  var cardName = card.name;
+  if (Number(playerID) == this.game.currentPlayerIndex)
+    $("img#discard-pile").attr('src', getCardPath(cardName));
 };
 
 Player.prototype.trash = function(card, cardLocation) {
