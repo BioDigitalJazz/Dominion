@@ -8,5 +8,16 @@ How to differentiate them in the log?
 3) game.js | playCard function
 (see comment in the function)
 
+4) player.js | Player.prototype.displayDiscard 
+  discardPile top card stays for 600 millisecond then gets shuffled into deck
+=> how to make it more obvious that shuffling is taking place
+
+** Phantom problem
+(Firefox only)
+  "game is undefined"
+game.js, line 151
+  if (parseInt(playerID) !== game.currentPlayerIndex){
+
+
 
 

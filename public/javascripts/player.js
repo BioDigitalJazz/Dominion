@@ -66,9 +66,8 @@ Player.prototype.gainCard = function (cardName) {
   var newCard = new cardConstructors[cardName]();
   this.discardPile.push(newCard);
 
-  if (Number(playerID) == this.game.currentPlayerIndex &&
-      Number(sessionStorage.gameRound) > 0)
-    $("img#discard-pile").attr('src', getCardPath(cardName));
+  if (Number(sessionStorage.gameRound) > 0)
+    this.displayDiscard(cardName);
 };
 
 Player.prototype.drawCard = function(num) {
@@ -85,6 +84,7 @@ Player.prototype.drawCard = function(num) {
         theDeck.push(theDiscardPile.pop());
       };
       this.shuffleDeck();
+      this.displayDiscard();
     };
     theHand.push(theDeck.pop());
   };
@@ -113,9 +113,21 @@ Player.prototype.discard = function(card, cardLocation) {
   this.discardPile.push(card);
   cardLocation.splice(cardLocation.indexOf(card), 1);
 
-  var cardName = card.name;
-  if (Number(playerID) == this.game.currentPlayerIndex)
-    $("img#discard-pile").attr('src', getCardPath(cardName));
+  this.displayDiscard(card.name);
+};
+
+Player.prototype.displayDiscard = function(cardName) {
+  if (Number(playerID) == this.game.currentPlayerIndex) {
+    if (cardName) {
+      setTimeout( function() {
+        $("img#discard-pile").attr('src', getCardPath(cardName));
+      }, 200);
+    } else {
+      setTimeout( function() {
+        $("img#discard-pile").attr('src', '/images/cards/back.jpg');
+      }, 800);
+    };
+  };
 };
 
 Player.prototype.trash = function(card, cardLocation) {
