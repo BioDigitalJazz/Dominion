@@ -190,11 +190,12 @@ var buyCard = function(cardName) {
     } else {
       adviseServerBuy(game.players.indexOf(game.getCurrentPlayer()), supplyName);
       $("#coinCount").text(Number($("#coinCount").text()) - cardToBuy.cost);
+
       if (Number($("#buyCount").text()) <= 1) {
         adviseServerNextPlayer();
       } else {
-        $("#actionCount").text(Number($("#actionCount").text()) - 1);
-        console.log("still more buys:" + $("#coinCount").text());
+        $("#buyCount").text(Number($("#buyCount").text()) - 1);
+        game.displayMessage("still more buys:" + $("#buyCount").text());
       }
 
     }
