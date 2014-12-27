@@ -227,7 +227,7 @@ var buyCard = function(cardName) {
         adviseServerNextPlayer();
       } else {
         $("#buyCount").text(Number($("#buyCount").text()) - 1);
-        console.log("still more buys:" + $("#coinCount").text());
+        game.displayMessage("still more buys:" + $("#buyCount").text());
       }
 
     }
