@@ -75,8 +75,6 @@ Player.prototype.drawCard = function(num) {
   var theDiscardPile = this.discardPile;
   var theDeck = this.deck;
 
-  console.log("drawing " + num + " cards");
-
   for (var i = 1; i <= num; i++) {
     if (theDeck.length == 0) {
       var discards = theDiscardPile.length;
@@ -88,7 +86,6 @@ Player.prototype.drawCard = function(num) {
     };
     theHand.push(theDeck.pop());
   };
-  console.log(theHand);
   
   $('img#deck').prev().text(theDeck.length);
 }; 
