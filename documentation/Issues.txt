@@ -1,14 +1,12 @@
 Issues:
 
-1) After playing an Action card, the player can no longer click on Treasure Cards to move them to the play area => Coins remain 0 => Can't buy
-
-2) Buying cards and gaining cards both use Player.gainCard()
+1) Buying cards and gaining cards both use Player.gainCard()
 How to differentiate them in the log?
 
-3) game.js | playCard function
+2) game.js | playCard function
 (see comment in the function)
 
-4) player.js | Player.prototype.displayDiscard 
+3) player.js | Player.prototype.displayDiscard 
   discardPile top card stays for 600 millisecond then gets shuffled into deck
   the top card gets displayed in the new hand right away
 => how to make it more obvious that shuffling is taking place
@@ -19,6 +17,7 @@ How to differentiate them in the log?
   "game is undefined"
 game.js, line 151
   if (parseInt(playerID) !== game.currentPlayerIndex){
+
 
 
 

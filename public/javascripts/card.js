@@ -131,7 +131,7 @@ ActionCard.prototype.play = function(player) {
 
   if (ef["gainCard"])   { player.gainCard(ef["gainCard"]); };
 
-  if (ef["drawCard"])   { player.drawCards(ef["drawCard"]); };
+  if (ef["drawCard"])   { player.drawCard(ef["drawCard"]); };
   if (ef["gainAction"]) { player.gainAction(ef["gainAction"]); };
   if (ef["gainCoin"])   { player.gainCoin(ef["gainCoin"]); };
   if (ef["gainBuy"])    { player.gainBuy(ef["gainBuy"]); };
