@@ -5,7 +5,7 @@ function Game(kingdomCards){
   
   this.supply['ProvinceCard'] = 8;
   this.supply['DuchyCard'] = 8;
-  this.supply['EstateCard'] = 8;
+  this.supply['EstateCard'] = 14;
   this.supply['GoldCard'] = 30;
   this.supply['SilverCard'] = 40;
   this.supply['CopperCard'] = 60;
@@ -25,7 +25,7 @@ Game.prototype.createPlayers = function(playerNames) {
 };
 
 Game.prototype.getCurrentPlayer = function() {
-  return game.players[game.currentPlayerIndex];
+  return this.players[this.currentPlayerIndex];
 };
 
 Game.prototype.showKingdomCards = function(kingdomCards) {
@@ -50,6 +50,25 @@ Game.prototype.showCardCounts = function() {
   };
 };
 
+Game.prototype.startLog = function(pNames, kCards) {
+  var logContent = "<u>Players</u>: ";
+  pNames.forEach( function(name) {
+    logContent += (name + ', ');
+  });
+
+  logContent = logContent.slice(0, -2) + "<br /><u>Kingdom Cards</u><br />&nbsp;&nbsp;";
+  kCards.forEach( function(kCard) {
+    logContent += (kCard.slice(0, -4) + ', ');
+  });
+
+  this.addLog("The Game Starts", logContent.slice(0, -2));
+};
+
+Game.prototype.addLog = function(title, content) {
+  var logStr = "=== " + title + ' === <br />' + content;
+  $('<p>').html(logStr).appendTo('#log-box');
+};
+
 Game.prototype.displayMessage = function(message) {
   $('#play-prompt').text(message);
 };
@@ -63,22 +82,25 @@ Game.prototype.cleanUp = function() {
 };
 
 Game.prototype.nextPlayer = function(){
-  if(game.currentPlayerIndex == Number(playerID)) {
-    game.cleanUp();
-    game.getCurrentPlayer().cleanUpPhase();
+  if(this.currentPlayerIndex == Number(playerID)) {
+    this.cleanUp();
+    this.getCurrentPlayer().cleanUpPhase();
     showMyHand();
   }
 
-  if (game.currentPlayerIndex == game.players.length - 1) {
-    game.currentPlayerIndex = 0;
+  if (this.currentPlayerIndex == this.players.length - 1) {
+    this.currentPlayerIndex = 0;
+    sessionStorage.gameRound++;
   } else {
-    game.currentPlayerIndex++;
+    this.currentPlayerIndex++;
   }
 
-  if(game.currentPlayerIndex == Number(playerID)) {
-    game.displayMessage("It is your turn, play an action, or buy a card.");
+  if(this.currentPlayerIndex == Number(playerID)) {
+    this.displayMessage("It is your turn, play an action, or buy a card.");
+    game.logTitle = game.players[playerID].name ;
+    game.logContent = "<u>Play</u>: ";
   } else {
-    game.displayMessage("Not your turn, please wait.");
+    this.displayMessage("Not your turn, please wait.");
   }
 };
 
@@ -115,10 +137,13 @@ socket.on('ready to start', function (data) {
   var kingdomCards = data.kingdomCards;
   var players = data.players;
   
+  sessionStorage.gameRound = 0;
   game = new Game(kingdomCards);
   game.createPlayers(players);
   game.showKingdomCards(kingdomCards);
   game.showCardCounts();
+  game.startLog(players, kingdomCards);
+  sessionStorage.gameRound = 1;
   socket.emit('game created ready to play', playerID);
 });
 
@@ -127,6 +152,8 @@ socket.on('player turn', function() {
     game.displayMessage("Not your turn, please wait.")
   } else {
     game.displayMessage("It is your turn, play an action, or buy a card")
+    game.logTitle = game.players[playerID].name ;
+    game.logContent = "<u>Play</u>: ";
   }
   showMyHand();
 });
@@ -135,6 +162,7 @@ var showMyHand = function() {
   var handArea = $("#area-player-hand");
   $(".handcard").remove();
   var cardsInHand = game.players[playerID].hand;
+
   for (var i = 0; i < cardsInHand.length; i++) {
     var aCard = cardsInHand[i]
     var imagesrc = "/images/cards/" + aCard.name.toLowerCase() + ".jpg";
@@ -146,6 +174,7 @@ var showMyHand = function() {
 
 var moveCardToPlay = function(jqueryCard, card) {
   jqueryCard.hide(400);
+
   setTimeout( function() {
     jqueryCard.remove();
     var moveCard = $('<img>').attr('src', card.image).addClass('hand-to-play');
@@ -168,12 +197,15 @@ var playCard = function(card, handIndex, playerid) {
         game.displayMessage("You have no actions left, please buy a card.")
       } else {
         moveCardToPlay($('.handcard').eq(handIndex), card);
+        $("#actionCount").text(Number($("#actionCount").text()) - 1);
         card.play(thePlayer);
         adviseServerAction("hand", handIndex, thePlayer, "moveToPlayArea");
-        setTimeout(function() {
-          showMyHand();
-        }, 400);
-        $("#actionCount").text(Number($("#actionCount").text()) - 1);
+        
+        // Issue: This is synched to moveCardToPlay(), but this shows wrong results if 
+        // adviseServerAction above and socket.on('update DB action') take longer than 
+        // 400 milliseconds
+        setTimeout(function() { showMyHand(); }, 400);
+        game.logContent += card.name;
       }
     }
   }
@@ -190,6 +222,8 @@ var buyCard = function(cardName) {
     } else {
       adviseServerBuy(game.players.indexOf(game.getCurrentPlayer()), supplyName);
       $("#coinCount").text(Number($("#coinCount").text()) - cardToBuy.cost);
+      // $("img#discard-pile").attr('src', getCardPath(supplyName));
+      
       if (Number($("#buyCount").text()) <= 1) {
         adviseServerNextPlayer();
       } else {
@@ -211,7 +245,7 @@ var buyCard = function(cardName) {
 // };
 
 var adviseServerNextPlayer = function() {
-  socket.emit('next player');
+  socket.emit('next player', { logTitle: game.logTitle, logContent: game.logContent });
 }
 
 var adviseServerBuy = function(thePlayer, theCard) {
@@ -223,7 +257,8 @@ var adviseServerAction = function(theCardLocation, theCardIndex, thePlayer, theF
                playerIndex: game.players.indexOf(thePlayer), functionToPass: theFunctionToPass });
 };
 
-socket.on('update DB next player', function() {
+socket.on('update DB next player', function(data) {
+  game.addLog(data.logTitle, data.logContent);
   game.nextPlayer();
 });
 
@@ -280,10 +315,21 @@ function initCardDisplay() {
 
 $(function(){
   initCardDisplay();
+
   $("#area-player-hand").on("click", ".handcard", function(event) {
     // var handIndex = event.target.id.slice(-1);
     var handIndex = $(".handcard").index(this);
     playCard(game.getCurrentPlayer().hand[handIndex], handIndex, playerID);
+  });
+
+  $("button#skip-action").on("click", function(event) {
+    if (game.players[playerID] == game.getCurrentPlayer())
+      $("#actionCount").text(0);
+  });
+
+  $("button#end-turn").on("click", function(event) {
+    if (game.players[playerID] == game.getCurrentPlayer())
+      adviseServerNextPlayer();
   });
 
   $("#area-supply-kingdom").on("click", "img.supply-kingdom", function(event) {
