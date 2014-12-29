@@ -157,6 +157,7 @@ img.supply-none {
 }
 
 #play-prompt {
+  z-index: 1;
   position: absolute;
   left: 30%;
   width: 70%;
@@ -169,7 +170,10 @@ img.supply-none {
 }
 
 #area-play-center button {
-
+  z-index: 2;
+  position: absolute;
+  top: 19%;
+  left: 81%;
 }
 
 #play-area {
