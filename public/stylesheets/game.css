@@ -252,5 +252,5 @@ img#discard-pile {
 }
 
 img#discard-pile.moveToDeck {
-  left: -500%;
+  left: -600%;
 }

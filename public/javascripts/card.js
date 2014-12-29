@@ -139,12 +139,18 @@ ActionCard.prototype.play = function(player) {
   if (ef["revealCard"]) { player.revealCard(ef["revealCard"]); };
   if (ef["discard"])    { player.discard(ef["discard"]); };
   if (ef["trash"])      { player.trash(ef["trash"]); };
+
+  if (ef["adventurer"]) { if (player.deck[player.deck.length -1].types["treasure"]) {
+                            var x = "placeholder";
+                          }
+                        };
 };
 
 
 function AdventurerCard() {
   ActionCard.call(this, 8, 'Adventurer', 6, '/images/cards/adventurer.jpg');
   this.types.action = true;
+  this.effects["adventurer"] = true;
 
   // Special Function
   
