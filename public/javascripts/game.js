@@ -159,17 +159,20 @@ socket.on('player turn', function() {
 });
 
 var showMyHand = function() {
-  var handArea = $("#area-player-hand");
   $(".handcard").remove();
   var cardsInHand = game.players[playerID].hand;
 
-  for (var i = 0; i < cardsInHand.length; i++) {
-    var aCard = cardsInHand[i]
-    var imagesrc = "/images/cards/" + aCard.name.toLowerCase() + ".jpg";
-    var imageid = "handcard" + i;
-    var imageClass = "handcard";
-    handArea.append('<img src= \"' + imagesrc + '\" class=\"' + imageClass + '\" id=\"' + imageid + '\">');
-  };
+  for (var i = 0; i < cardsInHand.length; i++)
+    addToHand(cardsInHand, i);
+};
+
+var addToHand = function (cards, index) {
+  var handArea = $("#area-player-hand");
+  var imgSrc = "/images/cards/" + cards[index].name.toLowerCase() + ".jpg";
+  var imgId = "handcard" + index;
+  var imgClass = "handcard";
+
+  handArea.append('<img src= \"' + imgSrc + '\" class=\"' + imgClass + '\" id=\"' + imgId + '\">');
 };
 
 var moveCardToPlay = function(jqueryCard, card) {
