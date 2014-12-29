@@ -13,10 +13,7 @@ var Player = function (name, game) {
       this.gainCard('EstateCard');
     }
   };
-  // console.log("discard pile should have 10 before drawing and shuffling : " + this.discardPile.length);
-  // console.log("hand should be empty before drawing : " + this.hand.length);
   this.drawCard(5);
-  // console.log("hand should have 5 cards after drawing : " + this.hand.length);
 };
 
 //check for a type of card in a given array
@@ -70,6 +67,22 @@ Player.prototype.gainCard = function (cardName) {
     this.displayDiscard(cardName);
 };
 
+Player.prototype.replenishDeck = function() {
+  var discards = this.discardPile.length;
+  for (var j = 0; j < discards; j++) {
+    this.deck.push(this.discardPile.pop());
+  };
+  this.shuffleDeck();
+  this.displayDiscard();
+};
+
+Player.prototype.revealCards = function(num) {
+  if (this.deck.length < num) {
+    this.replenishDeck();
+  }
+  return this.deck.slice(this.deck.length - num);
+}
+
 Player.prototype.drawCard = function(num) {
   var theHand = this.hand;
   var theDiscardPile = this.discardPile;
@@ -77,12 +90,7 @@ Player.prototype.drawCard = function(num) {
 
   for (var i = 1; i <= num; i++) {
     if (theDeck.length == 0) {
-      var discards = theDiscardPile.length;
-      for (var j = 0; j < discards; j++) {
-        theDeck.push(theDiscardPile.pop());
-      };
-      this.shuffleDeck();
-      this.displayDiscard();
+      this.replenishDeck();
     };
     theHand.push(theDeck.pop());
   };

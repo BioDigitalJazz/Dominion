@@ -7,13 +7,13 @@ Basic:
   Woodcutter
 
 Easy [from hand]:
-  Adventurer
-  Cellar
-  Chapel
-  Feast
-  Mine
-  Moneylender
-  ThroneRoom
+  Adventurer -code in card
+  Cellar - needs a button, playerState, and highlited cards
+  Chapel - needs a button, playerState, and highlited cards
+  Feast - needs playerState
+  Mine - needs playerState
+  Moneylender - needs playerState
+  ThroneRoom - needs playerState
 
 Easy [affects other players, no interaction window]:
   CouncilRoom
