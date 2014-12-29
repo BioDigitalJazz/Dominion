@@ -248,8 +248,9 @@ img#discard-pile {
   left: 10%;
   width: 70%;
   height: 90%;
+  transition: all 1s;
 }
 
 img#discard-pile.moveToDeck {
-  left: -200%;
+  left: -500%;
 }

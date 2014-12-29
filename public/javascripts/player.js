@@ -177,9 +177,11 @@ function displayDiscard (player, cardName) {
 
 function moveDiscardToDeck(player) {
   if (Number(playerID) == player.game.currentPlayerIndex) {
-    $("img#discard-pile").addClass('moveToDeck');
+    var discardP = $("img#discard-pile");
+    
     setTimeout( function() {
-      $("img#discard-pile").attr('src', '/images/cards/back.jpg');
+      var moveElem = discardP.clone().addClass('moveToDeck').appendTo('#area-discard-pile');
+      discardP.attr('src', '/images/cards/back.jpg');
     }, 800);
   };
 };
