@@ -172,7 +172,9 @@ var addToHand = function (cards, index) {
   var imgId = "handcard" + index;
   var imgClass = "handcard";
 
-  handArea.append('<img src= \"' + imgSrc + '\" class=\"' + imgClass + '\" id=\"' + imgId + '\">');
+  setTimeout( function() {
+    handArea.append('<img src= \"' + imgSrc + '\" class=\"' + imgClass + '\" id=\"' + imgId + '\">');
+  }, index * 100);
 };
 
 var moveCardToPlay = function(jqueryCard, card) {
