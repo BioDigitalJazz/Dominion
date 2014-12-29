@@ -85,7 +85,7 @@ Game.prototype.nextPlayer = function(){
   if(this.currentPlayerIndex == Number(playerID)) {
     this.cleanUp();
     this.getCurrentPlayer().cleanUpPhase();
-    showMyHand();
+    setTimeout(function() { showMyHand(); }, 1200);
   }
 
   if (this.currentPlayerIndex == this.players.length - 1) {

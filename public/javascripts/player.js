@@ -53,9 +53,7 @@ Player.prototype.cleanUpPhase = function() {
     theDiscardPile.push(theHand.pop());
   }
   this.hand = [];
-
-  var thisPlayer = this;
-  setTimeout( function() { thisPlayer.drawCard(5); }, 1200);
+  this.drawCard(5);
 }
 
 Player.prototype.gainCard = function (cardName) {
