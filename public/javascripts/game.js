@@ -108,9 +108,9 @@ Game.prototype.gameEnd = function(){
   return (supply['province'] == 0);
 };
 
-Game.prototype.triggerShowHand = function() {
-  showMyHand();
-};
+// Game.prototype.triggerShowHand = function() {
+//   showMyHand();
+// };
 
 
 

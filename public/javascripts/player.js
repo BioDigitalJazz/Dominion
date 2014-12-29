@@ -52,8 +52,10 @@ Player.prototype.cleanUpPhase = function() {
   for (var j = 0; j < handLength; j++) {
     theDiscardPile.push(theHand.pop());
   }
-  this.hand = []
-  this.drawCard(5);
+  this.hand = [];
+
+  var thisPlayer = this;
+  setTimeout( function() { thisPlayer.drawCard(5); }, 1200);
 }
 
 Player.prototype.gainCard = function (cardName) {
@@ -178,7 +180,7 @@ function displayDiscard (player, cardName) {
   if (Number(playerID) == player.game.currentPlayerIndex) {
     setTimeout( function() {
       $("img#discard-pile").attr('src', getCardPath(cardName));
-    }, 400);
+    }, 200);
   };
 };
 
@@ -189,7 +191,8 @@ function moveDiscardToDeck(player) {
     
     setTimeout( function() {
       moveElem.addClass('moveToDeck');
+      setTimeout( function() { moveElem.remove() }, 600);
       discardP.attr('src', '/images/cards/back.jpg');
-    }, 800);
+    }, 600);
   };
 };
