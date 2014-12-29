@@ -156,8 +156,8 @@ socket.on('player turn', function() {
     game.logContent = "<u>Play</u>: ";
   }
 
-  if (sessionStorage.gameRound == 1)
-    showMyHand();
+  // if (sessionStorage.gameRound == 1)
+  showMyHand();
 });
 
 var showMyHand = function() {
@@ -173,7 +173,6 @@ var addToHand = function (cards, index) {
   var imgSrc = "/images/cards/" + cards[index].name.toLowerCase() + ".jpg";
   var imgId = "handcard" + index;
   var imgClass = "handcard";
-  console.log(index);
 
   setTimeout( function() {
     handArea.append('<img src= \"' + imgSrc + '\" class=\"' + imgClass + '\" id=\"' + imgId + '\">');
@@ -327,11 +326,6 @@ $(function(){
     // var handIndex = event.target.id.slice(-1);
     var handIndex = $(".handcard").index(this);
     playCard(game.getCurrentPlayer().hand[handIndex], handIndex, playerID);
-  });
-
-  $("button#skip-action").on("click", function(event) {
-    if (game.players[playerID] == game.getCurrentPlayer())
-      $("#actionCount").text(0);
   });
 
   $("button#end-turn").on("click", function(event) {
