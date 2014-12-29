@@ -172,9 +172,14 @@ function displayDiscard (player, cardName) {
         $("img#discard-pile").attr('src', getCardPath(cardName));
       }, 200);
     } else {
+      moveDiscardToDeck();
       setTimeout( function() {
         $("img#discard-pile").attr('src', '/images/cards/back.jpg');
       }, 800);
     };
   };
+};
+
+function moveDiscardToDeck() {
+
 };

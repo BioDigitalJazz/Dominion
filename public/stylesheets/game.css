@@ -64,18 +64,18 @@ img.supply-nonaction-big {
 }
 
 #area-player-deck {
+  position: relative;
   width: 100%;
   height: 27.6%;
-  position: relative;
 }
 
 img#deck {
-  display: block;
+  position: absolute;
+  top: 5%;
+  left: 20%;
   z-index: 1;
   width: 56%;
   height: 90%;
-  margin-left: 27%;
-  margin-top: 5%;
 }
 
 #area-supply-kingdom {
@@ -237,14 +237,15 @@ button#skip-action, button#end-turn {
 
 #area-discard-pile {
   float: left;
+  position: relative;
   width: 50%;
   height: 100%;
 }
 
 img#discard-pile {
-  display: inline-block;
+  position: absolute;
+  top: 5%;
+  left: 10%;
   width: 70%;
   height: 90%;
-  margin-top: 2%;
-  margin-left: 10%;
 }
