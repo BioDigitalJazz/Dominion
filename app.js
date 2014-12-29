@@ -71,9 +71,9 @@ var io = require('socket.io')(server);
 var players = [];
 var whosReady = [];
 var messages = [];
-var randomCards = ['ChancellorCard', 'CouncilroomCard', 'FestivalCard', 
-      'LaboratoryCard', 'MarketCard', 'SmithyCard', 'VillageCard', 
-      'WitchCard', 'WoodcutterCard', 'WorkshopCard'];
+var randomCards = ['AdventurerCard', 'FeastCard', 'MineCard', 
+      'MoneylenderCard', 'MarketCard', 'SmithyCard', 'VillageCard', 
+      'WitchCard', 'ThroneRoomCard', 'WorkshopCard'];
 
 io.on('connection', function (socket) {
   // socket.emit('You are connected!');
@@ -114,6 +114,11 @@ io.on('connection', function (socket) {
   socket.on('next player', function(data) {
     io.emit('update DB next player', data);
   });
+
+  socket.on('player draw', function(date) {
+    io.emit('update DB player draw', data)
+  });
+
 });
 
 // === Ting ===

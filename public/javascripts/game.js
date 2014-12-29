@@ -251,6 +251,8 @@ var adviseServerBuy = function(thePlayer, theCard) {
   socket.emit('player buy', { playerIndex: thePlayer, card: theCard });
 }
 
+
+
 var adviseServerAction = function(theCardLocation, theCardIndex, thePlayer, theFunctionToPass) {
   socket.emit('player action', { cardLocation: theCardLocation, cardIndex: theCardIndex, 
                playerIndex: game.players.indexOf(thePlayer), functionToPass: theFunctionToPass });

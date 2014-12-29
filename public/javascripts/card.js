@@ -140,10 +140,19 @@ ActionCard.prototype.play = function(player) {
   if (ef["discard"])    { player.discard(ef["discard"]); };
   if (ef["trash"])      { player.trash(ef["trash"]); };
 
-  if (ef["adventurer"]) { if (player.deck[player.deck.length -1].types["treasure"]) {
-                            var x = "placeholder";
-                          }
+  if (ef["adventurer"]) { var treasures = 0;
+                          while (treasures < 2) {
+                            if (player.deck.length == 0) {
+                              player.replenishDeck();
+                            } else if (player.deck[player.deck.length -1].types["treasure"]) {
+                              player.drawcard(1);
+                              treasures++;
+                            } else {
+                              player.discardPile.push(player.deck.pop());
+                            }
+                          };
                         };
+
 };
 
 
