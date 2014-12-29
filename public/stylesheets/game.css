@@ -249,3 +249,7 @@ img#discard-pile {
   width: 70%;
   height: 90%;
 }
+
+img#discard-pile.moveToDeck {
+  left: -200%;
+}

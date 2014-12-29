@@ -82,7 +82,9 @@ Player.prototype.drawCard = function(num) {
         theDeck.push(theDiscardPile.pop());
       };
       this.shuffleDeck();
-      displayDiscard(this);
+
+      if (sessionStorage.gameRound > 0)
+        moveDiscardToDeck(this);
     };
     theHand.push(theDeck.pop());
   };
@@ -167,19 +169,17 @@ function updateCardCount(cardName) {
 
 function displayDiscard (player, cardName) {
   if (Number(playerID) == player.game.currentPlayerIndex) {
-    if (cardName) {
-      setTimeout( function() {
-        $("img#discard-pile").attr('src', getCardPath(cardName));
-      }, 200);
-    } else {
-      moveDiscardToDeck();
-      setTimeout( function() {
-        $("img#discard-pile").attr('src', '/images/cards/back.jpg');
-      }, 800);
-    };
+    setTimeout( function() {
+      $("img#discard-pile").attr('src', getCardPath(cardName));
+    }, 400);
   };
 };
 
-function moveDiscardToDeck() {
-
+function moveDiscardToDeck(player) {
+  if (Number(playerID) == player.game.currentPlayerIndex) {
+    $("img#discard-pile").addClass('moveToDeck');
+    setTimeout( function() {
+      $("img#discard-pile").attr('src', '/images/cards/back.jpg');
+    }, 800);
+  };
 };
