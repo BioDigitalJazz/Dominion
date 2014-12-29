@@ -64,7 +64,7 @@ Player.prototype.gainCard = function (cardName) {
   this.discardPile.push(newCard);
 
   if (Number(sessionStorage.gameRound) > 0)
-    this.displayDiscard(cardName);
+    displayDiscard(this, cardName);
 };
 
 Player.prototype.replenishDeck = function() {
@@ -73,7 +73,8 @@ Player.prototype.replenishDeck = function() {
     this.deck.push(this.discardPile.pop());
   };
   this.shuffleDeck();
-  this.displayDiscard();
+  if (sessionStorage.gameRound > 0)
+    moveDiscardToDeck(this);
 };
 
 Player.prototype.revealCards = function(num) {
@@ -118,21 +119,7 @@ Player.prototype.discard = function(card, cardLocation) {
   this.discardPile.push(card);
   cardLocation.splice(cardLocation.indexOf(card), 1);
 
-  this.displayDiscard(card.name);
-};
-
-Player.prototype.displayDiscard = function(cardName) {
-  if (Number(playerID) == this.game.currentPlayerIndex) {
-    if (cardName) {
-      setTimeout( function() {
-        $("img#discard-pile").attr('src', getCardPath(cardName));
-      }, 200);
-    } else {
-      setTimeout( function() {
-        $("img#discard-pile").attr('src', '/images/cards/back.jpg');
-      }, 800);
-    };
-  };
+  displayDiscard(this, card.name);
 };
 
 Player.prototype.trash = function(card, cardLocation) {
@@ -183,5 +170,25 @@ function updateCardCount(cardName) {
     noCard.removeClass('supply-nonaction');
     noCard.removeClass('supply-kingdom');
     noCard.addClass('supply-none');
+  };
+}; // updateCardCount()
+
+
+function displayDiscard (player, cardName) {
+  if (Number(playerID) == player.game.currentPlayerIndex) {
+    setTimeout( function() {
+      $("img#discard-pile").attr('src', getCardPath(cardName));
+    }, 400);
+  };
+};
+
+function moveDiscardToDeck(player) {
+  if (Number(playerID) == player.game.currentPlayerIndex) {
+    var discardP = $("img#discard-pile");
+    
+    setTimeout( function() {
+      var moveElem = discardP.clone().addClass('moveToDeck').appendTo('#area-discard-pile');
+      discardP.attr('src', '/images/cards/back.jpg');
+    }, 800);
   };
 };
