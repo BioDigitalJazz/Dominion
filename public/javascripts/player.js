@@ -52,7 +52,7 @@ Player.prototype.cleanUpPhase = function() {
   for (var j = 0; j < handLength; j++) {
     theDiscardPile.push(theHand.pop());
   }
-  this.hand = []
+  this.hand = [];
   this.drawCard(5);
 }
 
@@ -178,17 +178,19 @@ function displayDiscard (player, cardName) {
   if (Number(playerID) == player.game.currentPlayerIndex) {
     setTimeout( function() {
       $("img#discard-pile").attr('src', getCardPath(cardName));
-    }, 400);
+    }, 200);
   };
 };
 
 function moveDiscardToDeck(player) {
   if (Number(playerID) == player.game.currentPlayerIndex) {
     var discardP = $("img#discard-pile");
+    var moveElem = discardP.clone().appendTo('#area-discard-pile');
     
     setTimeout( function() {
-      var moveElem = discardP.clone().addClass('moveToDeck').appendTo('#area-discard-pile');
+      moveElem.addClass('moveToDeck');
+      setTimeout( function() { moveElem.remove() }, 600);
       discardP.attr('src', '/images/cards/back.jpg');
-    }, 800);
+    }, 600);
   };
 };

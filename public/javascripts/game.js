@@ -85,7 +85,7 @@ Game.prototype.nextPlayer = function(){
   if(this.currentPlayerIndex == Number(playerID)) {
     this.cleanUp();
     this.getCurrentPlayer().cleanUpPhase();
-    showMyHand();
+    setTimeout(function() { showMyHand(); }, 1200);
   }
 
   if (this.currentPlayerIndex == this.players.length - 1) {
@@ -108,9 +108,9 @@ Game.prototype.gameEnd = function(){
   return (supply['province'] == 0);
 };
 
-Game.prototype.triggerShowHand = function() {
-  showMyHand();
-};
+// Game.prototype.triggerShowHand = function() {
+//   showMyHand();
+// };
 
 
 
@@ -159,17 +159,22 @@ socket.on('player turn', function() {
 });
 
 var showMyHand = function() {
-  var handArea = $("#area-player-hand");
   $(".handcard").remove();
   var cardsInHand = game.players[playerID].hand;
 
-  for (var i = 0; i < cardsInHand.length; i++) {
-    var aCard = cardsInHand[i]
-    var imagesrc = "/images/cards/" + aCard.name.toLowerCase() + ".jpg";
-    var imageid = "handcard" + i;
-    var imageClass = "handcard";
-    handArea.append('<img src= \"' + imagesrc + '\" class=\"' + imageClass + '\" id=\"' + imageid + '\">');
-  };
+  for (var i = 0; i < cardsInHand.length; i++)
+    addToHand(cardsInHand, i);
+};
+
+var addToHand = function (cards, index) {
+  var handArea = $("#area-player-hand");
+  var imgSrc = "/images/cards/" + cards[index].name.toLowerCase() + ".jpg";
+  var imgId = "handcard" + index;
+  var imgClass = "handcard";
+
+  setTimeout( function() {
+    handArea.append('<img src= \"' + imgSrc + '\" class=\"' + imgClass + '\" id=\"' + imgId + '\">');
+  }, index * 100);
 };
 
 var moveCardToPlay = function(jqueryCard, card) {

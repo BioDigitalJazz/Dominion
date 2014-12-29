@@ -6,10 +6,6 @@ How to differentiate them in the log?
 2) game.js | playCard function
 (see comment in the function)
 
-3) player.js | Player.prototype.displayDiscard 
-  discardPile top card stays for 600 millisecond then gets shuffled into deck
-  the top card gets displayed in the new hand right away
-=> how to make it more obvious that shuffling is taking place
 
 
 ** Phantom problem
