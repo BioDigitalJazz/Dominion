@@ -63,7 +63,7 @@ Player.prototype.gainCard = function (cardName) {
   var newCard = new cardConstructors[cardName]();
   this.discardPile.push(newCard);
 
-  if (Number(sessionStorage.gameRound) > 0)
+  if (sessionStorage.gameRound > 0)
     displayDiscard(this, cardName);
 };
 

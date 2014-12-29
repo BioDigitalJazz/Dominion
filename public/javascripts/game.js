@@ -155,7 +155,9 @@ socket.on('player turn', function() {
     game.logTitle = game.players[playerID].name ;
     game.logContent = "<u>Play</u>: ";
   }
-  showMyHand();
+
+  if (sessionStorage.gameRound == 1)
+    showMyHand();
 });
 
 var showMyHand = function() {
@@ -171,6 +173,7 @@ var addToHand = function (cards, index) {
   var imgSrc = "/images/cards/" + cards[index].name.toLowerCase() + ".jpg";
   var imgId = "handcard" + index;
   var imgClass = "handcard";
+  console.log(index);
 
   setTimeout( function() {
     handArea.append('<img src= \"' + imgSrc + '\" class=\"' + imgClass + '\" id=\"' + imgId + '\">');

@@ -1,9 +1,11 @@
 Issues:
 
-1) Buying cards and gaining cards both use Player.gainCard()
+1) Multi-Purpose Button in play-prompt area
+
+2) Buying cards and gaining cards both use Player.gainCard()
 How to differentiate them in the log?
 
-2) game.js | playCard function
+3) game.js | playCard function
 (see comment in the function)
 
 

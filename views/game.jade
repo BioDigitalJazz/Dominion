@@ -95,17 +95,17 @@ block content
               td(id="coinCount") 0
         div(id="play-prompt")
           Your turn! Play an action.
+        button(id="end-turn") End Turn
         div(id="play-area")
       div(id="area-player-hand")
     div(id="column-right")
       div(id="area-log")
         div(id="log-box")
       div(id="area-misc")
-        div(id="control-buttons")
-          button(id="skip-action") Skip Action
-          button(id="end-turn") End Turn
         div(id="area-discard-pile")
           img(id="discard-pile" src="/images/cards/back.jpg")
+        div(id="control-buttons")
+          button(id="end-game") End Game
     script(src='/javascripts/card.js')
     script(src='/javascripts/player.js')     
     script(src='/javascripts/game.js')
