@@ -140,10 +140,14 @@ ActionCard.prototype.play = function(player) {
   if (ef["discard"])    { player.discard(ef["discard"]); };
   if (ef["trash"])      { player.trash(ef["trash"]); };
 
-  if (ef["adventurer"]) { if (player.deck[player.deck.length -1].types["treasure"]) {
-                            var x = "placeholder";
-                          }
-                        };
+  if (ef["adventurer"]) { 
+    if (player.deck[player.deck.length -1].types["treasure"]) {
+      var x = "placeholder";
+    };
+  };
+
+  // Ting: testing
+  if (ef["workshop"]) { player.state = "onhold"; };
 };
 
 
@@ -441,7 +445,8 @@ function WorkshopCard() {
   this.types.action = true;
 
   // Special Function
-
+  // Ting: testing
+  this.effects['workshop'] = true;
 };
 
 WorkshopCard.prototype = Object.create(ActionCard.prototype);

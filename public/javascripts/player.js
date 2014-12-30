@@ -1,6 +1,8 @@
 var Player = function (name, game) {
   this.game = game;
   this.name = name;
+  // Ting: testing
+  this.state = 'none';
   this.deck = [];
   this.hand = [];
   this.discardPile = [];
