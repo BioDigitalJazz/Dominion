@@ -71,7 +71,7 @@ Game.prototype.addLog = function(title, content) {
   var logBox = $('#log-box');
   $('<p>').html(logStr).appendTo(logBox);
 
-  logBox.animate({ scrollTop: logBox.height() }, 800);
+  logBox.animate({ scrollTop: logBox[0].scrollHeight }, 800);
 };
 
 Game.prototype.displayMessage = function(message) {
