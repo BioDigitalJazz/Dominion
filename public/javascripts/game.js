@@ -155,8 +155,6 @@ socket.on('player turn', function() {
     game.logTitle = game.players[playerID].name ;
     game.logContent = "<u>Play</u>: ";
   };
-
-  console.log('in player turn');
   showMyHand();
 });
 
@@ -227,9 +225,11 @@ var resolveInteraction = function (player) {
   btn.attr("id", "done-interact");
   btn.text("Done");
   
-  // btn.off();
-  // btn.on('click', function()
-  player.state = "none";
+  btn.off();
+  btn.on('click', function() {
+    player.state = "none";
+    console.log("interaction done");
+  };
 };
 
 var buyCard = function(cardName) {
