@@ -1,6 +1,8 @@
 var Player = function (name, game) {
   this.game = game;
   this.name = name;
+  // Ting: testing
+  this.state = 'none';
   this.deck = [];
   this.hand = [];
   this.discardPile = [];
@@ -63,7 +65,7 @@ Player.prototype.gainCard = function (cardName) {
   var newCard = new cardConstructors[cardName]();
   this.discardPile.push(newCard);
 
-  if (Number(sessionStorage.gameRound) > 0)
+  if (sessionStorage.gameRound > 0)
     displayDiscard(this, cardName);
 };
 

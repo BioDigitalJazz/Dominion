@@ -91,14 +91,12 @@ io.on('connection', function (socket) {
 
   socket.on('game created ready to play', function (playerID) {
     whosReady.push(playerID);
-    if (players.size == whosReady.size) {
+    if (players.length == whosReady.length) {
       io.emit('player turn');
     }
   });
 
   socket.on('player on game page', function (playerID) {
-    console.log('Player ' + playerID + ' starts');
-
     socket.emit('ready to start', 
             { message: messages[playerID], kingdomCards: randomCards, players: players });
   });

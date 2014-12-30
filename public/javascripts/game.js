@@ -148,13 +148,13 @@ socket.on('ready to start', function (data) {
 });
 
 socket.on('player turn', function() {
-  if (parseInt(playerID) !== game.currentPlayerIndex){
-    game.displayMessage("Not your turn, please wait.")
+  if (parseInt(playerID) !== game.currentPlayerIndex) {
+    game.displayMessage("Not your turn, please wait.");
   } else {
-    game.displayMessage("It is your turn, play an action, or buy a card")
+    game.displayMessage("It is your turn, play an action, or buy a card");
     game.logTitle = game.players[playerID].name ;
     game.logContent = "<u>Play</u>: ";
-  }
+  };
   showMyHand();
 });
 
@@ -205,6 +205,10 @@ var playCard = function(card, handIndex, playerid) {
         $("#actionCount").text(Number($("#actionCount").text()) - 1);
         card.play(thePlayer);
         adviseServerAction("hand", handIndex, thePlayer, "moveToPlayArea");
+
+        // onhold is a temp name for the player's state
+        if (thePlayer.state == "onhold")
+          resolveInteraction(thePlayer);
         
         // Issue: This is synched to moveCardToPlay(), but this shows wrong results if 
         // adviseServerAction above and socket.on('update DB action') take longer than 
@@ -215,6 +219,19 @@ var playCard = function(card, handIndex, playerid) {
     }
   }
 };
+
+var resolveInteraction = function (player) {
+  var btn = $("button#end-turn");
+  btn.attr("id", "done-interact");
+  btn.text("Done");
+  
+  btn.off();
+  btn.on('click', function() {
+    player.state = "none";
+    console.log("interaction done");
+  };
+};
+
 var buyCard = function(cardName) {
   // name format is CouncilroomCard
   var supplyName = cardName.charAt(0).toUpperCase() + cardName.substring(1) + "Card";
@@ -324,11 +341,6 @@ $(function(){
     // var handIndex = event.target.id.slice(-1);
     var handIndex = $(".handcard").index(this);
     playCard(game.getCurrentPlayer().hand[handIndex], handIndex, playerID);
-  });
-
-  $("button#skip-action").on("click", function(event) {
-    if (game.players[playerID] == game.getCurrentPlayer())
-      $("#actionCount").text(0);
   });
 
   $("button#end-turn").on("click", function(event) {
