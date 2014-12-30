@@ -65,6 +65,8 @@ Game.prototype.startLog = function(pNames, kCards) {
 };
 
 Game.prototype.addLog = function(title, content) {
+  if (content.substr(-2, 2) == ", ")
+    content = content.slice(0, -2)
   var logStr = "=== " + title + ' === <br />' + content;
   var logBox = $('#log-box');
   $('<p>').html(logStr).appendTo(logBox);
@@ -217,7 +219,7 @@ var playCard = function(card, handIndex, playerid) {
         // adviseServerAction above and socket.on('update DB action') take longer than 
         // 400 milliseconds
         setTimeout(function() { showMyHand(); }, 400);
-        game.logContent += card.name;
+        game.logContent += (card.name + ", ");
       }
     }
   }
