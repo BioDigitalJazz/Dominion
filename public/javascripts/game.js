@@ -229,7 +229,7 @@ var resolveInteraction = function (player) {
   btn.on('click', function() {
     player.state = "none";
     console.log("interaction done");
-  };
+  });
 };
 
 var buyCard = function(cardName) {
@@ -334,6 +334,11 @@ function initCardDisplay() {
   $('img#deck').hover(showCount, hideCount);
 };
 
+function endTurn() {
+  if (game.players[playerID] == game.getCurrentPlayer())
+    adviseServerNextPlayer();
+};
+
 $(function(){
   initCardDisplay();
 
@@ -343,10 +348,7 @@ $(function(){
     playCard(game.getCurrentPlayer().hand[handIndex], handIndex, playerID);
   });
 
-  $("button#end-turn").on("click", function(event) {
-    if (game.players[playerID] == game.getCurrentPlayer())
-      adviseServerNextPlayer();
-  });
+  $("button#end-turn").on("click", endTurn);
 
   $("#area-supply-kingdom").on("click", "img.supply-kingdom", function(event) {
     var supplyIndex = $("img.supply-kingdom").index(this);
