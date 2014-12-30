@@ -223,7 +223,7 @@ var playCard = function(card, handIndex, playerid) {
       }
     }
   }
-};
+}; // playCard()
 
 var resolveInteraction = function (player) {
   var btn = $("button#end-turn");
@@ -253,6 +253,7 @@ var buyCard = function(cardName) {
     } else {
       adviseServerBuy(game.players.indexOf(game.getCurrentPlayer()), supplyName);
       $("#coinCount").text(Number($("#coinCount").text()) - cardToBuy.cost);
+      logBuyCard(supplyName);
       
       if (Number($("#buyCount").text()) <= 1) {
         adviseServerNextPlayer();
@@ -260,11 +261,16 @@ var buyCard = function(cardName) {
         $("#buyCount").text(Number($("#buyCount").text()) - 1);
         game.displayMessage("still more buys:" + $("#buyCount").text());
       }
-
     }
   }
-};
+}; // buyCard()
 
+var logBuyCard = function (cardName) {
+  if (game.logContent.indexOf("Buy") == -1)
+    game.logContent += "<br><u>Buy</u>: ";
+
+  game.logContent += (cardName.slice(0, -4) + ", ");
+};
 
 // var moveToPlayArea = function(card, handIndex, player) {
 //   var imgIdentifier = "img#handcard" + handIndex
