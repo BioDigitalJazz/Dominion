@@ -224,10 +224,14 @@ var resolveInteraction = function (player) {
   var btn = $("button#end-turn");
   btn.attr("id", "done-interact");
   btn.text("Done");
-  
   btn.off();
+
   btn.on('click', function() {
-    player.state = "none";
+    player.state = "normal";
+    btn.attr("id", "end-turn");
+    btn.text("End Turn");
+    btn.off();
+    btn.on('click', endTurn);
     console.log("interaction done");
   });
 };
