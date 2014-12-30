@@ -66,7 +66,10 @@ Game.prototype.startLog = function(pNames, kCards) {
 
 Game.prototype.addLog = function(title, content) {
   var logStr = "=== " + title + ' === <br />' + content;
-  $('<p>').html(logStr).appendTo('#log-box');
+  var logBox = $('#log-box');
+  var addP = $('<p>').html(logStr).appendTo(logBox);
+
+  logBox.scrollTop(logBox.height());
 };
 
 Game.prototype.displayMessage = function(message) {
