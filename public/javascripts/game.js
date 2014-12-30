@@ -191,7 +191,7 @@ var playCard = function(card, handIndex, playerid) {
   if (game.players[playerid] == game.getCurrentPlayer()) {
     var thePlayer = game.players[playerid];
 
-    if (card.types.Treasure) {
+    if (card.types["Treasure"]) {
       moveCardToPlay($('.handcard').eq(handIndex), card);
       $("#coinCount").text(Number($("#coinCount").text()) + card.worth);
       adviseServerAction("hand", handIndex, thePlayer, "moveToPlayArea");
@@ -229,7 +229,7 @@ var resolveInteraction = function (player) {
   btn.on('click', function() {
     player.state = "none";
     console.log("interaction done");
-  };
+  });
 };
 
 var buyCard = function(cardName) {
@@ -338,9 +338,28 @@ $(function(){
   initCardDisplay();
 
   $("#area-player-hand").on("click", ".handcard", function(event) {
-    // var handIndex = event.target.id.slice(-1);
     var handIndex = $(".handcard").index(this);
-    playCard(game.getCurrentPlayer().hand[handIndex], handIndex, playerID);
+    var thePlayer = game.getCurrentPlayer();
+    if (thePlayer.state == "normal") {
+      playCard(game.getCurrentPlayer().hand[handIndex], handIndex, playerID);
+    } else  {
+      if (game.players[playerID] == thePlayer) {
+        if (thePlayer.state == "mine") {
+          var theCard = game.getCurrentPlayer().hand[handIndex];
+          if (theCard.types["Treasure"]) {
+            if (theCard.name = "Copper") {
+              console.log(thePlayer.hand[handIndex]);
+              thePlayer.hand[handIndex] = new cardConstructors["SilverCard"]();
+            } else {
+              thePlayer.hand[handIndex] = new cardConstructors["GoldCard"]();
+            }
+            showMyHand();
+            thePlayer.setState("normal");
+          };
+        };
+      };
+    };
+    
   });
 
   $("button#end-turn").on("click", function(event) {
@@ -354,7 +373,10 @@ $(function(){
     // src="/images/cards/councilroom_crop.jpg
     //index=0123456789012345678901234567890123
     var cardName = imgSource.substring(14, (imgSource.length - 9));
-    buyCard(cardName);
+    var thePlayer = game.getCurrentPlayer();
+    if (thePlayer.state == "normal") {
+      buyCard(cardName);
+    }; 
   });
 
   $("#area-supply-nonaction").on("click", "img.supply-nonaction", function(event) {
@@ -363,7 +385,10 @@ $(function(){
     // src="/images/cards/duchy.jpg"
     //index=01234567890123456789012
     var cardName = imgSource.substring(14, (imgSource.length - 4));
-    buyCard(cardName);
+    var thePlayer = game.getCurrentPlayer();
+    if (thePlayer.state == "normal") {
+      buyCard(cardName);
+    }; ;
   });
 
 });
