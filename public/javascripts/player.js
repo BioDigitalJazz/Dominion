@@ -5,6 +5,7 @@ var Player = function (name, game) {
   this.hand = [];
   this.discardPile = [];
   this.playArea = [];
+  this.playerState = "normal";
 
   for (var i = 1; i <= 10; i++) {
     if (i <= 7) {
