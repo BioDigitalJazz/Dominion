@@ -1,10 +1,10 @@
 Issues:
 
-1) Multi-Purpose Button in play-prompt area
-1.2) Highlighting cards to discard
+1) Messages for Played Action Cards
+  Mine, Feast
 
-2) Buying cards and gaining cards both use Player.gainCard()
-How to differentiate them in the log?
+2) Multi-Purpose Button in play-prompt area
+2.2) Highlighting cards to discard
 
 3) game.js | playCard function
 (see comment in the function)

@@ -449,6 +449,7 @@ $(function(){
           if (cardToGain.cost <= 5 && game.supply[supplyName] > 0) {
             console.log(thePlayer.playArea);
             thePlayer.gainCard(supplyName);
+            game.logGainCard(supplyName.slice(0, -4));
             thePlayer.setState("normal");
           };
         };
