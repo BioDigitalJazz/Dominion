@@ -62,6 +62,7 @@ Game.prototype.startLog = function(pNames, kCards) {
   }, this);
 
   this.addLog("The Game Starts", this.logContent.slice(0, -2));
+  this.logContent = "";
 };
 
 Game.prototype.addLog = function(title, content) {
@@ -72,41 +73,53 @@ Game.prototype.addLog = function(title, content) {
   $('<p>').html(logStr).appendTo(logBox);
 
   logBox.animate({ scrollTop: logBox[0].scrollHeight }, 800);
-  this.logContent = "";
 };
 
-Game.prototype.logPlayCard = function (cardName) {
-  if (this.logContent.indexOf("Play") == -1)
-    this.logContent += "<u>Play</u>: ";
-  this.logContent += (cardName + ", ");
-};
+Game.prototype.logCard = function (cardName, logType) {
+  var logTypes = ["Play", "Buy", "Gain", "Trash"];
+  var pos = logTypes.indexOf(logType);
+  var addNewline = false;
 
-Game.prototype.logBuyCard = function (cardName) {
-  if (this.logContent.indexOf("Buy") == -1) {
-    if (this.logContent.indexOf("Play") >= 0)
+  if (this.logContent.indexOf(logType) == -1) {
+    if (this.logContent.substr(-2, 2) == ", ")
       this.logContent += "<br>";
-    this.logContent += "<u>Buy</u>: ";
-  };
-  this.logContent += (cardName.slice(0, -4) + ", ");
-};
-
-Game.prototype.logGainCard = function (cardName) {
-  if (this.logContent.indexOf("Gain") == -1) {
-    if (this.logContent.indexOf("Play") >= 0 || this.logContent.indexOf("Buy") >= 0 )
-      this.logContent += "<br>";
-    this.logContent += "<u>Gain</u>: ";
+    this.logContent += ("<u>" + logType + "</u>: ");
   };
   this.logContent += (cardName + ", ");
 };
 
-Game.prototype.logTrashCard = function (cardName) {
-  if (this.logContent.indexOf("Trash") == -1) {
-    if (this.logContent.indexOf("Play") >= 0 || this.logContent.indexOf("Buy") >= 0 || this.logContent.indexOf("Gain") >= 0 )
-      this.logContent += "<br>";
-    this.logContent += "<u>Trash</u>: ";
-  };
-  this.logContent += (cardName + ", ");
-};
+// Game.prototype.logPlayCard = function (cardName) {
+//   if (this.logContent.indexOf("Play") == -1)
+//     this.logContent += "<u>Play</u>: ";
+//   this.logContent += (cardName + ", ");
+// };
+
+// Game.prototype.logBuyCard = function (cardName) {
+//   if (this.logContent.indexOf("Buy") == -1) {
+//     if (this.logContent.indexOf("Play") >= 0)
+//       this.logContent += "<br>";
+//     this.logContent += "<u>Buy</u>: ";
+//   };
+//   this.logContent += (cardName + ", ");
+// };
+
+// Game.prototype.logGainCard = function (cardName) {
+//   if (this.logContent.indexOf("Gain") == -1) {
+//     if (this.logContent.indexOf("Play") >= 0 || this.logContent.indexOf("Buy") >= 0 )
+//       this.logContent += "<br>";
+//     this.logContent += "<u>Gain</u>: ";
+//   };
+//   this.logContent += (cardName + ", ");
+// };
+
+// Game.prototype.logTrashCard = function (cardName) {
+//   if (this.logContent.indexOf("Trash") == -1) {
+//     if (this.logContent.indexOf("Play") >= 0 || this.logContent.indexOf("Buy") >= 0 || this.logContent.indexOf("Gain") >= 0 )
+//       this.logContent += "<br>";
+//     this.logContent += "<u>Trash</u>: ";
+//   };
+//   this.logContent += (cardName + ", ");
+// };
 
 Game.prototype.displayMessage = function(message) {
   $('#play-prompt').text(message);
@@ -255,7 +268,7 @@ var playCard = function(card, handIndex, playerid) {
         // adviseServerAction above and socket.on('update DB action') take longer than 
         // 400 milliseconds
         setTimeout(function() { showMyHand(); }, 400);
-        game.logPlayCard(card.name);
+        game.logCard(card.name, "Play");
       }
     }
   }
@@ -289,10 +302,10 @@ var buyCard = function(cardName) {
     } else {
       adviseServerBuy(game.players.indexOf(game.getCurrentPlayer()), supplyName);
       $("#coinCount").text(Number($("#coinCount").text()) - cardToBuy.cost);
-      game.logBuyCard(supplyName);
+      game.logCard(supplyName.slice(0, -4), "Buy"); 
       
       if (Number($("#buyCount").text()) <= 1) {
-        adviseServerNextPlayer();
+        endTurn();
       } else {
         $("#buyCount").text(Number($("#buyCount").text()) - 1);
         game.displayMessage("still more buys:" + $("#buyCount").text());
@@ -383,8 +396,10 @@ function initCardDisplay() {
 };
 
 function endTurn() {
-  if (game.players[playerID] == game.getCurrentPlayer())
+  if (game.players[playerID] == game.getCurrentPlayer()) {
     adviseServerNextPlayer();
+    game.logContent = "";
+  };
 };
 
 $(function(){
@@ -403,13 +418,13 @@ $(function(){
             if (theCard.name == "Copper") {
               thePlayer.hand[handIndex] = new cardConstructors["SilverCard"]();
               game.supply["SilverCard"] = game.supply["SilverCard"] - 1;
-              game.logGainCard("Silver");
-              game.logTrashCard("Copper");
+              game.logCard("Silver", "Gain");
+              game.logCard("Copper", "Trash");
             } else {
               thePlayer.hand[handIndex] = new cardConstructors["GoldCard"]();
               game.supply["GoldCard"] = game.supply["GoldCard"] - 1;
-              game.logGainCard("Gold");
-              game.logTrashCard("Silver");
+              game.logCard("Gold", "Gain");
+              game.logCard("Silver", "Trash");
             }
             showMyHand();
             thePlayer.setState("normal");
@@ -452,7 +467,7 @@ $(function(){
           if (cardToGain.cost <= 5 && game.supply[supplyName] > 0) {
             console.log(thePlayer.playArea);
             thePlayer.gainCard(supplyName);
-            game.logGainCard(supplyName.slice(0, -4));
+            game.logCard(supplyName.slice(0, -4), "Gain");
             thePlayer.setState("normal");
           };
         };
