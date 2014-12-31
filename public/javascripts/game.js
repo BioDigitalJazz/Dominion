@@ -78,7 +78,6 @@ Game.prototype.addLog = function(title, content) {
 Game.prototype.logPlayCard = function (cardName) {
   if (this.logContent.indexOf("Play") == -1)
     this.logContent += "<u>Play</u>: ";
-
   this.logContent += (cardName + ", ");
 };
 
@@ -88,8 +87,25 @@ Game.prototype.logBuyCard = function (cardName) {
       this.logContent += "<br>";
     this.logContent += "<u>Buy</u>: ";
   };
-
   this.logContent += (cardName.slice(0, -4) + ", ");
+};
+
+Game.prototype.logGainCard = function (cardName) {
+  if (this.logContent.indexOf("Gain") == -1) {
+    if (this.logContent.indexOf("Play") >= 0 || this.logContent.indexOf("Buy") >= 0 )
+      this.logContent += "<br>";
+    this.logContent += "<u>Gain</u>: ";
+  };
+  this.logContent += (cardName + ", ");
+};
+
+Game.prototype.logTrashCard = function (cardName) {
+  if (this.logContent.indexOf("Trash") == -1) {
+    if (this.logContent.indexOf("Play") >= 0 || this.logContent.indexOf("Buy") >= 0 || this.logContent.indexOf("Gain") >= 0 )
+      this.logContent += "<br>";
+    this.logContent += "<u>Trash</u>: ";
+  };
+  this.logContent += (cardName + ", ");
 };
 
 Game.prototype.displayMessage = function(message) {
@@ -376,11 +392,15 @@ $(function(){
         if (thePlayer.state == "mine") {
           var theCard = game.getCurrentPlayer().hand[handIndex];
           if (theCard.types["Treasure"]) {
-            if (theCard.name = "Copper") {
+            if (theCard.name == "Copper") {
               console.log(thePlayer.hand[handIndex]);
               thePlayer.hand[handIndex] = new cardConstructors["SilverCard"]();
+              game.logGainCard("Silver");
+              game.logTrashCard("Copper");
             } else {
               thePlayer.hand[handIndex] = new cardConstructors["GoldCard"]();
+              game.logGainCard("Gold");
+              game.logTrashCard("Silver");
             }
             showMyHand();
             thePlayer.setState("normal");
