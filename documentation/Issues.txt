@@ -3,8 +3,6 @@ Issues:
 1) Multi-Purpose Button in play-prompt area
 1.2) Highlighting cards to discard
 
-2) Play log: every time it updates, scroll to bottom automatically
-
 2) Buying cards and gaining cards both use Player.gainCard()
 How to differentiate them in the log?
 
