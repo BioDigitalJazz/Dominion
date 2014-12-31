@@ -76,10 +76,6 @@ Game.prototype.addLog = function(title, content) {
 };
 
 Game.prototype.logCard = function (cardName, logType) {
-  var logTypes = ["Play", "Buy", "Gain", "Trash"];
-  var pos = logTypes.indexOf(logType);
-  var addNewline = false;
-
   if (this.logContent.indexOf(logType) == -1) {
     if (this.logContent.substr(-2, 2) == ", ")
       this.logContent += "<br>";
@@ -87,39 +83,6 @@ Game.prototype.logCard = function (cardName, logType) {
   };
   this.logContent += (cardName + ", ");
 };
-
-// Game.prototype.logPlayCard = function (cardName) {
-//   if (this.logContent.indexOf("Play") == -1)
-//     this.logContent += "<u>Play</u>: ";
-//   this.logContent += (cardName + ", ");
-// };
-
-// Game.prototype.logBuyCard = function (cardName) {
-//   if (this.logContent.indexOf("Buy") == -1) {
-//     if (this.logContent.indexOf("Play") >= 0)
-//       this.logContent += "<br>";
-//     this.logContent += "<u>Buy</u>: ";
-//   };
-//   this.logContent += (cardName + ", ");
-// };
-
-// Game.prototype.logGainCard = function (cardName) {
-//   if (this.logContent.indexOf("Gain") == -1) {
-//     if (this.logContent.indexOf("Play") >= 0 || this.logContent.indexOf("Buy") >= 0 )
-//       this.logContent += "<br>";
-//     this.logContent += "<u>Gain</u>: ";
-//   };
-//   this.logContent += (cardName + ", ");
-// };
-
-// Game.prototype.logTrashCard = function (cardName) {
-//   if (this.logContent.indexOf("Trash") == -1) {
-//     if (this.logContent.indexOf("Play") >= 0 || this.logContent.indexOf("Buy") >= 0 || this.logContent.indexOf("Gain") >= 0 )
-//       this.logContent += "<br>";
-//     this.logContent += "<u>Trash</u>: ";
-//   };
-//   this.logContent += (cardName + ", ");
-// };
 
 Game.prototype.displayMessage = function(message) {
   $('#play-prompt').text(message);
@@ -468,6 +431,7 @@ $(function(){
             console.log(thePlayer.playArea);
             thePlayer.gainCard(supplyName);
             game.logCard(supplyName.slice(0, -4), "Gain");
+            game.logCard("Feast", "Trash");
             thePlayer.setState("normal");
           };
         };
