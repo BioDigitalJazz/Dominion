@@ -1,5 +1,7 @@
 Issues:
 
+Feast: can only gain non-Action cards
+
 1) Messages for Played Action Cards
   Mine, Feast
 

@@ -244,6 +244,9 @@ var playCard = function(card, handIndex, playerid) {
         card.play(thePlayer);
         adviseServerAction("hand", handIndex, thePlayer, "moveToPlayArea");
 
+        if (thePlayer.state == "mine")
+          game.displayMessage("Trash a Treasure card from your hand. Gain a Treasure card costing up to 3 more.");
+
         // onhold is a temp name for the player's state
         if (thePlayer.state == "onhold")
           resolveInteraction(thePlayer);
