@@ -51,17 +51,17 @@ Game.prototype.showCardCounts = function() {
 };
 
 Game.prototype.startLog = function(pNames, kCards) {
-  var logContent = "<u>Players</u>: ";
+  this.logContent = "<u>Players</u>: ";
   pNames.forEach( function(name) {
-    logContent += (name + ', ');
-  });
+    this.logContent += (name + ', ');
+  }, this);
 
-  logContent = logContent.slice(0, -2) + "<br /><u>Kingdom Cards</u><br />&nbsp;&nbsp;";
+  this.logContent = this.logContent.slice(0, -2) + "<br /><u>Kingdom Cards</u><br />&nbsp;&nbsp;";
   kCards.forEach( function(kCard) {
-    logContent += (kCard.slice(0, -4) + ', ');
-  });
+    this.logContent += (kCard.slice(0, -4) + ', ');
+  }, this);
 
-  this.addLog("The Game Starts", logContent.slice(0, -2));
+  this.addLog("The Game Starts", this.logContent.slice(0, -2));
 };
 
 Game.prototype.addLog = function(title, content) {
@@ -72,6 +72,24 @@ Game.prototype.addLog = function(title, content) {
   $('<p>').html(logStr).appendTo(logBox);
 
   logBox.animate({ scrollTop: logBox[0].scrollHeight }, 800);
+  this.logContent = "";
+};
+
+Game.prototype.logPlayCard = function (cardName) {
+  if (this.logContent.indexOf("Play") == -1)
+    this.logContent += "<u>Play</u>: ";
+
+  this.logContent += (cardName + ", ");
+};
+
+Game.prototype.logBuyCard = function (cardName) {
+  if (this.logContent.indexOf("Buy") == -1) {
+    if (this.logContent.indexOf("Play") >= 0)
+      this.logContent += "<br>";
+    this.logContent += "<u>Buy</u>: ";
+  };
+
+  this.logContent += (cardName.slice(0, -4) + ", ");
 };
 
 Game.prototype.displayMessage = function(message) {
@@ -103,7 +121,6 @@ Game.prototype.nextPlayer = function(){
   if(this.currentPlayerIndex == Number(playerID)) {
     this.displayMessage("It is your turn, play an action, or buy a card.");
     game.logTitle = game.players[playerID].name ;
-    game.logContent = "<u>Play</u>: ";
   } else {
     this.displayMessage("Not your turn, please wait.");
   }
@@ -158,7 +175,6 @@ socket.on('player turn', function() {
   } else {
     game.displayMessage("It is your turn, play an action, or buy a card");
     game.logTitle = game.players[playerID].name ;
-    game.logContent = "<u>Play</u>: ";
   };
   showMyHand();
 });
@@ -219,7 +235,7 @@ var playCard = function(card, handIndex, playerid) {
         // adviseServerAction above and socket.on('update DB action') take longer than 
         // 400 milliseconds
         setTimeout(function() { showMyHand(); }, 400);
-        game.logContent += (card.name + ", ");
+        game.logPlayCard(card.name);
       }
     }
   }
@@ -253,7 +269,7 @@ var buyCard = function(cardName) {
     } else {
       adviseServerBuy(game.players.indexOf(game.getCurrentPlayer()), supplyName);
       $("#coinCount").text(Number($("#coinCount").text()) - cardToBuy.cost);
-      logBuyCard(supplyName);
+      game.logBuyCard(supplyName);
       
       if (Number($("#buyCount").text()) <= 1) {
         adviseServerNextPlayer();
@@ -264,13 +280,6 @@ var buyCard = function(cardName) {
     }
   }
 }; // buyCard()
-
-var logBuyCard = function (cardName) {
-  if (game.logContent.indexOf("Buy") == -1)
-    game.logContent += "<br><u>Buy</u>: ";
-
-  game.logContent += (cardName.slice(0, -4) + ", ");
-};
 
 // var moveToPlayArea = function(card, handIndex, player) {
 //   var imgIdentifier = "img#handcard" + handIndex
