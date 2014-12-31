@@ -17,6 +17,10 @@ var Player = function (name, game) {
   this.drawCard(5);
 };
 
+Player.prototype.setState = function(state) {
+  this.state = state;
+}
+
 //check for a type of card in a given array
 Player.prototype.blankCardInBlank = function(cardType, cardLocation) {
   for (var i = 0; i < cardLocation.length; i++) {

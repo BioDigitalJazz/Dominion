@@ -151,9 +151,9 @@ ActionCard.prototype.play = function(player) {
                               player.discardPile.push(player.deck.pop());
                             }
                           };
-  };
+                        };
 
-  if (ef["mine"]) { var x = "placeholder"; };
+  if (ef["mine"]) { player.setState("mine"); };
 
   // Ting: testing
   if (ef["workshop"]) { player.state = "onhold"; };
@@ -224,7 +224,7 @@ ChapelCard.prototype = Object.create(ActionCard.prototype);
 ChapelCard.prototype.constructor = ChapelCard;
 
 
-function CouncilRoomCard() {
+function CouncilroomCard() {
   ActionCard.call(this, 13, 'CouncilRoom', 5, '/images/cards/councilroom.jpg');
   this.types.action = true;
   this.effects["drawCard"]    = 4;
@@ -234,8 +234,8 @@ function CouncilRoomCard() {
   
 };
 
-CouncilRoomCard.prototype = Object.create(ActionCard.prototype);
-CouncilRoomCard.prototype.constructor = CouncilRoomCard;
+CouncilroomCard.prototype = Object.create(ActionCard.prototype);
+CouncilroomCard.prototype.constructor = CouncilroomCard;
 
 
 function FeastCard() {
@@ -339,7 +339,7 @@ MoatCard.prototype = Object.create(ActionCard.prototype);
 MoatCard.prototype.constructor = MoatCard;
 
 
-function MoneyLenderCard() {
+function MoneylenderCard() {
   ActionCard.call(this, 22, 'MoneyLender', 4, '/images/cards/moneylender.jpg');
   this.types.action = true;
 
@@ -347,8 +347,8 @@ function MoneyLenderCard() {
   
 };
 
-MoneyLenderCard.prototype = Object.create(ActionCard.prototype);
-MoneyLenderCard.prototype.constructor = MoneyLenderCard;
+MoneylenderCard.prototype = Object.create(ActionCard.prototype);
+MoneylenderCard.prototype.constructor = MoneylenderCard;
 
 
 function RemodelCard() {
@@ -402,16 +402,16 @@ ThiefCard.prototype = Object.create(ActionCard.prototype);
 ThiefCard.prototype.constructor = ThiefCard;
 
 
-function ThroneRoomCard() {
-  ActionCard.call(this, 27, 'ThroneRoom', 4, '/images/cards/throneroom.jpg');
+function ThroneroomCard() {
+  ActionCard.call(this, 27, 'Throneroom', 4, '/images/cards/throneroom.jpg');
   this.types.action = true;
 
   // Special Function
   
 };
 
-ThroneRoomCard.prototype = Object.create(ActionCard.prototype);
-ThroneRoomCard.prototype.constructor = ThroneRoomCard;
+ThroneroomCard.prototype = Object.create(ActionCard.prototype);
+ThroneroomCard.prototype.constructor = ThroneroomCard;
 
 
 function VillageCard() {
@@ -478,7 +478,7 @@ cardConstructors.BureaucratCard  = BureaucratCard;
 cardConstructors.CellarCard      = CellarCard;
 cardConstructors.ChancellorCard  = ChancellorCard;
 cardConstructors.ChapelCard      = ChapelCard;
-cardConstructors.CouncilRoomCard = CouncilRoomCard;
+cardConstructors.CouncilroomCard = CouncilroomCard;
 cardConstructors.FeastCard       = FeastCard;
 cardConstructors.FestivalCard    = FestivalCard;
 cardConstructors.LaboratoryCard  = LaboratoryCard;
@@ -487,12 +487,12 @@ cardConstructors.MarketCard      = MarketCard;
 cardConstructors.MilitiaCard     = MilitiaCard;
 cardConstructors.MineCard        = MineCard;
 cardConstructors.MoatCard        = MoatCard;
-cardConstructors.MoneyLenderCard = MoneyLenderCard;
+cardConstructors.MoneylenderCard = MoneylenderCard;
 cardConstructors.RemodelCard     = RemodelCard;
 cardConstructors.SmithyCard      = SmithyCard;
 cardConstructors.SpyCard         = SpyCard;
 cardConstructors.ThiefCard       = ThiefCard;
-cardConstructors.ThroneRoomCard  = ThroneRoomCard;
+cardConstructors.ThroneroomCard  = ThroneroomCard;
 cardConstructors.VillageCard     = VillageCard;
 cardConstructors.WitchCard       = WitchCard;
 cardConstructors.WoodcutterCard  = WoodcutterCard;
