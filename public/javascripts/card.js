@@ -153,7 +153,11 @@ ActionCard.prototype.play = function(player) {
                           };
                         };
 
+  if (ef["feast"]) { player.setState("feast"); };
+
   if (ef["mine"]) { player.setState("mine"); };
+
+  if (ef["moneylender"]) { player.setState("moneylender"); };
 
   // Ting: testing
   if (ef["workshop"]) { player.state = "onhold"; };
@@ -241,6 +245,7 @@ CouncilroomCard.prototype.constructor = CouncilroomCard;
 function FeastCard() {
   ActionCard.call(this, 14, 'Feast', 4, '/images/cards/feast.jpg');
   this.types.action = true;
+  this.effects["feast"] = true;
 
   // Special Function
   
@@ -342,6 +347,7 @@ MoatCard.prototype.constructor = MoatCard;
 function MoneylenderCard() {
   ActionCard.call(this, 22, 'MoneyLender', 4, '/images/cards/moneylender.jpg');
   this.types.action = true;
+  this.effects["moneylender"] = true;
 
   // Special Function
   
