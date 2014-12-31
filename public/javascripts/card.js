@@ -158,9 +158,6 @@ ActionCard.prototype.play = function(player) {
   if (ef["mine"]) { player.setState("mine"); };
 
   if (ef["moneylender"]) { player.setState("moneylender"); };
-
-  // Ting: testing
-  if (ef["workshop"]) { player.state = "onhold"; };
 };
 
 
@@ -461,8 +458,7 @@ function WorkshopCard() {
   this.types.action = true;
 
   // Special Function
-  // Ting: testing
-  this.effects['workshop'] = true;
+  
 };
 
 WorkshopCard.prototype = Object.create(ActionCard.prototype);

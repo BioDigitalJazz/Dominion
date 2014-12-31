@@ -7,12 +7,12 @@
   Woodcutter
 
 Easy [from hand]:
-  (done) Adventurer -code in card
-  (done) Mine - needs playerState
+  (done) Adventurer   - code in card
+  (done) Feast        - needs playerState
+  (done) Mine         - needs playerState
+  (done) Moneylender  - needs playerState
   Cellar - needs a button, playerState, and highlited cards
   Chapel - needs a button, playerState, and highlited cards
-  Feast - needs playerState
-  Moneylender - needs playerState
   ThroneRoom - needs playerState
 
 Easy [affects other players, no interaction window]:
