@@ -216,12 +216,13 @@ var addToHand = function (cards, index) {
 
 var moveCardToPlay = function(jqueryCard, card) {
   jqueryCard.hide(400);
-
-  setTimeout( function() {
-    jqueryCard.remove();
-    var moveCard = $('<img>').attr('src', card.image).addClass('hand-to-play');
-    moveCard.hide().appendTo('#play-area').show(400);
-  }, 400);
+  if (card.name != "Feast") {
+    setTimeout( function() {
+      jqueryCard.remove();
+      var moveCard = $('<img>').attr('src', card.image).addClass('hand-to-play');
+      moveCard.hide().appendTo('#play-area').show(400);
+    }, 400);
+  };
 }
 
 var playCard = function(card, handIndex, playerid) {
@@ -336,8 +337,12 @@ socket.on('update DB action', function(data) {
   var theFunction = data.functionToPass;
   
   if (theFunction == "moveToPlayArea") {
+    var theCard = thePlayer.hand[theCardIndex]
     thePlayer.playArea.push(thePlayer.hand[theCardIndex]);
     thePlayer.hand.splice(theCardIndex, 1);
+    if (theCard.name == "Feast") {
+      thePlayer.playArea.pop();    //Moneylender gets trashed when played
+    };
   }
 });
 
@@ -393,12 +398,13 @@ $(function(){
           var theCard = game.getCurrentPlayer().hand[handIndex];
           if (theCard.types["Treasure"]) {
             if (theCard.name == "Copper") {
-              console.log(thePlayer.hand[handIndex]);
               thePlayer.hand[handIndex] = new cardConstructors["SilverCard"]();
+              game.supply["SilverCard"] = game.supply["SilverCard"] - 1;
               game.logGainCard("Silver");
               game.logTrashCard("Copper");
             } else {
               thePlayer.hand[handIndex] = new cardConstructors["GoldCard"]();
+              game.supply["GoldCard"] = game.supply["GoldCard"] - 1;
               game.logGainCard("Gold");
               game.logTrashCard("Silver");
             }
@@ -434,7 +440,20 @@ $(function(){
     var thePlayer = game.getCurrentPlayer();
     if (thePlayer.state == "normal") {
       buyCard(cardName);
-    }; ;
+    } else {
+      if (game.players[playerID] == thePlayer) {
+        if (thePlayer.state == "feast") {
+          var supplyName = cardName.charAt(0).toUpperCase() + cardName.substring(1) + "Card";
+          var cardToGain = new cardConstructors[supplyName]();
+          console.log(cardName);
+          if (cardToGain.cost <= 5 && game.supply[supplyName] > 0) {
+            console.log(thePlayer.playArea);
+            thePlayer.gainCard(supplyName);
+            thePlayer.setState("normal");
+          };
+        };
+      };
+    }; 
   });
 
 });
