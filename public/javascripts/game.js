@@ -192,40 +192,38 @@ var addToHand = function (cards, index) {
 };
 
 
-var playCard = function(card, handIndex, playerid) {
-  if (thisPlayer == game.getCurrentPlayer()) {
-    if (card.types["Treasure"]) {
+var playCard = function(handIndex) {
+  var card = thisPlayer.hand[handIndex]
+
+  if (card.types["Treasure"]) {
+    moveCardToPlay($('.handcard').eq(handIndex), card);
+    $("#coinCount").text(Number($("#coinCount").text()) + card.worth);
+    playerAction(handIndex, "moveToPlayArea");
+  };
+
+  if (card.types.action) {
+    if (Number($("#actionCount").text()) == 0) {
+      game.displayMessage("You have no actions left, please buy a card.")
+    } else {
       moveCardToPlay($('.handcard').eq(handIndex), card);
-      $("#coinCount").text(Number($("#coinCount").text()) + card.worth);
-      // adviseServerAction("hand", handIndex, thisPlayer, "moveToPlayArea");
+      $("#actionCount").text(Number($("#actionCount").text()) - 1);
       playerAction(handIndex, "moveToPlayArea");
-    }
+      card.play(thisPlayer);
 
-    if (card.types.action) {
-      if (Number($("#actionCount").text()) == 0) {
-        game.displayMessage("You have no actions left, please buy a card.")
-      } else {
-        moveCardToPlay($('.handcard').eq(handIndex), card);
-        $("#actionCount").text(Number($("#actionCount").text()) - 1);
-        // adviseServerAction("hand", handIndex, thisPlayer, "moveToPlayArea");
-        playerAction(handIndex, "moveToPlayArea");
-        card.play(thisPlayer);
+      if (thisPlayer.state == "mine")
+        game.displayMessage("Trash a Treasure card from your hand. Gain a Treasure card costing up to 3 more.");
 
-        if (thisPlayer.state == "mine")
-          game.displayMessage("Trash a Treasure card from your hand. Gain a Treasure card costing up to 3 more.");
-
-        // onhold is a temp name for the player's state
-        if (thisPlayer.state == "onhold")
-          resolveInteraction(thePlayer);
-        
-        // Issue: This is synched to moveCardToPlay(), but this shows wrong results if 
-        // adviseServerAction above and socket.on('update DB action') take longer than 
-        // 400 milliseconds
-        setTimeout(function() { showMyHand(); }, 400);
-        game.logCard(card.name, "Play");
-      }
-    }
-  }
+      // onhold is a temp name for the player's state
+      if (thisPlayer.state == "onhold")
+        resolveInteraction();
+      
+      // Issue: This is synched to moveCardToPlay(), but this shows wrong results if 
+      // adviseServerAction above and socket.on('update DB action') take longer than 
+      // 400 milliseconds
+      setTimeout(function() { showMyHand(); }, 400);
+      game.logCard(card.name, "Play");
+    };
+  };
 }; // playCard()
 
 var moveCardToPlay = function(jqueryCard, card) {
@@ -237,7 +235,7 @@ var moveCardToPlay = function(jqueryCard, card) {
       moveCard.hide().appendTo('#play-area').show(400);
     }, 400);
   };
-}
+};
 
 var playerAction = function(cardIndex, theFunction) { 
   if (theFunction == "moveToPlayArea") {
@@ -251,14 +249,14 @@ var playerAction = function(cardIndex, theFunction) {
   };
 };
 
-var resolveInteraction = function (player) {
+var resolveInteraction = function () {
   var btn = $("button#end-turn");
   btn.attr("id", "done-interact");
   btn.text("Done");
   btn.off();
 
   btn.on('click', function() {
-    player.state = "normal";
+    thisPlayer.state = "normal";
     btn.attr("id", "end-turn");
     btn.text("End Turn");
     btn.off();
@@ -272,25 +270,21 @@ var buyCard = function(card) {
   var supplyName = cardName + "Card";
   var cardToBuy = new cardConstructors[supplyName]();
 
-  if (thisPlayer !== game.getCurrentPlayer()) {
-    console.log("Wait your goddamn turn!");
+  if (cardToBuy.cost > Number($("#coinCount").text())) {
+    console.log("You can't afford that!");
   } else {
-    if (cardToBuy.cost > Number($("#coinCount").text())) {
-      console.log("You can't afford that!");
+    // adviseServerBuy(game.players.indexOf(game.getCurrentPlayer()), supplyName);
+    thisPlayer.gainCard(supplyName);
+    $("#coinCount").text(Number($("#coinCount").text()) - cardToBuy.cost);
+    game.logCard(cardName, "Buy"); 
+    
+    if (Number($("#buyCount").text()) <= 1) {
+      endTurn();
     } else {
-      // adviseServerBuy(game.players.indexOf(game.getCurrentPlayer()), supplyName);
-      thisPlayer.gainCard(supplyName);
-      $("#coinCount").text(Number($("#coinCount").text()) - cardToBuy.cost);
-      game.logCard(cardName, "Buy"); 
-      
-      if (Number($("#buyCount").text()) <= 1) {
-        endTurn();
-      } else {
-        $("#buyCount").text(Number($("#buyCount").text()) - 1);
-        game.displayMessage("still more buys:" + $("#buyCount").text());
-      }
-    }
-  }
+      $("#buyCount").text(Number($("#buyCount").text()) - 1);
+      game.displayMessage("still more buys:" + $("#buyCount").text());
+    };
+  };
 }; // buyCard()
 
 var endTurn = function() {
@@ -347,83 +341,95 @@ function initCardDisplay() {
   $('img#deck').hover(showCount, hideCount);
 };
 
-function checkFeast(thePlayer, card) {
-  if (thePlayer.state == "feast") {
+
+function clickHandCard() {
+  if (thisPlayer !== game.getCurrentPlayer())
+    return;
+
+  var handIndex = $(".handcard").index(this);
+
+  if (thisPlayer.state == "normal") {
+    playCard(handIndex);
+  } else {
+    checkMine(handIndex);
+  };
+}; // clickHandCard
+
+function clickKingdomCard() {
+  if (thisPlayer !== game.getCurrentPlayer())
+    return;
+
+  var supplyIndex = $("img.supply-kingdom").index(this);
+  var imgSource = $(this).attr('src');
+  var cardName = imgSource.substring(14, (imgSource.length - 9));
+
+  if (thisPlayer.state == "normal") {
+    buyCard(cardName);
+  }; 
+}; // clickKingdomCard
+
+function clickNonactionCard() {
+  if (thisPlayer !== game.getCurrentPlayer())
+    return;
+
+  var supplyIndex = $("img.supply-nonaction").index(this);
+  var imgSource = $(this).attr('src');
+  var cardName = imgSource.substring(14, (imgSource.length - 4));
+
+  if (thisPlayer.state == "normal") {
+    buyCard(cardName);
+  } else {
+    checkFeast(cardName);
+  }; 
+}; // clickNonactionCard
+
+function checkFeast(card) {
+  if (thisPlayer.state == "feast") {
     var cardName = capStr(card);
     var supplyName = cardName + "Card";
     var cardToGain = new cardConstructors[supplyName]();
 
     if (cardToGain.cost <= 5 && game.supply[supplyName] > 0) {
-      thePlayer.gainCard(supplyName);
+      thisPlayer.gainCard(supplyName);
       game.logCard(cardName, "Gain");
       game.logCard("Feast", "Trash");
-      thePlayer.setState("normal");
+      thisPlayer.setState("normal");
     };
   };
-};
+}; // checkFeast
+
+function checkMine(handIndex) {
+  if (thisPlayer.state == "mine") {
+    var theCard = thisPlayer.hand[handIndex];
+    
+    if (theCard.types["Treasure"]) {
+      if (theCard.name == "Copper") {
+        thisPlayer.hand[handIndex] = new cardConstructors["SilverCard"]();
+        game.supply["SilverCard"] -= 1;
+        game.logCard("Silver", "Gain");
+        game.logCard("Copper", "Trash");
+      } else {
+        thisPlayer.hand[handIndex] = new cardConstructors["GoldCard"]();
+        game.supply["GoldCard"] -= 1;
+        game.logCard("Gold", "Gain");
+        game.logCard("Silver", "Trash");
+      };
+      showMyHand();
+      thisPlayer.setState("normal");
+    };
+  };
+}; // checkMine
 
 
 $(function(){
   initCardDisplay();
 
-  $("#area-player-hand").on("click", ".handcard", function(event) {
-    var handIndex = $(".handcard").index(this);
-    var thePlayer = game.getCurrentPlayer();
-    if (thePlayer.state == "normal") {
-      playCard(game.getCurrentPlayer().hand[handIndex], handIndex, playerID);
-    } else  {
-      if (game.players[playerID] == thePlayer) {
-        if (thePlayer.state == "mine") {
-          var theCard = game.getCurrentPlayer().hand[handIndex];
-          if (theCard.types["Treasure"]) {
-            if (theCard.name == "Copper") {
-              thePlayer.hand[handIndex] = new cardConstructors["SilverCard"]();
-              game.supply["SilverCard"] = game.supply["SilverCard"] - 1;
-              game.logCard("Silver", "Gain");
-              game.logCard("Copper", "Trash");
-            } else {
-              thePlayer.hand[handIndex] = new cardConstructors["GoldCard"]();
-              game.supply["GoldCard"] = game.supply["GoldCard"] - 1;
-              game.logCard("Gold", "Gain");
-              game.logCard("Silver", "Trash");
-            }
-            showMyHand();
-            thePlayer.setState("normal");
-          };
-        };
-      };
-    };
-    
-  });
+  $("#area-player-hand").on("click", ".handcard", clickHandCard);
 
   $("button#end-turn").on("click", endTurn);
 
-  $("#area-supply-kingdom").on("click", "img.supply-kingdom", function(event) {
-    var supplyIndex = $("img.supply-kingdom").index(this);
-    var imgSource = $(this).attr('src');
-    // src="/images/cards/councilroom_crop.jpg
-    //index=0123456789012345678901234567890123
-    var cardName = imgSource.substring(14, (imgSource.length - 9));
-    var thePlayer = game.getCurrentPlayer();
-    if (thePlayer.state == "normal") {
-      buyCard(cardName);
-    }; 
-  });
+  $("#area-supply-kingdom").on("click", "img.supply-kingdom", clickKingdomCard);
 
-  $("#area-supply-nonaction").on("click", "img.supply-nonaction", function(event) {
-    var supplyIndex = $("img.supply-nonaction").index(this);
-    var imgSource = $(this).attr('src');
-    var cardName = imgSource.substring(14, (imgSource.length - 4));
-    var thePlayer = game.getCurrentPlayer();
-
-    if (thePlayer.state == "normal") {
-      buyCard(cardName);
-    } else {
-      if (game.players[playerID] == thePlayer) {
-        checkFeast(thePlayer, cardName);
-      };
-    }; 
-  });
-
+  $("#area-supply-nonaction").on("click", "img.supply-nonaction", clickNonactionCard);
 });
 
