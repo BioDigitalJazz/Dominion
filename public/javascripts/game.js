@@ -210,8 +210,10 @@ var playCard = function(handIndex) {
       playerAction(handIndex, "moveToPlayArea");
       card.play(thisPlayer);
 
-      if (thisPlayer.state == "mine")
-        game.displayMessage("Trash a Treasure card from your hand. Gain a Treasure card costing up to 3 more.");
+      switch (thisPlayer.state) {
+        case "mine": 
+          game.displayMessage("Trash a Treasure card from your hand. Gain a Treasure card costing up to 3 more.");
+      }
 
       // onhold is a temp name for the player's state
       if (thisPlayer.state == "onhold")
