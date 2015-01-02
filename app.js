@@ -105,9 +105,9 @@ io.on('connection', function (socket) {
   //   io.emit('update DB action', data);
   // });
 
-  // socket.on('player buy', function(data) {
-  //   io.emit('update DB buy', data);
-  // });
+  socket.on('player buy', function(supplyName) {
+    socket.broadcast.emit('update DB buy', supplyName);
+  });
 
   socket.on('next player', function(data) {
     io.emit('update DB next player', data);
