@@ -217,7 +217,7 @@ var playCard = function(handIndex) {
         case "feast":
           game.displayMessage("Feast has been trashed.  Gain a card costing up to 5 coins.");
           break;
-      }
+      };
 
       // onhold is a temp name for the player's state
       if (thisPlayer.state == "onhold")
@@ -244,9 +244,6 @@ var playerAction = function(cardIndex, theFunction) {
     var theCard = thisPlayer.hand[cardIndex]
     thisPlayer.playArea.push(theCard);
     thisPlayer.hand.splice(cardIndex, 1);
-
-    if (theCard.name == "Feast")
-      thisPlayer.playArea.pop();  // Feast gets trashed when played
   };
 };
 
@@ -403,6 +400,7 @@ function checkFeast(card) {
 
     if (cardToGain.cost <= 5 && game.supply[supplyName] > 0) {
       thisPlayer.gainCard(supplyName);
+      thisPlayer.playArea.pop();
       thisPlayer.displayTrash("FeastCard", "#play-area");
       game.logCard(cardName, "Gain");
       game.logCard("Feast", "Trash");

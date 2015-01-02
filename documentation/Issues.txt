@@ -9,8 +9,7 @@ Issues:
 2) Multi-Purpose Button in play-prompt area
 2.2) Highlighting cards to discard
 
-3) game.js | playCard function
-(see comment in the function)
+3) Multiple games
 
 
 
