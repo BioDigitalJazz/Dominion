@@ -202,13 +202,13 @@ function moveDiscardToDeck(player) {
 
 
 // capitalize card name
-function capitalize(str) {
-  str.charAt(0).toUpperCase() + str.substring(1);
+function capStr(str) {
+  return str.charAt(0).toUpperCase() + str.substring(1);
 };
 
 function checkFeast(thePlayer, card) {
   if (thePlayer.state == "feast") {
-    var cardName = capitalize(card);
+    var cardName = capStr(card);
     var supplyName = cardName + "Card";
     var cardToGain = new cardConstructors[supplyName]();
 
