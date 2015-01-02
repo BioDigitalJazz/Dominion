@@ -215,7 +215,7 @@ var playCard = function(handIndex) {
           game.displayMessage("Trash a Treasure card from your hand. Gain a Treasure card costing up to 3 more.");
           break;
         case "feast":
-          game.displayMessage("Feast has been trashed.  Gain a card costing up to 5 coins.");
+          game.displayMessage("Gain a card costing up to 5 coins and trash the Feast card.");
           break;
       };
 
@@ -402,9 +402,11 @@ function checkFeast(card) {
       thisPlayer.gainCard(supplyName);
       thisPlayer.playArea.pop();
       thisPlayer.displayTrash("FeastCard", "#play-area");
+
       game.logCard(cardName, "Gain");
       game.logCard("Feast", "Trash");
-      thisPlayer.setState("normal");
+
+      afterSpecialAction();
     };
   };
 }; // checkFeast
@@ -426,10 +428,15 @@ function checkMine(handIndex) {
         game.logCard("Silver", "Trash");
       };
       showMyHand();
-      thisPlayer.setState("normal");
+      afterSpecialAction();
     };
   };
 }; // checkMine
+
+function afterSpecialAction() {
+  thisPlayer.setState("normal");
+  game.displayMessage("Buy a card, or end your turn.");
+};
 
 
 $(function(){
