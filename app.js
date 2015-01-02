@@ -109,6 +109,10 @@ io.on('connection', function (socket) {
     socket.broadcast.emit('update DB gain', supplyName);
   });
 
+  socket.on('attack', function(cardName) {
+    socket.broadcast.emit('you are being attacked', cardName);
+  });
+
   socket.on('next player', function(data) {
     io.emit('update DB next player', data);
   });

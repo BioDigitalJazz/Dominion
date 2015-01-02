@@ -217,6 +217,10 @@ var playCard = function(handIndex) {
         case "feast":
           game.displayMessage("Feast has been trashed.  Gain a card costing up to 5 coins.");
           break;
+        case "moneylender":
+          game.displayMessage("Trash a Copper card from your hand.  If you do, +3 coins.");
+          requireInteraction("Cancel");
+          break;
       }
 
       // onhold is a temp name for the player's state
@@ -250,10 +254,10 @@ var playerAction = function(cardIndex, theFunction) {
   };
 };
 
-var resolveInteraction = function () {
+var requireInteraction = function (buttonText) {
   var btn = $("button#end-turn");
   btn.attr("id", "done-interact");
-  btn.text("Done");
+  btn.text(buttonText);
   btn.off();
 
   btn.on('click', function() {
@@ -303,6 +307,24 @@ var endTurn = function() {
     game.logContent = "";
   };
 };
+
+Game.prototype.playerAttack = function(cardName) {
+  adviseServerAttack(cardName);
+}
+
+var adviseServerAttack = function(cardName) {
+  console.log("attcking");
+  socket.emit('attack', cardName)
+};
+
+socket.on('you are being attacked', function(cardName) {
+  console.log("under attack");
+  switch (cardName) {
+    case "witch": 
+      thisPlayer.gainCard("CurseCard");
+      break;
+  } 
+});
 
 var adviseServerNextPlayer = function() {
   socket.emit('next player', { logTitle: game.logTitle, logContent: game.logContent });
@@ -362,6 +384,7 @@ function clickHandCard() {
     playCard(handIndex);
   } else {
     checkMine(handIndex);
+    checkMoneylender(handIndex);
   };
 }; // clickHandCard
 
@@ -433,6 +456,18 @@ function checkMine(handIndex) {
   };
 }; // checkMine
 
+function checkMoneylender(handIndex) {
+  if (thisPlayer.state == "moneylender") {
+    var theCard = thisPlayer.hand[handIndex];
+
+    if (theCard.name == "Copper") {
+      thisPlayer.hand.splice(handIndex, 1);
+      thisPlayer.gainCoin(3);
+      showMyHand();
+      thisPlayer.setState("normal");
+    }
+  }
+}; // checkMoneylender
 
 $(function(){
   initCardDisplay();

@@ -158,6 +158,8 @@ ActionCard.prototype.play = function(player) {
   if (ef["mine"]) { player.setState("mine"); };
 
   if (ef["moneylender"]) { player.setState("moneylender"); };
+
+  if (ef["witch"]) { player.game.playerAttack("witch"); };
 };
 
 
@@ -433,6 +435,7 @@ function WitchCard() {
   this.types.action = true;
   this.types.attack = true;
   this.effects["drawCard"]    = 2;
+  this.effects["witch"]       = true;
 
   // Special Function
   
