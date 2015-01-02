@@ -405,7 +405,6 @@ function checkFeast(card) {
 
       game.logCard(cardName, "Gain");
       game.logCard("Feast", "Trash");
-
       afterSpecialAction();
     };
   };
