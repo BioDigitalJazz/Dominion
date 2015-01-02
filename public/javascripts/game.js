@@ -217,9 +217,6 @@ var playCard = function(handIndex) {
       if (thisPlayer.state == "onhold")
         resolveInteraction();
       
-      // Issue: This is synched to moveCardToPlay(), but this shows wrong results if 
-      // adviseServerAction above and socket.on('update DB action') take longer than 
-      // 400 milliseconds
       setTimeout(function() { showMyHand(); }, 400);
       game.logCard(card.name, "Play");
     };
