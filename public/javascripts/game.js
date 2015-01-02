@@ -270,9 +270,6 @@ var resolveInteraction = function (player) {
 var buyCard = function(card) {
   var cardName = capStr(card);
   var supplyName = cardName + "Card";
-  console.log(card);
-  console.log(cardName);
-  console.log(supplyName);
   var cardToBuy = new cardConstructors[supplyName]();
 
   if (thisPlayer !== game.getCurrentPlayer()) {
@@ -312,6 +309,10 @@ socket.on('update DB next player', function(data) {
   game.nextPlayer();
 });
 
+// capitalize card name
+function capStr(str) {
+  return str.charAt(0).toUpperCase() + str.substring(1);
+};
 
 function showMore() {
   var smallImg = $(this);
@@ -344,6 +345,21 @@ function initCardDisplay() {
   $('img.supply-nonaction').hover(showMore, hideMore);
   $('img.supply-kingdom').hover(showMore, hideMore);
   $('img#deck').hover(showCount, hideCount);
+};
+
+function checkFeast(thePlayer, card) {
+  if (thePlayer.state == "feast") {
+    var cardName = capStr(card);
+    var supplyName = cardName + "Card";
+    var cardToGain = new cardConstructors[supplyName]();
+
+    if (cardToGain.cost <= 5 && game.supply[supplyName] > 0) {
+      thePlayer.gainCard(supplyName);
+      game.logCard(cardName, "Gain");
+      game.logCard("Feast", "Trash");
+      thePlayer.setState("normal");
+    };
+  };
 };
 
 
