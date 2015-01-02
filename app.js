@@ -101,13 +101,13 @@ io.on('connection', function (socket) {
             { message: messages[playerID], kingdomCards: randomCards, players: players });
   });
 
-  socket.on('player action', function(data) {
-    io.emit('update DB action', data);
-  });
+  // socket.on('player action', function(data) {
+  //   io.emit('update DB action', data);
+  // });
 
-  socket.on('player buy', function(data) {
-    io.emit('update DB buy', data);
-  });
+  // socket.on('player buy', function(data) {
+  //   io.emit('update DB buy', data);
+  // });
 
   socket.on('next player', function(data) {
     io.emit('update DB next player', data);
