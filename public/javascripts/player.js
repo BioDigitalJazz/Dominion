@@ -131,6 +131,13 @@ Player.prototype.trash = function(card, cardLocation) {
   cardLocation.splice(cardLocation.indexOf(card), 1);
 };
 
+Player.prototype.displayTrash = function(cardName, cardArea) {
+  var cardPath = getCardPath(cardName, false);
+  var cardToTrash = $(cardArea).find('img[src="' + cardPath + '"]');
+  cardToTrash.hide(400);
+  setTimeout(function() { cardToTrash.remove(); }, 400);
+};
+
 Player.prototype.shuffleDeck = function(){ //v1.0
   var deck = this.deck;
   for(var j, x, i = deck.length; i; j = 0) {

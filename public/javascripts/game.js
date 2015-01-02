@@ -225,13 +225,12 @@ var playCard = function(handIndex) {
 
 var moveCardToPlay = function(jqueryCard, card) {
   jqueryCard.hide(400);
-  if (card.name != "Feast") {
-    setTimeout( function() {
-      jqueryCard.remove();
-      var moveCard = $('<img>').attr('src', card.image).addClass('hand-to-play');
-      moveCard.hide().appendTo('#play-area').show(400);
-    }, 400);
-  };
+
+  setTimeout( function() {
+    jqueryCard.remove();
+    var moveCard = $('<img>').attr('src', card.image).addClass('hand-to-play');
+    moveCard.hide().appendTo('#play-area').show(400);
+  }, 400);
 };
 
 var playerAction = function(cardIndex, theFunction) { 
@@ -240,9 +239,8 @@ var playerAction = function(cardIndex, theFunction) {
     thisPlayer.playArea.push(theCard);
     thisPlayer.hand.splice(cardIndex, 1);
 
-    if (theCard.name == "Feast") {
-      thisPlayer.playArea.pop();    // Feast gets trashed when played
-    };
+    if (theCard.name == "Feast")
+      thisPlayer.playArea.pop();  // Feast gets trashed when played
   };
 };
 
@@ -270,7 +268,7 @@ var buyCard = function(card) {
   if (cardToBuy.cost > Number($("#coinCount").text())) {
     console.log("You can't afford that!");
   } else {
-    adviseServerBuy(supplyName);
+    adviseServerGain(supplyName);
     thisPlayer.gainCard(supplyName);
     $("#coinCount").text(Number($("#coinCount").text()) - cardToBuy.cost);
     game.logCard(cardName, "Buy"); 
@@ -284,11 +282,11 @@ var buyCard = function(card) {
   };
 }; // buyCard()
 
-var adviseServerBuy = function(supplyName) {
-  socket.emit('player buy', supplyName);
+var adviseServerGain = function(supplyName) {
+  socket.emit('player gain', supplyName);
 };
 
-socket.on('update DB buy', function(supplyName) {
+socket.on('update DB gain', function(supplyName) {
   game.supply[supplyName]--;
   updateCardCount(supplyName);
 });
@@ -399,6 +397,7 @@ function checkFeast(card) {
 
     if (cardToGain.cost <= 5 && game.supply[supplyName] > 0) {
       thisPlayer.gainCard(supplyName);
+      thisPlayer.displayTrash("FeastCard", "#play-area");
       game.logCard(cardName, "Gain");
       game.logCard("Feast", "Trash");
       thisPlayer.setState("normal");
