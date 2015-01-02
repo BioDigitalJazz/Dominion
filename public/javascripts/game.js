@@ -215,15 +215,15 @@ var playCard = function(handIndex) {
           game.displayMessage("Trash a Treasure card from your hand. Gain a Treasure card costing up to 3 more.");
           break;
         case "feast":
-          game.displayMessage("Feast has been trashed.  Gain a card costing up to 5 coins.");
+          game.displayMessage("Gain a card costing up to 5 coins and trash the Feast card.");
           break;
-      }
+      };
 
       // onhold is a temp name for the player's state
       if (thisPlayer.state == "onhold")
         resolveInteraction();
       
-      setTimeout(function() { showMyHand(); }, 400);
+      // setTimeout(function() { showMyHand(); }, 400);
       game.logCard(card.name, "Play");
     };
   };
@@ -244,9 +244,6 @@ var playerAction = function(cardIndex, theFunction) {
     var theCard = thisPlayer.hand[cardIndex]
     thisPlayer.playArea.push(theCard);
     thisPlayer.hand.splice(cardIndex, 1);
-
-    if (theCard.name == "Feast")
-      thisPlayer.playArea.pop();  // Feast gets trashed when played
   };
 };
 
@@ -403,10 +400,12 @@ function checkFeast(card) {
 
     if (cardToGain.cost <= 5 && game.supply[supplyName] > 0) {
       thisPlayer.gainCard(supplyName);
+      thisPlayer.playArea.pop();
       thisPlayer.displayTrash("FeastCard", "#play-area");
+
       game.logCard(cardName, "Gain");
       game.logCard("Feast", "Trash");
-      thisPlayer.setState("normal");
+      afterSpecialAction();
     };
   };
 }; // checkFeast
@@ -428,10 +427,15 @@ function checkMine(handIndex) {
         game.logCard("Silver", "Trash");
       };
       showMyHand();
-      thisPlayer.setState("normal");
+      afterSpecialAction();
     };
   };
 }; // checkMine
+
+function afterSpecialAction() {
+  thisPlayer.setState("normal");
+  game.displayMessage("Buy a card, or end your turn.");
+};
 
 
 $(function(){
