@@ -223,7 +223,7 @@ var playCard = function(handIndex) {
       if (thisPlayer.state == "onhold")
         resolveInteraction();
       
-      setTimeout(function() { showMyHand(); }, 400);
+      // setTimeout(function() { showMyHand(); }, 400);
       game.logCard(card.name, "Play");
     };
   };
