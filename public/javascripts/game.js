@@ -112,7 +112,7 @@ Game.prototype.nextPlayer = function(){
 
   if(this.currentPlayerIndex == Number(playerID)) {
     this.displayMessage("It is your turn, play an action, or buy a card.");
-    game.logTitle = game.players[playerID].name ;
+    game.logTitle = thisPlayer.name ;
   } else {
     this.displayMessage("Not your turn, please wait.");
   }
@@ -167,14 +167,14 @@ socket.on('player turn', function() {
     game.displayMessage("Not your turn, please wait.");
   } else {
     game.displayMessage("It is your turn, play an action, or buy a card");
-    game.logTitle = game.players[playerID].name ;
+    game.logTitle = thisPlayer.name ;
   };
   showMyHand();
 });
 
 var showMyHand = function() {
   $(".handcard").remove();
-  var cardsInHand = game.players[playerID].hand;
+  var cardsInHand = thisPlayer.hand;
 
   for (var i = 0; i < cardsInHand.length; i++)
     addToHand(cardsInHand, i);
@@ -270,7 +270,7 @@ var buyCard = function(card) {
   if (cardToBuy.cost > Number($("#coinCount").text())) {
     console.log("You can't afford that!");
   } else {
-    // adviseServerBuy(game.players.indexOf(game.getCurrentPlayer()), supplyName);
+    adviseServerBuy(supplyName);
     thisPlayer.gainCard(supplyName);
     $("#coinCount").text(Number($("#coinCount").text()) - cardToBuy.cost);
     game.logCard(cardName, "Buy"); 
@@ -284,8 +284,17 @@ var buyCard = function(card) {
   };
 }; // buyCard()
 
+var adviseServerBuy = function(supplyName) {
+  socket.emit('player buy', supplyName);
+};
+
+socket.on('update DB buy', function(supplyName) {
+  game.supply[supplyName]--;
+  updateCardCount(supplyName);
+});
+
 var endTurn = function() {
-  if (game.players[playerID] == game.getCurrentPlayer()) {
+  if (thisPlayer == game.getCurrentPlayer()) {
     adviseServerNextPlayer();
     game.logContent = "";
   };
@@ -362,6 +371,8 @@ function clickKingdomCard() {
 
   if (thisPlayer.state == "normal") {
     buyCard(cardName);
+  } else {
+    checkFeast(cardName);
   }; 
 }; // clickKingdomCard
 
