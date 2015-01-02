@@ -199,3 +199,24 @@ function moveDiscardToDeck(player) {
     }, 600);
   };
 };
+
+
+// capitalize card name
+function capitalize(str) {
+  str.charAt(0).toUpperCase() + str.substring(1);
+};
+
+function checkFeast(thePlayer, card) {
+  if (thePlayer.state == "feast") {
+    var cardName = capitalize(card);
+    var supplyName = cardName + "Card";
+    var cardToGain = new cardConstructors[supplyName]();
+
+    if (cardToGain.cost <= 5 && game.supply[supplyName] > 0) {
+      thePlayer.gainCard(supplyName);
+      game.logCard(cardName, "Gain");
+      game.logCard("Feast", "Trash");
+      thePlayer.setState("normal");
+    };
+  };
+};

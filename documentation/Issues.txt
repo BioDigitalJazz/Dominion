@@ -3,7 +3,11 @@ Issues:
 Feast: can only gain non-Action cards
 
 1) Messages for Played Action Cards
-  Mine, Feast
+  Mine (done)
+  Feast (wait for fix. separate functions for click actions)
+
+(maybe) separate function for capitalizing card name
+(maybe) DOM manipulation in global functions instead of Game.func()
 
 2) Multi-Purpose Button in play-prompt area
 2.2) Highlighting cards to discard

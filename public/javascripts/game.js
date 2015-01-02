@@ -317,6 +317,8 @@ socket.on('update DB action', function(data) {
   
   if (theFunction == "moveToPlayArea") {
     var theCard = thePlayer.hand[theCardIndex]
+    console.log(theCardIndex);
+    console.log(thePlayer.hand);
     thePlayer.playArea.push(thePlayer.hand[theCardIndex]);
     thePlayer.hand.splice(theCardIndex, 1);
     if (theCard.name == "Feast") {
@@ -415,26 +417,14 @@ $(function(){
   $("#area-supply-nonaction").on("click", "img.supply-nonaction", function(event) {
     var supplyIndex = $("img.supply-nonaction").index(this);
     var imgSource = $(this).attr('src');
-    // src="/images/cards/duchy.jpg"
-    //index=01234567890123456789012
     var cardName = imgSource.substring(14, (imgSource.length - 4));
     var thePlayer = game.getCurrentPlayer();
+
     if (thePlayer.state == "normal") {
       buyCard(cardName);
     } else {
       if (game.players[playerID] == thePlayer) {
-        if (thePlayer.state == "feast") {
-          var supplyName = cardName.charAt(0).toUpperCase() + cardName.substring(1) + "Card";
-          var cardToGain = new cardConstructors[supplyName]();
-          console.log(cardName);
-          if (cardToGain.cost <= 5 && game.supply[supplyName] > 0) {
-            console.log(thePlayer.playArea);
-            thePlayer.gainCard(supplyName);
-            game.logCard(supplyName.slice(0, -4), "Gain");
-            game.logCard("Feast", "Trash");
-            thePlayer.setState("normal");
-          };
-        };
+        checkFeast(thePlayer, cardName);
       };
     }; 
   });
