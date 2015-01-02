@@ -141,7 +141,6 @@ Player.prototype.shuffleDeck = function(){ //v1.0
   }
 };
 
-
 // return the path to the cropped card img
 function getCardPath(cardName, cropped) {
   var path = '/images/cards/' + cardName.slice(0, -4).toLowerCase();
