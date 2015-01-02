@@ -213,6 +213,10 @@ var playCard = function(handIndex) {
       switch (thisPlayer.state) {
         case "mine": 
           game.displayMessage("Trash a Treasure card from your hand. Gain a Treasure card costing up to 3 more.");
+          break;
+        case "feast":
+          game.displayMessage("Feast has been trashed.  Gain a card costing up to 5 coins.");
+          break;
       }
 
       // onhold is a temp name for the player's state
