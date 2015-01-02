@@ -111,7 +111,7 @@ Game.prototype.nextPlayer = function(){
   }
 
   if(this.currentPlayerIndex == Number(playerID)) {
-    this.displayMessage("It is your turn, play an action, or buy a card.");
+    this.displayMessage("It is your turn. Play an action, buy a card, or end the turn.");
     game.logTitle = thisPlayer.name ;
   } else {
     this.displayMessage("Not your turn, please wait.");
@@ -193,63 +193,62 @@ var addToHand = function (cards, index) {
 
 
 var playCard = function(handIndex) {
-  var card = thisPlayer.hand[handIndex]
+  var card = thisPlayer.hand[handIndex];
 
   if (card.types["Treasure"]) {
-    moveCardToPlay($('.handcard').eq(handIndex), card);
+    moveCardToPlay(handIndex, card);
     $("#coinCount").text(Number($("#coinCount").text()) + card.worth);
-    playerAction(handIndex, "moveToPlayArea");
   };
 
   if (card.types.action) {
     if (Number($("#actionCount").text()) == 0) {
       game.displayMessage("You have no actions left, please buy a card.")
     } else {
-      moveCardToPlay($('.handcard').eq(handIndex), card);
+      moveCardToPlay(handIndex, card);
       $("#actionCount").text(Number($("#actionCount").text()) - 1);
-      playerAction(handIndex, "moveToPlayArea");
       card.play(thisPlayer);
 
       switch (thisPlayer.state) {
-        case "mine": 
-          game.displayMessage("Trash a Treasure card from your hand. Gain a Treasure card costing up to 3 more.");
+        case "normal":
+          afterAction();
           break;
         case "feast":
           game.displayMessage("Gain a card costing up to 5 coins and trash the Feast card.");
           break;
+        case "mine": 
+          game.displayMessage("Trash a Treasure card from your hand. Gain a Treasure card costing up to 3 more.");
+          requireInteraction("Cancel");
+          break;
         case "moneylender":
-          game.displayMessage("Trash a Copper card from your hand.  If you do, +3 coins.");
+          game.displayMessage("Trash a Copper card from your hand. If you do, +3 coins.");
           requireInteraction("Cancel");
           break;
       }; // switch
-
-      // onhold is a temp name for the player's state
-      if (thisPlayer.state == "onhold")
-        resolveInteraction();
       
-      // setTimeout(function() { showMyHand(); }, 400);
       game.logCard(card.name, "Play");
     };
   };
-}; // playCard()
+}; // playCard
 
-var moveCardToPlay = function(jqueryCard, card) {
-  jqueryCard.hide(400);
+var moveCardToPlay = function(handIndex, card) {
+  thisPlayer.playArea.push(card);
+  thisPlayer.hand.splice(handIndex, 1);
 
+  var jqueryCard = $('.handcard').eq(handIndex).hide(400);
   setTimeout( function() {
     jqueryCard.remove();
     var moveCard = $('<img>').attr('src', card.image).addClass('hand-to-play');
     moveCard.hide().appendTo('#play-area').show(400);
   }, 400);
-};
+}; // moveCardToPlay
 
-var playerAction = function(cardIndex, theFunction) { 
-  if (theFunction == "moveToPlayArea") {
-    var theCard = thisPlayer.hand[cardIndex]
-    thisPlayer.playArea.push(theCard);
-    thisPlayer.hand.splice(cardIndex, 1);
-  };
-};
+// var playerAction = function(cardIndex, theFunction) { 
+//   if (theFunction == "moveToPlayArea") {
+//     var theCard = thisPlayer.hand[cardIndex]
+//     thisPlayer.playArea.push(theCard);
+//     thisPlayer.hand.splice(cardIndex, 1);
+//   };
+// }; // playerAction
 
 var requireInteraction = function (buttonText) {
   var btn = $("button#end-turn");
@@ -258,14 +257,20 @@ var requireInteraction = function (buttonText) {
   btn.off();
 
   btn.on('click', function() {
-    thisPlayer.state = "normal";
+    afterAction();
     btn.attr("id", "end-turn");
     btn.text("End Turn");
     btn.off();
     btn.on('click', endTurn);
     console.log("interaction done");
   });
-};
+}; // requireInteraction
+
+var afterAction = function () {
+  thisPlayer.setState("normal");
+  game.displayMessage("Buy a card, or end your turn.");
+}; // afterAction
+
 
 var buyCard = function(card) {
   var cardName = capStr(card);
@@ -287,7 +292,7 @@ var buyCard = function(card) {
       game.displayMessage("still more buys:" + $("#buyCount").text());
     };
   };
-}; // buyCard()
+}; // buyCard
 
 var adviseServerGain = function(supplyName) {
   socket.emit('player gain', supplyName);
@@ -296,14 +301,15 @@ var adviseServerGain = function(supplyName) {
 socket.on('update DB gain', function(supplyName) {
   game.supply[supplyName]--;
   updateCardCount(supplyName);
-});
+}); // adviseServerGain
 
 var endTurn = function() {
   if (thisPlayer == game.getCurrentPlayer()) {
     adviseServerNextPlayer();
     game.logContent = "";
   };
-};
+}; // endTurn
+
 
 Game.prototype.playerAttack = function(cardName) {
   adviseServerAttack(cardName);
@@ -320,7 +326,7 @@ socket.on('you are being attacked', function(cardName) {
     case "witch": 
       thisPlayer.gainCard("CurseCard");
       break;
-  } 
+  }; 
 });
 
 var adviseServerNextPlayer = function() {
@@ -428,7 +434,7 @@ function checkFeast(card) {
 
       game.logCard(cardName, "Gain");
       game.logCard("Feast", "Trash");
-      afterSpecialAction();
+      afterAction();
     };
   };
 }; // checkFeast
@@ -450,7 +456,7 @@ function checkMine(handIndex) {
         game.logCard("Silver", "Trash");
       };
       showMyHand();
-      afterSpecialAction();
+      afterAction();
     };
   };
 }; // checkMine
@@ -463,15 +469,10 @@ function checkMoneylender(handIndex) {
       thisPlayer.hand.splice(handIndex, 1);
       thisPlayer.gainCoin(3);
       showMyHand();
-      afterSpecialAction();
+      afterAction();
     };
   };
 }; // checkMoneylender
-
-function afterSpecialAction() {
-  thisPlayer.setState("normal");
-  game.displayMessage("Buy a card, or end your turn.");
-};
 
 
 $(function(){
