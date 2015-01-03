@@ -67,7 +67,7 @@ Player.prototype.cleanUpPhase = function(waitTime) {
     theDiscardPile.push(theHand.pop());
   }
   this.hand = [];
-  this.drawCard(5, waitTime);
+  this.drawCard(5, 800);
 }
 
 Player.prototype.gainCard = function (cardName) {
@@ -99,7 +99,7 @@ Player.prototype.drawCard = function(num, waitTime) {
 };
 
 Player.prototype.showHand = function(waitTime) {
-  var wait = waitTime || 400; 
+  var wait = (waitTime === undefined ? 0 : waitTime);
   $(".handcard").hide(wait);
   var thePlayer = this;
   var theHand = this.hand;
