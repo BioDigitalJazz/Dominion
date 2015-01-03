@@ -310,17 +310,19 @@ Game.prototype.playerAttack = function(cardName) {
 }
 
 var adviseServerAttack = function(cardName) {
-  console.log("attcking");
   socket.emit('attack', cardName)
 };
 
 socket.on('you are being attacked', function(cardName) {
-  console.log("under attack");
-  switch (cardName) {
-    case "witch": 
-      thisPlayer.gainCard("CurseCard");
-      break;
-  } 
+  if (!thisPlayer.handContains("Moat")) {
+    switch (cardName) {
+      case "witch": 
+        thisPlayer.gainCard("CurseCard");
+        break;
+    } 
+  } else {
+    console.log("Moat card for the win!!!");
+  }
 });
 
 var adviseServerNextPlayer = function() {

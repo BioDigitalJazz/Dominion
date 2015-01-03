@@ -31,6 +31,15 @@ Player.prototype.blankCardInBlank = function(cardType, cardLocation) {
   return false;
 }
 
+Player.prototype.handContains = function(cardName) {
+  for (var i = 0; i < this.hand.length; i++) {
+    if (this.hand[i].name == cardName) {
+      return i;           // returns the index of the card
+    }
+  }
+  return false;
+}
+
 Player.prototype.startTurn = function() {
   var coins = 0;
   var actions = 1;
