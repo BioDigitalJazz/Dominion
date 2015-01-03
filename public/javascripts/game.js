@@ -283,7 +283,7 @@ socket.on('update DB gain', function(supplyName) {
 }); // adviseServerGain
 
 var endTurn = function() {
-  if (thisPlayer == game.getCurrentPlayer()) {
+  if (playerID === game.currentPlayerIndex) {
     adviseServerNextPlayer();
     game.logContent = "";
   };
