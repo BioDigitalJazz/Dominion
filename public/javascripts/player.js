@@ -43,7 +43,7 @@ Player.prototype.startTurn = function() {
   }
 }
 
-Player.prototype.cleanUpPhase = function() {
+Player.prototype.cleanUpPhase = function(waitTime) {
   var theDiscardPile = this.discardPile;
   var theHand = this.hand;
   var thePlayArea = this.playArea;
@@ -58,7 +58,7 @@ Player.prototype.cleanUpPhase = function() {
     theDiscardPile.push(theHand.pop());
   }
   this.hand = [];
-  this.drawCard(5);
+  this.drawCard(5, waitTime);
 }
 
 Player.prototype.gainCard = function (cardName) {
@@ -72,7 +72,7 @@ Player.prototype.gainCard = function (cardName) {
     displayDiscard(this, cardName);
 };
 
-Player.prototype.drawCard = function(num) {
+Player.prototype.drawCard = function(num, waitTime) {
   var theHand = this.hand;
   var theDiscardPile = this.discardPile;
   var theDeck = this.deck;
@@ -80,19 +80,27 @@ Player.prototype.drawCard = function(num) {
   for (var i = 1; i <= num; i++) {
     if (theDeck.length == 0) {
       this.replenishDeck();
+      waitTime = 1200;
     };
     theHand.push(theDeck.pop());
   };
   
   $('img#deck').prev().text(theDeck.length);
-  this.showHand();
+  this.showHand(waitTime);
 };
 
-Player.prototype.showHand = function() {
-  $(".handcard").remove();
-  for (var i = 0; i < this.hand.length; i++)
-    this.addToHand(i);
-}
+Player.prototype.showHand = function(waitTime) {
+  var wait = waitTime || 400; 
+  $(".handcard").hide(wait);
+  var thePlayer = this;
+  var theHand = this.hand;
+
+  setTimeout(function() {
+    $(".handcard").remove();
+    for (var i = 0; i < theHand.length; i++)
+      thePlayer.addToHand(i);
+  }, wait);
+};
 
 Player.prototype.addToHand = function (index) {
   var handArea = $("#area-player-hand");
@@ -103,7 +111,7 @@ Player.prototype.addToHand = function (index) {
   setTimeout( function() {
     handArea.append('<img src= \"' + imgSrc + '\" class=\"' + imgClass + '\" id=\"' + imgId + '\">');
   }, index * 100);
-}
+};
 
 Player.prototype.replenishDeck = function() {
   var discards = this.discardPile.length;
