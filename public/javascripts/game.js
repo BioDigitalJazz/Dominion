@@ -18,17 +18,6 @@ function Game(kingdomCards){
   });
 };
 
-// Game.prototype.createPlayers = function(playerNames) {
-//   var theGame = this;
-//   playerNames.forEach( function(name, index) {
-//     theGame.players.push({ id: index, name: name });
-//   });
-// };
-
-// Game.prototype.getCurrentPlayer = function() {
-//   return this.players[this.currentPlayerIndex];
-// };
-
 Game.prototype.showKingdomCards = function(kingdomCards) {
   var kCardPiles = $('img.supply-kingdom');
 
@@ -151,7 +140,6 @@ socket.emit('player on game page', playerID);
 socket.on('ready to start', function (data) {
   var kingdomCards = data.kingdomCards;
   game = new Game(kingdomCards);
-  // sessionStorage.gameRound = 0;
   game.round = 0;
   game.players = data.players;
   thisPlayer = new Player(game.players[playerID], game);
@@ -159,7 +147,6 @@ socket.on('ready to start', function (data) {
   game.showCardCounts();
   game.startLog(kingdomCards);
 
-  // sessionStorage.gameRound = 1;
   game.round = 1;
   socket.emit('game created ready to play', playerID);
 });
@@ -218,11 +205,9 @@ var moveCardToPlay = function(handIndex, card) {
   thisPlayer.hand.splice(handIndex, 1);
 
   var jqueryCard = $('.handcard').eq(handIndex).hide(400);
-  setTimeout( function() {
-    jqueryCard.remove();
-    var moveCard = $('<img>').attr('src', card.image).addClass('hand-to-play');
-    moveCard.hide().appendTo('#play-area').show(400);
-  }, 400);
+  setTimeout(function() { jqueryCard.remove(); }, 400);
+  var moveCard = $('<img>').attr('src', card.image).addClass('hand-to-play');
+  moveCard.hide().appendTo('#play-area').show(400);
 }; // moveCardToPlay
 
 var requireInteraction = function (buttonText) {
