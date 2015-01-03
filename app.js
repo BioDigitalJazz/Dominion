@@ -72,7 +72,7 @@ var players = [];
 var whosReady = [];
 var messages = [];
 var randomCards = ['AdventurerCard', 'FeastCard', 'MineCard', 
-    'MoneylenderCard', 'MarketCard', 'SmithyCard', 'VillageCard', 
+    'MoneylenderCard', 'MarketCard', 'MoatCard', 'VillageCard', 
     'WitchCard', 'ThroneroomCard', 'WorkshopCard'];
 
 io.on('connection', function (socket) {
