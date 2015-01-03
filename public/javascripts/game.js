@@ -435,6 +435,7 @@ function checkMoneylender(handIndex) {
       thisPlayer.hand.splice(handIndex, 1);
       thisPlayer.gainCoin(3);
       thisPlayer.showHand();
+      game.logCard("Copper", "Trash");
       afterAction();
     };
   };

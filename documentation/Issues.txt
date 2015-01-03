@@ -1,10 +1,5 @@
 Issues:
 
-Bugfix
-1) Message display after playing an action changes to
-"Buy a card, ..."
-but if a Village card has been played there should be >1 actions
-
 1) Messages for Played Action Cards
   Moneylender
   Witch
