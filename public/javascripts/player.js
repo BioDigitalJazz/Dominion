@@ -68,26 +68,9 @@ Player.prototype.gainCard = function (cardName) {
   var newCard = new cardConstructors[cardName]();
   this.discardPile.push(newCard);
 
-  if (sessionStorage.gameRound > 0)
+  if (this.game.round > 0)
     displayDiscard(this, cardName);
 };
-
-Player.prototype.replenishDeck = function() {
-  var discards = this.discardPile.length;
-  for (var j = 0; j < discards; j++) {
-    this.deck.push(this.discardPile.pop());
-  };
-  this.shuffleDeck();
-  if (sessionStorage.gameRound > 0)
-    moveDiscardToDeck(this);
-};
-
-Player.prototype.revealCards = function(num) {
-  if (this.deck.length < num) {
-    this.replenishDeck();
-  }
-  return this.deck.slice(this.deck.length - num);
-}
 
 Player.prototype.drawCard = function(num) {
   var theHand = this.hand;
@@ -102,7 +85,42 @@ Player.prototype.drawCard = function(num) {
   };
   
   $('img#deck').prev().text(theDeck.length);
-}; 
+  this.showHand();
+};
+
+Player.prototype.showHand = function() {
+  $(".handcard").remove();
+  for (var i = 0; i < this.hand.length; i++)
+    this.addToHand(i);
+}
+
+Player.prototype.addToHand = function (index) {
+  var handArea = $("#area-player-hand");
+  var imgSrc = "/images/cards/" + this.hand[index].name.toLowerCase() + ".jpg";
+  var imgId = "handcard" + index;
+  var imgClass = "handcard";
+
+  setTimeout( function() {
+    handArea.append('<img src= \"' + imgSrc + '\" class=\"' + imgClass + '\" id=\"' + imgId + '\">');
+  }, index * 100);
+}
+
+Player.prototype.replenishDeck = function() {
+  var discards = this.discardPile.length;
+  for (var j = 0; j < discards; j++) {
+    this.deck.push(this.discardPile.pop());
+  };
+  this.shuffleDeck();
+  if (this.game.round > 0)
+    moveDiscardToDeck(this);
+}
+
+Player.prototype.revealCards = function(num) {
+  if (this.deck.length < num) {
+    this.replenishDeck();
+  }
+  return this.deck.slice(this.deck.length - num);
+}
 
 Player.prototype.gainAction = function(num) {
   $("#actionCount").text(Number($("#actionCount").text()) + Number(num));
@@ -123,7 +141,6 @@ Player.prototype.revealCard = function(card) {
 Player.prototype.discard = function(card, cardLocation) {
   this.discardPile.push(card);
   cardLocation.splice(cardLocation.indexOf(card), 1);
-
   displayDiscard(this, card.name);
 };
 

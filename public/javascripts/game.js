@@ -1,6 +1,7 @@
 function Game(kingdomCards){
   this.players = [];
   this.currentPlayerIndex = 0;
+  this.round = 0;
   this.supply = {};
   
   this.supply['ProvinceCard'] = 8;
@@ -17,16 +18,16 @@ function Game(kingdomCards){
   });
 };
 
-Game.prototype.createPlayers = function(playerNames) {
-  var theGame = this;
-  playerNames.forEach( function(name) {
-    theGame.players.push(new Player(name, theGame));
-  })
-};
+// Game.prototype.createPlayers = function(playerNames) {
+//   var theGame = this;
+//   playerNames.forEach( function(name, index) {
+//     theGame.players.push({ id: index, name: name });
+//   });
+// };
 
-Game.prototype.getCurrentPlayer = function() {
-  return this.players[this.currentPlayerIndex];
-};
+// Game.prototype.getCurrentPlayer = function() {
+//   return this.players[this.currentPlayerIndex];
+// };
 
 Game.prototype.showKingdomCards = function(kingdomCards) {
   var kCardPiles = $('img.supply-kingdom');
@@ -50,9 +51,9 @@ Game.prototype.showCardCounts = function() {
   };
 };
 
-Game.prototype.startLog = function(pNames, kCards) {
+Game.prototype.startLog = function(kCards) {
   this.logContent = "<u>Players</u>: ";
-  pNames.forEach( function(name) {
+  this.players.forEach( function(name) {
     this.logContent += (name + ', ');
   }, this);
 
@@ -97,25 +98,25 @@ Game.prototype.cleanUp = function() {
 };
 
 Game.prototype.nextPlayer = function(){
-  if(this.currentPlayerIndex == Number(playerID)) {
+  if (this.currentPlayerIndex == Number(playerID)) {
     this.cleanUp();
-    this.getCurrentPlayer().cleanUpPhase();
-    setTimeout(function() { showMyHand(); }, 1200);
-  }
+    thisPlayer.cleanUpPhase();
+    // setTimeout(function() { showMyHand(); }, 1200);
+  };
 
   if (this.currentPlayerIndex == this.players.length - 1) {
     this.currentPlayerIndex = 0;
-    sessionStorage.gameRound++;
+    this.round++;
   } else {
     this.currentPlayerIndex++;
-  }
+  };
 
   if(this.currentPlayerIndex == Number(playerID)) {
     this.displayMessage("It is your turn. Play an action, buy a card, or end the turn.");
     game.logTitle = thisPlayer.name ;
   } else {
     this.displayMessage("Not your turn, please wait.");
-  }
+  };
 };
 
 Game.prototype.gameEnd = function(){
@@ -141,7 +142,7 @@ Game.prototype.gameEnd = function(){
 // };
 
 
-var playerID = sessionStorage.playerID;
+var playerID = Number(sessionStorage.playerID);
 var game, thisPlayer;
 
 var socket = io();
@@ -149,47 +150,29 @@ socket.emit('player on game page', playerID);
 
 socket.on('ready to start', function (data) {
   var kingdomCards = data.kingdomCards;
-  var players = data.players;
-  
-  sessionStorage.gameRound = 0;
   game = new Game(kingdomCards);
-  game.createPlayers(players);
+  // sessionStorage.gameRound = 0;
+  game.round = 0;
+  game.players = data.players;
+  thisPlayer = new Player(game.players[playerID], game);
   game.showKingdomCards(kingdomCards);
   game.showCardCounts();
-  game.startLog(players, kingdomCards);
-  thisPlayer = game.players[playerID];
-  sessionStorage.gameRound = 1;
+  game.startLog(kingdomCards);
+
+  // sessionStorage.gameRound = 1;
+  game.round = 1;
   socket.emit('game created ready to play', playerID);
 });
 
 socket.on('player turn', function() {
-  if (parseInt(playerID) !== game.currentPlayerIndex) {
+  if (playerID !== game.currentPlayerIndex) {
     game.displayMessage("Not your turn, please wait.");
   } else {
     game.displayMessage("It is your turn, play an action, or buy a card");
     game.logTitle = thisPlayer.name ;
   };
-  showMyHand();
+  // showMyHand();
 });
-
-var showMyHand = function() {
-  $(".handcard").remove();
-  var cardsInHand = thisPlayer.hand;
-
-  for (var i = 0; i < cardsInHand.length; i++)
-    addToHand(cardsInHand, i);
-};
-
-var addToHand = function (cards, index) {
-  var handArea = $("#area-player-hand");
-  var imgSrc = "/images/cards/" + cards[index].name.toLowerCase() + ".jpg";
-  var imgId = "handcard" + index;
-  var imgClass = "handcard";
-
-  setTimeout( function() {
-    handArea.append('<img src= \"' + imgSrc + '\" class=\"' + imgClass + '\" id=\"' + imgId + '\">');
-  }, index * 100);
-};
 
 
 var playCard = function(handIndex) {
@@ -242,14 +225,6 @@ var moveCardToPlay = function(handIndex, card) {
   }, 400);
 }; // moveCardToPlay
 
-// var playerAction = function(cardIndex, theFunction) { 
-//   if (theFunction == "moveToPlayArea") {
-//     var theCard = thisPlayer.hand[cardIndex]
-//     thisPlayer.playArea.push(theCard);
-//     thisPlayer.hand.splice(cardIndex, 1);
-//   };
-// }; // playerAction
-
 var requireInteraction = function (buttonText) {
   var btn = $("button#end-turn");
   btn.attr("id", "done-interact");
@@ -268,7 +243,11 @@ var requireInteraction = function (buttonText) {
 
 var afterAction = function () {
   thisPlayer.setState("normal");
-  game.displayMessage("Buy a card, or end your turn.");
+  if (Number($("#actionCount").text()) == 0) {
+    game.displayMessage("Buy a card, or end your turn.");
+  } else {
+    game.displayMessage("Next action, buy a card, or end your turn.");
+  };
 }; // afterAction
 
 
@@ -378,7 +357,7 @@ function initCardDisplay() {
 
 
 function clickHandCard() {
-  if (thisPlayer !== game.getCurrentPlayer())
+  if (playerID !== game.currentPlayerIndex)
     return;
 
   var handIndex = $(".handcard").index(this);
@@ -392,7 +371,7 @@ function clickHandCard() {
 }; // clickHandCard
 
 function clickKingdomCard() {
-  if (thisPlayer !== game.getCurrentPlayer())
+  if (playerID !== game.currentPlayerIndex)
     return;
 
   var supplyIndex = $("img.supply-kingdom").index(this);
@@ -407,7 +386,7 @@ function clickKingdomCard() {
 }; // clickKingdomCard
 
 function clickNonactionCard() {
-  if (thisPlayer !== game.getCurrentPlayer())
+  if (playerID !== game.currentPlayerIndex)
     return;
 
   var supplyIndex = $("img.supply-nonaction").index(this);
@@ -455,7 +434,7 @@ function checkMine(handIndex) {
         game.logCard("Gold", "Gain");
         game.logCard("Silver", "Trash");
       };
-      showMyHand();
+      thisPlayer.showHand();
       afterAction();
     };
   };
@@ -468,7 +447,7 @@ function checkMoneylender(handIndex) {
     if (theCard.name == "Copper") {
       thisPlayer.hand.splice(handIndex, 1);
       thisPlayer.gainCoin(3);
-      showMyHand();
+      thisPlayer.showHand();
       afterAction();
     };
   };
