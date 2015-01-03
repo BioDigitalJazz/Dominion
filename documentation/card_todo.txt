@@ -30,7 +30,7 @@ Medium [interaction window ]
 Attack Cards
 ------------
 Easy [affects other players, no click]
-  Witch
+  (done) Witch
 
 Medium [affects other players, click but no interaction window]
   Militia

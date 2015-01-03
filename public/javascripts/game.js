@@ -1,6 +1,7 @@
 function Game(kingdomCards){
   this.players = [];
   this.currentPlayerIndex = 0;
+  this.round = 0;
   this.supply = {};
   
   this.supply['ProvinceCard'] = 8;
@@ -17,16 +18,16 @@ function Game(kingdomCards){
   });
 };
 
-Game.prototype.createPlayers = function(playerNames) {
-  var theGame = this;
-  playerNames.forEach( function(name) {
-    theGame.players.push(new Player(name, theGame));
-  })
-};
+// Game.prototype.createPlayers = function(playerNames) {
+//   var theGame = this;
+//   playerNames.forEach( function(name, index) {
+//     theGame.players.push({ id: index, name: name });
+//   });
+// };
 
-Game.prototype.getCurrentPlayer = function() {
-  return this.players[this.currentPlayerIndex];
-};
+// Game.prototype.getCurrentPlayer = function() {
+//   return this.players[this.currentPlayerIndex];
+// };
 
 Game.prototype.showKingdomCards = function(kingdomCards) {
   var kCardPiles = $('img.supply-kingdom');
@@ -50,9 +51,9 @@ Game.prototype.showCardCounts = function() {
   };
 };
 
-Game.prototype.startLog = function(pNames, kCards) {
+Game.prototype.startLog = function(kCards) {
   this.logContent = "<u>Players</u>: ";
-  pNames.forEach( function(name) {
+  this.players.forEach( function(name) {
     this.logContent += (name + ', ');
   }, this);
 
@@ -97,25 +98,25 @@ Game.prototype.cleanUp = function() {
 };
 
 Game.prototype.nextPlayer = function(){
-  if(this.currentPlayerIndex == Number(playerID)) {
+  if (this.currentPlayerIndex == Number(playerID)) {
     this.cleanUp();
-    this.getCurrentPlayer().cleanUpPhase();
-    setTimeout(function() { showMyHand(); }, 1200);
-  }
+    thisPlayer.cleanUpPhase();
+    // setTimeout(function() { showMyHand(); }, 1200);
+  };
 
   if (this.currentPlayerIndex == this.players.length - 1) {
     this.currentPlayerIndex = 0;
-    sessionStorage.gameRound++;
+    this.round++;
   } else {
     this.currentPlayerIndex++;
-  }
+  };
 
   if(this.currentPlayerIndex == Number(playerID)) {
-    this.displayMessage("It is your turn, play an action, or buy a card.");
+    this.displayMessage("It is your turn. Play an action, buy a card, or end the turn.");
     game.logTitle = thisPlayer.name ;
   } else {
     this.displayMessage("Not your turn, please wait.");
-  }
+  };
 };
 
 Game.prototype.gameEnd = function(){
@@ -141,7 +142,7 @@ Game.prototype.gameEnd = function(){
 // };
 
 
-var playerID = sessionStorage.playerID;
+var playerID = Number(sessionStorage.playerID);
 var game, thisPlayer;
 
 var socket = io();
@@ -149,107 +150,80 @@ socket.emit('player on game page', playerID);
 
 socket.on('ready to start', function (data) {
   var kingdomCards = data.kingdomCards;
-  var players = data.players;
-  
-  sessionStorage.gameRound = 0;
   game = new Game(kingdomCards);
-  game.createPlayers(players);
+  // sessionStorage.gameRound = 0;
+  game.round = 0;
+  game.players = data.players;
+  thisPlayer = new Player(game.players[playerID], game);
   game.showKingdomCards(kingdomCards);
   game.showCardCounts();
-  game.startLog(players, kingdomCards);
-  thisPlayer = game.players[playerID];
-  sessionStorage.gameRound = 1;
+  game.startLog(kingdomCards);
+
+  // sessionStorage.gameRound = 1;
+  game.round = 1;
   socket.emit('game created ready to play', playerID);
 });
 
 socket.on('player turn', function() {
-  if (parseInt(playerID) !== game.currentPlayerIndex) {
+  if (playerID !== game.currentPlayerIndex) {
     game.displayMessage("Not your turn, please wait.");
   } else {
     game.displayMessage("It is your turn, play an action, or buy a card");
     game.logTitle = thisPlayer.name ;
   };
-  showMyHand();
+  // showMyHand();
 });
-
-var showMyHand = function() {
-  $(".handcard").remove();
-  var cardsInHand = thisPlayer.hand;
-
-  for (var i = 0; i < cardsInHand.length; i++)
-    addToHand(cardsInHand, i);
-};
-
-var addToHand = function (cards, index) {
-  var handArea = $("#area-player-hand");
-  var imgSrc = "/images/cards/" + cards[index].name.toLowerCase() + ".jpg";
-  var imgId = "handcard" + index;
-  var imgClass = "handcard";
-
-  setTimeout( function() {
-    handArea.append('<img src= \"' + imgSrc + '\" class=\"' + imgClass + '\" id=\"' + imgId + '\">');
-  }, index * 100);
-};
 
 
 var playCard = function(handIndex) {
-  var card = thisPlayer.hand[handIndex]
+  var card = thisPlayer.hand[handIndex];
 
   if (card.types["Treasure"]) {
-    moveCardToPlay($('.handcard').eq(handIndex), card);
+    moveCardToPlay(handIndex, card);
     $("#coinCount").text(Number($("#coinCount").text()) + card.worth);
-    playerAction(handIndex, "moveToPlayArea");
   };
 
   if (card.types.action) {
     if (Number($("#actionCount").text()) == 0) {
       game.displayMessage("You have no actions left, please buy a card.")
     } else {
-      moveCardToPlay($('.handcard').eq(handIndex), card);
+      moveCardToPlay(handIndex, card);
       $("#actionCount").text(Number($("#actionCount").text()) - 1);
-      playerAction(handIndex, "moveToPlayArea");
       card.play(thisPlayer);
 
       switch (thisPlayer.state) {
-        case "mine": 
-          game.displayMessage("Trash a Treasure card from your hand. Gain a Treasure card costing up to 3 more.");
+        case "normal":
+          afterAction();
           break;
         case "feast":
           game.displayMessage("Gain a card costing up to 5 coins and trash the Feast card.");
           break;
+        case "mine": 
+          game.displayMessage("Trash a Treasure card from your hand. Gain a Treasure card costing up to 3 more.");
+          requireInteraction("Cancel");
+          break;
         case "moneylender":
-          game.displayMessage("Trash a Copper card from your hand.  If you do, +3 coins.");
+          game.displayMessage("Trash a Copper card from your hand. If you do, +3 coins.");
           requireInteraction("Cancel");
           break;
       }; // switch
-
-      // onhold is a temp name for the player's state
-      if (thisPlayer.state == "onhold")
-        resolveInteraction();
       
-      // setTimeout(function() { showMyHand(); }, 400);
       game.logCard(card.name, "Play");
     };
   };
-}; // playCard()
+}; // playCard
 
-var moveCardToPlay = function(jqueryCard, card) {
-  jqueryCard.hide(400);
+var moveCardToPlay = function(handIndex, card) {
+  thisPlayer.playArea.push(card);
+  thisPlayer.hand.splice(handIndex, 1);
 
+  var jqueryCard = $('.handcard').eq(handIndex).hide(400);
   setTimeout( function() {
     jqueryCard.remove();
     var moveCard = $('<img>').attr('src', card.image).addClass('hand-to-play');
     moveCard.hide().appendTo('#play-area').show(400);
   }, 400);
-};
-
-var playerAction = function(cardIndex, theFunction) { 
-  if (theFunction == "moveToPlayArea") {
-    var theCard = thisPlayer.hand[cardIndex]
-    thisPlayer.playArea.push(theCard);
-    thisPlayer.hand.splice(cardIndex, 1);
-  };
-};
+}; // moveCardToPlay
 
 var requireInteraction = function (buttonText) {
   var btn = $("button#end-turn");
@@ -258,14 +232,24 @@ var requireInteraction = function (buttonText) {
   btn.off();
 
   btn.on('click', function() {
-    thisPlayer.state = "normal";
+    afterAction();
     btn.attr("id", "end-turn");
     btn.text("End Turn");
     btn.off();
     btn.on('click', endTurn);
     console.log("interaction done");
   });
-};
+}; // requireInteraction
+
+var afterAction = function () {
+  thisPlayer.setState("normal");
+  if (Number($("#actionCount").text()) == 0) {
+    game.displayMessage("Buy a card, or end your turn.");
+  } else {
+    game.displayMessage("Next action, buy a card, or end your turn.");
+  };
+}; // afterAction
+
 
 var buyCard = function(card) {
   var cardName = capStr(card);
@@ -287,7 +271,7 @@ var buyCard = function(card) {
       game.displayMessage("still more buys:" + $("#buyCount").text());
     };
   };
-}; // buyCard()
+}; // buyCard
 
 var adviseServerGain = function(supplyName) {
   socket.emit('player gain', supplyName);
@@ -296,14 +280,15 @@ var adviseServerGain = function(supplyName) {
 socket.on('update DB gain', function(supplyName) {
   game.supply[supplyName]--;
   updateCardCount(supplyName);
-});
+}); // adviseServerGain
 
 var endTurn = function() {
-  if (thisPlayer == game.getCurrentPlayer()) {
+  if (playerID === game.currentPlayerIndex) {
     adviseServerNextPlayer();
     game.logContent = "";
   };
-};
+}; // endTurn
+
 
 Game.prototype.playerAttack = function(cardName) {
   adviseServerAttack(cardName);
@@ -320,7 +305,7 @@ socket.on('you are being attacked', function(cardName) {
     case "witch": 
       thisPlayer.gainCard("CurseCard");
       break;
-  } 
+  }; 
 });
 
 var adviseServerNextPlayer = function() {
@@ -372,7 +357,7 @@ function initCardDisplay() {
 
 
 function clickHandCard() {
-  if (thisPlayer !== game.getCurrentPlayer())
+  if (playerID !== game.currentPlayerIndex)
     return;
 
   var handIndex = $(".handcard").index(this);
@@ -386,7 +371,7 @@ function clickHandCard() {
 }; // clickHandCard
 
 function clickKingdomCard() {
-  if (thisPlayer !== game.getCurrentPlayer())
+  if (playerID !== game.currentPlayerIndex)
     return;
 
   var supplyIndex = $("img.supply-kingdom").index(this);
@@ -401,7 +386,7 @@ function clickKingdomCard() {
 }; // clickKingdomCard
 
 function clickNonactionCard() {
-  if (thisPlayer !== game.getCurrentPlayer())
+  if (playerID !== game.currentPlayerIndex)
     return;
 
   var supplyIndex = $("img.supply-nonaction").index(this);
@@ -428,7 +413,7 @@ function checkFeast(card) {
 
       game.logCard(cardName, "Gain");
       game.logCard("Feast", "Trash");
-      afterSpecialAction();
+      afterAction();
     };
   };
 }; // checkFeast
@@ -449,8 +434,8 @@ function checkMine(handIndex) {
         game.logCard("Gold", "Gain");
         game.logCard("Silver", "Trash");
       };
-      showMyHand();
-      afterSpecialAction();
+      thisPlayer.showHand();
+      afterAction();
     };
   };
 }; // checkMine
@@ -462,16 +447,11 @@ function checkMoneylender(handIndex) {
     if (theCard.name == "Copper") {
       thisPlayer.hand.splice(handIndex, 1);
       thisPlayer.gainCoin(3);
-      showMyHand();
-      afterSpecialAction();
+      thisPlayer.showHand();
+      afterAction();
     };
   };
 }; // checkMoneylender
-
-function afterSpecialAction() {
-  thisPlayer.setState("normal");
-  game.displayMessage("Buy a card, or end your turn.");
-};
 
 
 $(function(){

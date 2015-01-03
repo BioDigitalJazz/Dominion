@@ -43,7 +43,7 @@ Player.prototype.startTurn = function() {
   }
 }
 
-Player.prototype.cleanUpPhase = function() {
+Player.prototype.cleanUpPhase = function(waitTime) {
   var theDiscardPile = this.discardPile;
   var theHand = this.hand;
   var thePlayArea = this.playArea;
@@ -58,7 +58,7 @@ Player.prototype.cleanUpPhase = function() {
     theDiscardPile.push(theHand.pop());
   }
   this.hand = [];
-  this.drawCard(5);
+  this.drawCard(5, waitTime);
 }
 
 Player.prototype.gainCard = function (cardName) {
@@ -68,8 +68,49 @@ Player.prototype.gainCard = function (cardName) {
   var newCard = new cardConstructors[cardName]();
   this.discardPile.push(newCard);
 
-  if (sessionStorage.gameRound > 0)
+  if (this.game.round > 0)
     displayDiscard(this, cardName);
+};
+
+Player.prototype.drawCard = function(num, waitTime) {
+  var theHand = this.hand;
+  var theDiscardPile = this.discardPile;
+  var theDeck = this.deck;
+
+  for (var i = 1; i <= num; i++) {
+    if (theDeck.length == 0) {
+      this.replenishDeck();
+      waitTime = 1200;
+    };
+    theHand.push(theDeck.pop());
+  };
+  
+  $('img#deck').prev().text(theDeck.length);
+  this.showHand(waitTime);
+};
+
+Player.prototype.showHand = function(waitTime) {
+  var wait = waitTime || 400; 
+  $(".handcard").hide(wait);
+  var thePlayer = this;
+  var theHand = this.hand;
+
+  setTimeout(function() {
+    $(".handcard").remove();
+    for (var i = 0; i < theHand.length; i++)
+      thePlayer.addToHand(i);
+  }, wait);
+};
+
+Player.prototype.addToHand = function (index) {
+  var handArea = $("#area-player-hand");
+  var imgSrc = "/images/cards/" + this.hand[index].name.toLowerCase() + ".jpg";
+  var imgId = "handcard" + index;
+  var imgClass = "handcard";
+
+  setTimeout( function() {
+    handArea.append('<img src= \"' + imgSrc + '\" class=\"' + imgClass + '\" id=\"' + imgId + '\">');
+  }, index * 100);
 };
 
 Player.prototype.replenishDeck = function() {
@@ -78,9 +119,9 @@ Player.prototype.replenishDeck = function() {
     this.deck.push(this.discardPile.pop());
   };
   this.shuffleDeck();
-  if (sessionStorage.gameRound > 0)
+  if (this.game.round > 0)
     moveDiscardToDeck(this);
-};
+}
 
 Player.prototype.revealCards = function(num) {
   if (this.deck.length < num) {
@@ -88,21 +129,6 @@ Player.prototype.revealCards = function(num) {
   }
   return this.deck.slice(this.deck.length - num);
 }
-
-Player.prototype.drawCard = function(num) {
-  var theHand = this.hand;
-  var theDiscardPile = this.discardPile;
-  var theDeck = this.deck;
-
-  for (var i = 1; i <= num; i++) {
-    if (theDeck.length == 0) {
-      this.replenishDeck();
-    };
-    theHand.push(theDeck.pop());
-  };
-  
-  $('img#deck').prev().text(theDeck.length);
-}; 
 
 Player.prototype.gainAction = function(num) {
   $("#actionCount").text(Number($("#actionCount").text()) + Number(num));
@@ -123,7 +149,6 @@ Player.prototype.revealCard = function(card) {
 Player.prototype.discard = function(card, cardLocation) {
   this.discardPile.push(card);
   cardLocation.splice(cardLocation.indexOf(card), 1);
-
   displayDiscard(this, card.name);
 };
 
