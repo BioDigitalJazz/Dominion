@@ -201,6 +201,7 @@ var checkPlayerState = function() {
       break;
     case "feast":
       game.displayMessage("Gain a card costing up to 5 coins and trash the Feast card.");
+      requireInteraction("Cancel");
       break;
     case "mine": 
       game.displayMessage("Trash a Treasure card from your hand. Gain a Treasure card costing up to 3 more.");
@@ -215,19 +216,20 @@ var checkPlayerState = function() {
 
 var requireInteraction = function (buttonText) {
   var btn = $("button#end-turn");
-  btn.attr("id", "done-interact");
+  btn.attr("id", "end-interaction");
   btn.text(buttonText);
   btn.off();
-
-  btn.on('click', function() {
-    afterAction();
-    btn.attr("id", "end-turn");
-    btn.text("End Turn");
-    btn.off();
-    btn.on('click', endTurn);
-    console.log("interaction done");
-  });
+  btn.on('click', endInteraction);
 }; // requireInteraction
+
+var endInteraction = function() {
+  afterAction();
+  var btn = $("button#end-interaction");
+  btn.attr("id", "end-turn");
+  btn.text("End Turn");
+  btn.off();
+  btn.on('click', endTurn);
+}; // endInteraction
 
 var afterAction = function () {
   thisPlayer.setState("normal");
@@ -403,7 +405,7 @@ function checkFeast(card) {
 
       game.logCard(cardName, "Gain");
       game.logCard("Feast", "Trash");
-      afterAction();
+      endInteraction();
     };
   };
 }; // checkFeast
@@ -425,7 +427,7 @@ function checkMine(handIndex) {
         game.logCard("Silver", "Trash");
       };
       thisPlayer.showHand();
-      afterAction();
+      endInteraction();
     };
   };
 }; // checkMine
@@ -439,7 +441,7 @@ function checkMoneylender(handIndex) {
       thisPlayer.gainCoin(3);
       thisPlayer.showHand();
       game.logCard("Copper", "Trash");
-      afterAction();
+      endInteraction();
     };
   };
 }; // checkMoneylender
