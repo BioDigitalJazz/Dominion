@@ -205,11 +205,11 @@ var checkPlayerState = function() {
       break;
     case "mine": 
       game.displayMessage("Trash a Treasure card from your hand. Gain a Treasure card costing up to 3 more.");
-      requireInteraction("Cancel", { action: "trash" });
+      requireInteraction("Cancel");
       break;
     case "moneylender":
       game.displayMessage("Trash a Copper card from your hand. If you do, +3 coins.");
-      requireInteraction("Cancel", { action: "trash", card: "" });
+      requireInteraction("Cancel");
       break;
     case "cellar":
       game.displayMessage("Discard any number of cards.  +1 Card per card discarded.");
@@ -223,7 +223,9 @@ var checkPlayerState = function() {
 }; // checkPlayerState
 
 var requireInteraction = function (buttonText, details) {
-  highlightCards(details);
+  if (details)
+    highlightCards(details);
+
   if (buttonText === null)
     return;
 
@@ -235,21 +237,18 @@ var requireInteraction = function (buttonText, details) {
 }; // requireInteraction
 
 var highlightCards = function(details) {
-  switch (details.action) {
-    case "gain":
-      for (var supplyName in game.supply) {
-        var supplyCard = new cardConstructors[supplyName]();
+  var cardPath, cardSelect;
+  // switch (details.action)
+  // Highlight cards that the player can gain
+  for (var supplyName in game.supply) {
+    var supplyCard = new cardConstructors[supplyName]();
 
-        if (details.coin === undefined || details.coin >= supplyCard.cost) {
-          var cardPath = getCardPath(supplyName);
-          var cardSelect = 'img.supply-card[src="' + cardPath + '"]';
-          $(cardSelect).addClass('highlight');
-        };
-      };
-      break;
-    case "trash":
-      break;
-  }; // switch
+    if (details.coin === undefined || details.coin >= supplyCard.cost) {
+      cardPath = getCardPath(supplyName);
+      cardSelect = 'img.supply-card[src="' + cardPath + '"]';
+      $(cardSelect).addClass('highlight-gain');
+    };
+  };
 }; // highlightCards 
 
 var endInteraction = function(noCancel) {
@@ -266,11 +265,9 @@ var endInteraction = function(noCancel) {
 }; // endInteraction
 
 var unHighlightCards = function() {
-  for (supplyName in game.supply) {
-    var cardPath = getCardPath(supplyName);
-    var cardSelect = 'img.supply-card[src="' + cardPath + '"]';
-    $(cardSelect).removeClass('highlight');
-  };
+  $('img.highlight-gain').removeClass('highlight-gain');
+  $('img.highlight-discard').removeClass('highlight-discard');
+  $('img.highlight-trash').removeClass('highlight-trash');
 }; // unHighlightCards 
 
 var afterAction = function () {
