@@ -23,7 +23,7 @@ Game.prototype.showKingdomCards = function(kingdomCards) {
 
   kingdomCards.forEach( function(card, index) {
     var kCard = kCardPiles.eq(index);
-    var cardPath = getCardPath(card, true);
+    var cardPath = getCardPath(card);
     kCard.attr('src', cardPath);
     kCard.prev().text(10);
   });
@@ -32,7 +32,7 @@ Game.prototype.showKingdomCards = function(kingdomCards) {
 Game.prototype.showCardCounts = function() {
   for (var cardName in this.supply) {
     var count = this.supply[cardName];
-    var cardPath = getCardPath(cardName, false);
+    var cardPath = getCardPath(cardName);
     var cardSelect = 'img.supply-nonaction[src="' + cardPath + '"]';
     
     if ( $(cardSelect).length > 0 )
@@ -215,6 +215,20 @@ var checkPlayerState = function() {
 }; // checkPlayerState
 
 var requireInteraction = function (buttonText, details) {
+  var supplyCardsDOM = $('img.supply-card');
+  var cardPath;
+
+  switch (details.action) {
+    case "gain":
+      for (cardName in game.supply) {
+        cardPath = getCardPath(cardName);
+        $('img.supply-card');
+      };
+      break;
+    case "trash":
+      break;
+  }; // switch
+
   var btn = $("button#end-turn");
   btn.attr("id", "end-interaction");
   btn.text(buttonText);
