@@ -205,12 +205,10 @@ function getCardPath(cardName, cropped) {
 
 // update card counts on game page
 function updateCardCount(cardName) {
-  var isKingdom = true;
   var cardPath = getCardPath(cardName, true);
   var cardSelect = 'img.supply-kingdom[src="' + cardPath + '"]';
   // HACK
   if ( $(cardSelect).length == 0 ) {
-    isKingdom = false;
     cardPath = getCardPath(cardName, false);
     cardSelect = 'img.supply-nonaction[src="' + cardPath + '"]';
   };

@@ -1,14 +1,12 @@
 Issues:
 
 1) Messages for Played Action Cards  
-  Witch
-  Moat
-
   Adventurer (no need)
   Feast (done)
   Mine (done)
+  Moat (done)
   Moneylender (done)
-
+  Witch (done)
 
 (maybe) DOM manipulation in global functions instead of Game.func()
 
