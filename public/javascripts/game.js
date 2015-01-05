@@ -215,19 +215,7 @@ var checkPlayerState = function() {
 }; // checkPlayerState
 
 var requireInteraction = function (buttonText, details) {
-  var supplyCardsDOM = $('img.supply-card');
-  var cardPath;
-
-  switch (details.action) {
-    case "gain":
-      for (cardName in game.supply) {
-        cardPath = getCardPath(cardName);
-        $('img.supply-card');
-      };
-      break;
-    case "trash":
-      break;
-  }; // switch
+  highlightCards(details);
 
   var btn = $("button#end-turn");
   btn.attr("id", "end-interaction");
@@ -236,14 +224,42 @@ var requireInteraction = function (buttonText, details) {
   btn.on('click', endInteraction);
 }; // requireInteraction
 
+var highlightCards = function(details) {
+  switch (details.action) {
+    case "gain":
+      for (var supplyName in game.supply) {
+        var supplyCard = new cardConstructors[supplyName]();
+
+        if (details.coin === undefined || details.coin >= supplyCard.cost) {
+          var cardPath = getCardPath(supplyName);
+          var cardSelect = 'img.supply-card[src="' + cardPath + '"]';
+          $(cardSelect).addClass('highlight');
+        };
+      };
+      break;
+    case "trash":
+      break;
+  }; // switch
+}; // highlightCards 
+
 var endInteraction = function() {
   afterAction();
+  unHighlightCards();
+
   var btn = $("button#end-interaction");
   btn.attr("id", "end-turn");
   btn.text("End Turn");
   btn.off();
   btn.on('click', endTurn);
 }; // endInteraction
+
+var unHighlightCards = function() {
+  for (supplyName in game.supply) {
+    var cardPath = getCardPath(supplyName);
+    var cardSelect = 'img.supply-card[src="' + cardPath + '"]';
+    $(cardSelect).removeClass('highlight');
+  };
+}; // unHighlightCards 
 
 var afterAction = function () {
   thisPlayer.setState("normal");

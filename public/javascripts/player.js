@@ -217,10 +217,6 @@ function getCardPath(cardName) {
 function updateCardCount(cardName) {
   var cardPath = getCardPath(cardName);
   var cardSelect = 'img.supply-card[src="' + cardPath + '"]';
-  console.log(cardSelect);
-  console.log($(cardSelect).prev());
-  console.log(cardName);
-  console.log(this.game.supply[cardName]);
   $(cardSelect).prev().text(this.game.supply[cardName]);
   
   // when card count reaches 0, change img to back.jpg and remove click event

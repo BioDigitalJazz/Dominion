@@ -16,7 +16,9 @@ Issues:
 3) Multiple games
 
 4) End/save game
+  * For demo, the game ends when Province cards run out
 
+** A demo branch off the (completed) master branch
 
 
 ** Phantom problem
