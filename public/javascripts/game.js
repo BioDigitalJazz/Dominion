@@ -23,7 +23,7 @@ Game.prototype.showKingdomCards = function(kingdomCards) {
 
   kingdomCards.forEach( function(card, index) {
     var kCard = kCardPiles.eq(index);
-    var cardPath = getCardPath(card, true);
+    var cardPath = getCardPath(card);
     kCard.attr('src', cardPath);
     kCard.prev().text(10);
   });
@@ -32,7 +32,7 @@ Game.prototype.showKingdomCards = function(kingdomCards) {
 Game.prototype.showCardCounts = function() {
   for (var cardName in this.supply) {
     var count = this.supply[cardName];
-    var cardPath = getCardPath(cardName, false);
+    var cardPath = getCardPath(cardName);
     var cardSelect = 'img.supply-nonaction[src="' + cardPath + '"]';
     
     if ( $(cardSelect).length > 0 )
@@ -201,20 +201,24 @@ var checkPlayerState = function() {
       break;
     case "feast":
       game.displayMessage("Gain a card costing up to 5 coins and trash the Feast card.");
-      requireInteraction("Cancel");
+      requireInteraction(null, { action: "gain", coin: 5 });
       break;
     case "mine": 
       game.displayMessage("Trash a Treasure card from your hand. Gain a Treasure card costing up to 3 more.");
-      requireInteraction("Cancel");
+      requireInteraction("Cancel", { action: "trash" });
       break;
     case "moneylender":
       game.displayMessage("Trash a Copper card from your hand. If you do, +3 coins.");
-      requireInteraction("Cancel");
+      requireInteraction("Cancel", { action: "trash", card: "" });
       break;
   }; // switch
 }; // checkPlayerState
 
-var requireInteraction = function (buttonText) {
+var requireInteraction = function (buttonText, details) {
+  highlightCards(details);
+  if (buttonText === null)
+    return;
+
   var btn = $("button#end-turn");
   btn.attr("id", "end-interaction");
   btn.text(buttonText);
@@ -222,14 +226,44 @@ var requireInteraction = function (buttonText) {
   btn.on('click', endInteraction);
 }; // requireInteraction
 
-var endInteraction = function() {
+var highlightCards = function(details) {
+  switch (details.action) {
+    case "gain":
+      for (var supplyName in game.supply) {
+        var supplyCard = new cardConstructors[supplyName]();
+
+        if (details.coin === undefined || details.coin >= supplyCard.cost) {
+          var cardPath = getCardPath(supplyName);
+          var cardSelect = 'img.supply-card[src="' + cardPath + '"]';
+          $(cardSelect).addClass('highlight');
+        };
+      };
+      break;
+    case "trash":
+      break;
+  }; // switch
+}; // highlightCards 
+
+var endInteraction = function(noCancel) {
   afterAction();
+  unHighlightCards();
+  if (noCancel)
+    return;
+
   var btn = $("button#end-interaction");
   btn.attr("id", "end-turn");
   btn.text("End Turn");
   btn.off();
   btn.on('click', endTurn);
 }; // endInteraction
+
+var unHighlightCards = function() {
+  for (supplyName in game.supply) {
+    var cardPath = getCardPath(supplyName);
+    var cardSelect = 'img.supply-card[src="' + cardPath + '"]';
+    $(cardSelect).removeClass('highlight');
+  };
+}; // unHighlightCards 
 
 var afterAction = function () {
   thisPlayer.setState("normal");
@@ -409,7 +443,7 @@ function checkFeast(card) {
 
       game.logCard(cardName, "Gain");
       game.logCard("Feast", "Trash");
-      endInteraction();
+      endInteraction(true);
     };
   };
 }; // checkFeast

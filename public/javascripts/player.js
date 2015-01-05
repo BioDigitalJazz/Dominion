@@ -134,7 +134,6 @@ Player.prototype.replenishDeck = function() {
 }
 
 function moveDiscardToDeck(player) {
-  // if (Number(playerID) == player.game.currentPlayerIndex) {
   var discardP = $("img#discard-pile");
   var moveElem = discardP.clone().appendTo('#area-discard-pile');
   
@@ -143,7 +142,6 @@ function moveDiscardToDeck(player) {
     setTimeout( function() { moveElem.remove() }, 600);
     discardP.attr('src', '/images/cards/back.jpg');
   }, 600);
-  // };
 };
 
 Player.prototype.revealCards = function(num) {
@@ -175,12 +173,18 @@ Player.prototype.discard = function(card, cardLocation) {
   displayDiscard(this, card.name);
 };
 
+function displayDiscard (player, cardName) {
+  setTimeout( function() {
+    $("img#discard-pile").attr('src', getCardPath(cardName));
+  }, 200);
+};
+
 Player.prototype.trash = function(card, cardLocation) {
   cardLocation.splice(cardLocation.indexOf(card), 1);
 };
 
 Player.prototype.displayTrash = function(cardName, cardArea) {
-  var cardPath = getCardPath(cardName, false);
+  var cardPath = getCardPath(cardName);
   var cardToTrash = $(cardArea).find('img[src="' + cardPath + '"]');
   cardToTrash.hide(400);
   setTimeout(function() { cardToTrash.remove(); }, 400);
@@ -197,24 +201,22 @@ Player.prototype.shuffleDeck = function(){ //v1.0
 };
 
 // return the path to the cropped card img
-function getCardPath(cardName, cropped) {
-  var path = '/images/cards/' + cardName.slice(0, -4).toLowerCase();
-  var file = (cropped ? '_crop.jpg' : '.jpg'); 
-  return path + file;
+function getCardPath(cardName) {
+  var cardPath = '/images/cards/' + cardName.slice(0, -4).toLowerCase();
+  var fileExt = '.jpg'; 
+  var cardSelect = 'img.supply-card[src="' + cardPath + fileExt + '"]';
+  
+  // Kingdom cards: /images/cards/cardname_crop.jpg
+  if ($(cardSelect).length === 0) {
+    var fileExt = '_crop.jpg';
+  };
+  return cardPath + fileExt;
 };
 
 // update card counts on game page
 function updateCardCount(cardName) {
-  var isKingdom = true;
-  var cardPath = getCardPath(cardName, true);
-  var cardSelect = 'img.supply-kingdom[src="' + cardPath + '"]';
-  // HACK
-  if ( $(cardSelect).length == 0 ) {
-    isKingdom = false;
-    cardPath = getCardPath(cardName, false);
-    cardSelect = 'img.supply-nonaction[src="' + cardPath + '"]';
-  };
-
+  var cardPath = getCardPath(cardName);
+  var cardSelect = 'img.supply-card[src="' + cardPath + '"]';
   $(cardSelect).prev().text(this.game.supply[cardName]);
   
   // when card count reaches 0, change img to back.jpg and remove click event
@@ -231,12 +233,3 @@ function updateCardCount(cardName) {
     noCard.addClass('supply-none');
   };
 }; // updateCardCount()
-
-
-function displayDiscard (player, cardName) {
-  // if (Number(playerID) == player.game.currentPlayerIndex) {
-  setTimeout( function() {
-    $("img#discard-pile").attr('src', getCardPath(cardName));
-  }, 200);
-  // };
-};
