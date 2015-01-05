@@ -292,7 +292,8 @@ var adviseServerAttack = function(cardName) {
 socket.on('you are being attacked', function(cardName) {
   if (!thisPlayer.handContains("Moat")) {
     switch (cardName) {
-      case "witch": 
+      case "witch":
+        adviseServerGain("CurseCard"); 
         thisPlayer.gainCard("CurseCard");
         game.displayMessage("Opponent played a Witch card. You gain a Curse.");
         break;
