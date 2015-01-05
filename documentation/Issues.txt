@@ -3,13 +3,17 @@ Issues:
 -- Discard pile display fix
 -- Highlighting style
 
-1) Messages for Played Action Cards  
+Action Cards  
   Adventurer (no need)
-  Feast (done)
-  Mine (done)
-  Moat (done)
-  Moneylender (done)
-  Witch (done)
+  Cellar
+  Chapel
+  CouncilRoom
+  Feast         (done)
+  Market        (done)
+  Mine          (done)
+  Moat          (done)
+  Moneylender   (done)
+  Witch         (done)
 
 2) Multi-Purpose Button in play-prompt area
 2.2) Highlighting cards to discard
