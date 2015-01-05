@@ -175,7 +175,7 @@ Player.prototype.discard = function(card, cardLocation) {
 
 function displayDiscard (player, cardName) {
   setTimeout( function() {
-    $("img#discard-pile").attr('src', getCardPath(cardName));
+    $("img#discard-pile").attr('src', getCardPath(cardName, true));
   }, 200);
 };
 
@@ -184,7 +184,7 @@ Player.prototype.trash = function(card, cardLocation) {
 };
 
 Player.prototype.displayTrash = function(cardName, cardArea) {
-  var cardPath = getCardPath(cardName);
+  var cardPath = getCardPath(cardName, true);
   var cardToTrash = $(cardArea).find('img[src="' + cardPath + '"]');
   cardToTrash.hide(400);
   setTimeout(function() { cardToTrash.remove(); }, 400);
@@ -201,13 +201,13 @@ Player.prototype.shuffleDeck = function(){ //v1.0
 };
 
 // return the path to the cropped card img
-function getCardPath(cardName) {
+function getCardPath(cardName, noCrop) {
   var cardPath = '/images/cards/' + cardName.slice(0, -4).toLowerCase();
   var fileExt = '.jpg'; 
   var cardSelect = 'img.supply-card[src="' + cardPath + fileExt + '"]';
   
-  // Kingdom cards: /images/cards/cardname_crop.jpg
-  if ($(cardSelect).length === 0) {
+  // Supply - Kingdom cards: /images/cards/cardname_crop.jpg
+  if ($(cardSelect).length === 0 && noCrop === undefined) {
     var fileExt = '_crop.jpg';
   };
   return cardPath + fileExt;

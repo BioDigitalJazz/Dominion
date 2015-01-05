@@ -7,8 +7,12 @@ img {
   border-radius: 10%;
 }
 
-img.highlight {
-  border: 2px dotted red;
+img.highlight-gain {
+  border: 4px ridge #66FF00;
+}
+
+img.highlight-discard, img.highlight-trash {
+  border: 4px dotted #FF0000;
 }
 
 #column-left {
