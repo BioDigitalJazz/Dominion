@@ -344,7 +344,7 @@ MoatCard.prototype.constructor = MoatCard;
 
 
 function MoneylenderCard() {
-  ActionCard.call(this, 22, 'MoneyLender', 4, '/images/cards/moneylender.jpg');
+  ActionCard.call(this, 22, 'Moneylender', 4, '/images/cards/moneylender.jpg');
   this.types.action = true;
   this.effects["moneylender"] = true;
 

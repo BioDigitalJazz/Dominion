@@ -18,17 +18,6 @@ function Game(kingdomCards){
   });
 };
 
-// Game.prototype.createPlayers = function(playerNames) {
-//   var theGame = this;
-//   playerNames.forEach( function(name, index) {
-//     theGame.players.push({ id: index, name: name });
-//   });
-// };
-
-// Game.prototype.getCurrentPlayer = function() {
-//   return this.players[this.currentPlayerIndex];
-// };
-
 Game.prototype.showKingdomCards = function(kingdomCards) {
   var kCardPiles = $('img.supply-kingdom');
 
@@ -151,7 +140,6 @@ socket.emit('player on game page', playerID);
 socket.on('ready to start', function (data) {
   var kingdomCards = data.kingdomCards;
   game = new Game(kingdomCards);
-  // sessionStorage.gameRound = 0;
   game.round = 0;
   game.players = data.players;
   thisPlayer = new Player(game.players[playerID], game);
@@ -159,7 +147,6 @@ socket.on('ready to start', function (data) {
   game.showCardCounts();
   game.startLog(kingdomCards);
 
-  // sessionStorage.gameRound = 1;
   game.round = 1;
   socket.emit('game created ready to play', playerID);
 });
@@ -189,25 +176,9 @@ var playCard = function(handIndex) {
     } else {
       moveCardToPlay(handIndex, card);
       $("#actionCount").text(Number($("#actionCount").text()) - 1);
-      card.play(thisPlayer);
-
-      switch (thisPlayer.state) {
-        case "normal":
-          afterAction();
-          break;
-        case "feast":
-          game.displayMessage("Gain a card costing up to 5 coins and trash the Feast card.");
-          break;
-        case "mine": 
-          game.displayMessage("Trash a Treasure card from your hand. Gain a Treasure card costing up to 3 more.");
-          requireInteraction("Cancel");
-          break;
-        case "moneylender":
-          game.displayMessage("Trash a Copper card from your hand. If you do, +3 coins.");
-          requireInteraction("Cancel");
-          break;
-      }; // switch
       
+      card.play(thisPlayer);
+      checkPlayerState();
       game.logCard(card.name, "Play");
     };
   };
@@ -218,28 +189,47 @@ var moveCardToPlay = function(handIndex, card) {
   thisPlayer.hand.splice(handIndex, 1);
 
   var jqueryCard = $('.handcard').eq(handIndex).hide(400);
-  setTimeout( function() {
-    jqueryCard.remove();
-    var moveCard = $('<img>').attr('src', card.image).addClass('hand-to-play');
-    moveCard.hide().appendTo('#play-area').show(400);
-  }, 400);
+  setTimeout(function() { jqueryCard.remove(); }, 400);
+  var moveCard = $('<img>').attr('src', card.image).addClass('hand-to-play');
+  moveCard.hide().appendTo('#play-area').show(400);
 }; // moveCardToPlay
+
+var checkPlayerState = function() {
+  switch (thisPlayer.state) {
+    case "normal":
+      afterAction();
+      break;
+    case "feast":
+      game.displayMessage("Gain a card costing up to 5 coins and trash the Feast card.");
+      requireInteraction("Cancel");
+      break;
+    case "mine": 
+      game.displayMessage("Trash a Treasure card from your hand. Gain a Treasure card costing up to 3 more.");
+      requireInteraction("Cancel");
+      break;
+    case "moneylender":
+      game.displayMessage("Trash a Copper card from your hand. If you do, +3 coins.");
+      requireInteraction("Cancel");
+      break;
+  }; // switch
+}; // checkPlayerState
 
 var requireInteraction = function (buttonText) {
   var btn = $("button#end-turn");
-  btn.attr("id", "done-interact");
+  btn.attr("id", "end-interaction");
   btn.text(buttonText);
   btn.off();
-
-  btn.on('click', function() {
-    afterAction();
-    btn.attr("id", "end-turn");
-    btn.text("End Turn");
-    btn.off();
-    btn.on('click', endTurn);
-    console.log("interaction done");
-  });
+  btn.on('click', endInteraction);
 }; // requireInteraction
+
+var endInteraction = function() {
+  afterAction();
+  var btn = $("button#end-interaction");
+  btn.attr("id", "end-turn");
+  btn.text("End Turn");
+  btn.off();
+  btn.on('click', endTurn);
+}; // endInteraction
 
 var afterAction = function () {
   thisPlayer.setState("normal");
@@ -291,8 +281,9 @@ var endTurn = function() {
 
 
 Game.prototype.playerAttack = function(cardName) {
+  // this.displayMessage("");
   adviseServerAttack(cardName);
-}
+};
 
 var adviseServerAttack = function(cardName) {
   socket.emit('attack', cardName)
@@ -303,11 +294,13 @@ socket.on('you are being attacked', function(cardName) {
     switch (cardName) {
       case "witch": 
         thisPlayer.gainCard("CurseCard");
+        game.displayMessage("Opponent played a Witch card. You gain a Curse.");
         break;
-    } 
+    };
   } else {
-    console.log("Moat card for the win!!!");
-  }
+    // console.log("Moat card for the win!!!");
+    game.displayMessage("Opponent played an attack card. Your Moat card protects you.");
+  };
 });
 
 var adviseServerNextPlayer = function() {
@@ -415,7 +408,7 @@ function checkFeast(card) {
 
       game.logCard(cardName, "Gain");
       game.logCard("Feast", "Trash");
-      afterAction();
+      endInteraction();
     };
   };
 }; // checkFeast
@@ -437,7 +430,7 @@ function checkMine(handIndex) {
         game.logCard("Silver", "Trash");
       };
       thisPlayer.showHand();
-      afterAction();
+      endInteraction();
     };
   };
 }; // checkMine
@@ -450,7 +443,8 @@ function checkMoneylender(handIndex) {
       thisPlayer.hand.splice(handIndex, 1);
       thisPlayer.gainCoin(3);
       thisPlayer.showHand();
-      afterAction();
+      game.logCard("Copper", "Trash");
+      endInteraction();
     };
   };
 }; // checkMoneylender

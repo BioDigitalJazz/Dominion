@@ -41,5 +41,7 @@ Hard [affects other players, interaction window]
   Bureaucrat
   Thief
 
+
 Reaction Card
-  Moat
+-------------
+  (done) Moat

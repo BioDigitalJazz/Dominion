@@ -1,8 +1,14 @@
 Issues:
 
-1) Messages for Played Action Cards
+1) Messages for Played Action Cards  
+  Witch
+  Moat
+
+  Adventurer (no need)
+  Feast (done)
   Mine (done)
-  Feast (wait for fix. separate functions for click actions)
+  Moneylender (done)
+
 
 (maybe) DOM manipulation in global functions instead of Game.func()
 
@@ -10,6 +16,8 @@ Issues:
 2.2) Highlighting cards to discard
 
 3) Multiple games
+
+4) End/save game
 
 
 
