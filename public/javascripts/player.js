@@ -34,7 +34,8 @@ Player.prototype.blankCardInBlank = function(cardType, cardLocation) {
 Player.prototype.handContains = function(cardName) {
   for (var i = 0; i < this.hand.length; i++) {
     if (this.hand[i].name == cardName) {
-      return i;           // returns the index of the card
+      // return i;           // returns the index of the card
+      return true;
     }
   }
   return false;
