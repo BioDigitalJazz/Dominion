@@ -1,5 +1,8 @@
 Issues:
 
+-- Discard pile display fix
+-- Highlighting style
+
 1) Messages for Played Action Cards  
   Adventurer (no need)
   Feast (done)
@@ -7,8 +10,6 @@ Issues:
   Moat (done)
   Moneylender (done)
   Witch (done)
-
-(maybe) DOM manipulation in global functions instead of Game.func()
 
 2) Multi-Purpose Button in play-prompt area
 2.2) Highlighting cards to discard
@@ -26,6 +27,8 @@ Issues:
   "game is undefined"
 game.js, line 151
   if (parseInt(playerID) !== game.currentPlayerIndex){
+
+(maybe) DOM manipulation in global functions instead of Game.func()
 
 
 

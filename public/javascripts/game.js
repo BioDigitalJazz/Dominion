@@ -201,7 +201,7 @@ var checkPlayerState = function() {
       break;
     case "feast":
       game.displayMessage("Gain a card costing up to 5 coins and trash the Feast card.");
-      requireInteraction("Cancel", { action: "gain", coin: 5 });
+      requireInteraction(null, { action: "gain", coin: 5 });
       break;
     case "mine": 
       game.displayMessage("Trash a Treasure card from your hand. Gain a Treasure card costing up to 3 more.");
@@ -209,13 +209,15 @@ var checkPlayerState = function() {
       break;
     case "moneylender":
       game.displayMessage("Trash a Copper card from your hand. If you do, +3 coins.");
-      requireInteraction("Cancel", { action: "trash", coin: 0 });
+      requireInteraction("Cancel", { action: "trash", card: "" });
       break;
   }; // switch
 }; // checkPlayerState
 
 var requireInteraction = function (buttonText, details) {
   highlightCards(details);
+  if (buttonText === null)
+    return;
 
   var btn = $("button#end-turn");
   btn.attr("id", "end-interaction");
@@ -242,9 +244,11 @@ var highlightCards = function(details) {
   }; // switch
 }; // highlightCards 
 
-var endInteraction = function() {
+var endInteraction = function(noCancel) {
   afterAction();
   unHighlightCards();
+  if (noCancel)
+    return;
 
   var btn = $("button#end-interaction");
   btn.attr("id", "end-turn");
@@ -439,7 +443,7 @@ function checkFeast(card) {
 
       game.logCard(cardName, "Gain");
       game.logCard("Feast", "Trash");
-      endInteraction();
+      endInteraction(true);
     };
   };
 }; // checkFeast
