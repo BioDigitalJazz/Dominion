@@ -8,7 +8,7 @@ img {
 }
 
 img.highlight {
-  border: 2px solid red;
+  border: 2px dotted red;
 }
 
 #column-left {
