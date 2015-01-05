@@ -133,6 +133,19 @@ Player.prototype.replenishDeck = function() {
     moveDiscardToDeck(this);
 }
 
+function moveDiscardToDeck(player) {
+  // if (Number(playerID) == player.game.currentPlayerIndex) {
+  var discardP = $("img#discard-pile");
+  var moveElem = discardP.clone().appendTo('#area-discard-pile');
+  
+  setTimeout( function() {
+    moveElem.addClass('moveToDeck');
+    setTimeout( function() { moveElem.remove() }, 600);
+    discardP.attr('src', '/images/cards/back.jpg');
+  }, 600);
+  // };
+};
+
 Player.prototype.revealCards = function(num) {
   if (this.deck.length < num) {
     this.replenishDeck();
@@ -221,22 +234,9 @@ function updateCardCount(cardName) {
 
 
 function displayDiscard (player, cardName) {
-  if (Number(playerID) == player.game.currentPlayerIndex) {
-    setTimeout( function() {
-      $("img#discard-pile").attr('src', getCardPath(cardName));
-    }, 200);
-  };
-};
-
-function moveDiscardToDeck(player) {
-  if (Number(playerID) == player.game.currentPlayerIndex) {
-    var discardP = $("img#discard-pile");
-    var moveElem = discardP.clone().appendTo('#area-discard-pile');
-    
-    setTimeout( function() {
-      moveElem.addClass('moveToDeck');
-      setTimeout( function() { moveElem.remove() }, 600);
-      discardP.attr('src', '/images/cards/back.jpg');
-    }, 600);
-  };
+  // if (Number(playerID) == player.game.currentPlayerIndex) {
+  setTimeout( function() {
+    $("img#discard-pile").attr('src', getCardPath(cardName));
+  }, 200);
+  // };
 };
