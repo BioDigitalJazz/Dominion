@@ -1,16 +1,15 @@
 Issues:
 
-1) Messages for Played Action Cards  
-  Witch
-  Moat
+-- Discard pile display fix
+-- Highlighting style
 
+1) Messages for Played Action Cards  
   Adventurer (no need)
   Feast (done)
   Mine (done)
+  Moat (done)
   Moneylender (done)
-
-
-(maybe) DOM manipulation in global functions instead of Game.func()
+  Witch (done)
 
 2) Multi-Purpose Button in play-prompt area
 2.2) Highlighting cards to discard
@@ -18,7 +17,9 @@ Issues:
 3) Multiple games
 
 4) End/save game
+  * For demo, the game ends when Province cards run out
 
+** A demo branch off the (completed) master branch
 
 
 ** Phantom problem
@@ -26,6 +27,8 @@ Issues:
   "game is undefined"
 game.js, line 151
   if (parseInt(playerID) !== game.currentPlayerIndex){
+
+(maybe) DOM manipulation in global functions instead of Game.func()
 
 
 
