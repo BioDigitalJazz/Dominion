@@ -281,8 +281,9 @@ var endTurn = function() {
 
 
 Game.prototype.playerAttack = function(cardName) {
+  // this.displayMessage("");
   adviseServerAttack(cardName);
-}
+};
 
 var adviseServerAttack = function(cardName) {
   socket.emit('attack', cardName)
@@ -293,11 +294,13 @@ socket.on('you are being attacked', function(cardName) {
     switch (cardName) {
       case "witch": 
         thisPlayer.gainCard("CurseCard");
+        game.displayMessage("Opponent played a Witch card. You gain a Curse.");
         break;
-    } 
+    };
   } else {
-    console.log("Moat card for the win!!!");
-  }
+    // console.log("Moat card for the win!!!");
+    game.displayMessage("Opponent played an attack card. Your Moat card protects you.");
+  };
 });
 
 var adviseServerNextPlayer = function() {

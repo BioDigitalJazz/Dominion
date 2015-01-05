@@ -17,6 +17,8 @@ Issues:
 
 3) Multiple games
 
+4) End/save game
+
 
 
 ** Phantom problem
