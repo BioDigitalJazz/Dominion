@@ -231,13 +231,14 @@ var requireInteraction = function (buttonText, details) {
 var highlightCards = function(details) {
   var cardPath, cardSelect;
   // switch (details.action)
+  // Highlight cards that the player can gain
   for (var supplyName in game.supply) {
     var supplyCard = new cardConstructors[supplyName]();
 
     if (details.coin === undefined || details.coin >= supplyCard.cost) {
       cardPath = getCardPath(supplyName);
       cardSelect = 'img.supply-card[src="' + cardPath + '"]';
-      $(cardSelect).addClass('highlight');
+      $(cardSelect).addClass('highlight-gain');
     };
   };
 }; // highlightCards 
@@ -256,13 +257,9 @@ var endInteraction = function(noCancel) {
 }; // endInteraction
 
 var unHighlightCards = function() {
-  // for (supplyName in game.supply) {
-  //   var cardPath = getCardPath(supplyName);
-  //   var cardSelect = 'img.supply-card[src="' + cardPath + '"]';
-  //   $(cardSelect).removeClass('highlight');
-  // };
-
-  $('img.highlight').removeClass('highlight');
+  $('img.highlight-gain').removeClass('highlight-gain');
+  $('img.highlight-discard').removeClass('highlight-discard');
+  $('img.highlight-trash').removeClass('highlight-trash');
 }; // unHighlightCards 
 
 var afterAction = function () {

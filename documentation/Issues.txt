@@ -1,8 +1,5 @@
 Issues:
 
--- Discard pile display fix
--- Highlighting style
-
 Action Cards  
   Adventurer (no need)
   Cellar
