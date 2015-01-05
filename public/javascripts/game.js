@@ -395,6 +395,7 @@ function initCardDisplay() {
 
 
 function clickHandCard() {
+  var imgElement = this;
   if (playerID !== game.currentPlayerIndex)
     return;
 
@@ -403,6 +404,8 @@ function clickHandCard() {
   if (thisPlayer.state == "normal") {
     playCard(handIndex);
   } else {
+    checkCellar(imgElement);
+    checkChapel(imgElement);
     checkMine(handIndex);
     checkMoneylender(handIndex);
   };
@@ -438,12 +441,17 @@ function clickNonactionCard() {
   }; 
 }; // clickNonactionCard
 
-function checkCellar(card) {
-
+function checkCellar(imgElement) {
+  if (thisPlayer.state == "cellar") {
+    console.log($(imgElement));
+    $(imgElement).toggleClass('highlight');
+  }
 };
 
-function checkChapel(card) {
-
+function checkChapel(imgElement) {
+  if (thisPlayer.state == "chapel") {
+    imgElement.toggleClass('highlight');
+  }
 };
 
 function checkFeast(card) {

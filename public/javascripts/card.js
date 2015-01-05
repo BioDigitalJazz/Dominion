@@ -197,7 +197,7 @@ function CellarCard() {
   ActionCard.call(this, 10, 'Cellar', 2, '/images/cards/cellar.jpg');
   this.types.action = true;
   this.effects["gainAction"]  = 1;
-  this.effect["cellar"]       = true;
+  this.effects["cellar"]       = true;
   
   // Special Function
   
