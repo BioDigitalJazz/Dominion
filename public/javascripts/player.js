@@ -175,7 +175,7 @@ Player.prototype.discard = function(card, cardLocation) {
 
 function displayDiscard (player, cardName) {
   setTimeout( function() {
-    $("img#discard-pile").attr('src', getCardPath(cardName));
+    $("img#discard-pile").attr('src', getCardPath(cardName, true));
   }, 200);
 };
 
@@ -201,13 +201,13 @@ Player.prototype.shuffleDeck = function(){ //v1.0
 };
 
 // return the path to the cropped card img
-function getCardPath(cardName) {
+function getCardPath(cardName, forDiscard) {
   var cardPath = '/images/cards/' + cardName.slice(0, -4).toLowerCase();
   var fileExt = '.jpg'; 
   var cardSelect = 'img.supply-card[src="' + cardPath + fileExt + '"]';
   
-  // Kingdom cards: /images/cards/cardname_crop.jpg
-  if ($(cardSelect).length === 0) {
+  // Supply - Kingdom cards: /images/cards/cardname_crop.jpg
+  if ($(cardSelect).length === 0 && forDiscard === undefined) {
     var fileExt = '_crop.jpg';
   };
   return cardPath + fileExt;
