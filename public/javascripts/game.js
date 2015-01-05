@@ -211,6 +211,14 @@ var checkPlayerState = function() {
       game.displayMessage("Trash a Copper card from your hand. If you do, +3 coins.");
       requireInteraction("Cancel");
       break;
+    case "cellar":
+      game.displayMessage("Discard any number of cards.  +1 Card per card discarded.");
+      requireInteraction("Done");
+      break;
+    case "chapel":
+      game.displayMessage("Trash up to 4 cards from your hand.");
+      requireInteraction("Done");
+      break;
   }; // switch
 }; // checkPlayerState
 
@@ -395,6 +403,14 @@ function clickNonactionCard() {
     checkFeast(cardName);
   }; 
 }; // clickNonactionCard
+
+function checkCellar(card) {
+
+};
+
+function checkChapel(card) {
+
+};
 
 function checkFeast(card) {
   if (thisPlayer.state == "feast") {
