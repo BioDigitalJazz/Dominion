@@ -252,14 +252,24 @@ var highlightCards = function(details) {
 }; // highlightCards 
 
 var endInteraction = function(noCancel) {
-  if (thisPlayer.state == "cellar") {
-    resolveCellar();
-  }
+
+  switch (thisPlayer.state) {
+    case "cellar":
+      resolveCellar();
+      break;
+    case "chapel":
+      resolveChapel();
+      break;
+  }; // switch
+
+  console.log("this runs");
+
   afterAction();
   unHighlightCards();
-  if (noCancel)
+  if (noCancel === true) {
+    console.log("but it returns here");
     return;
-
+  }
   var btn = $("button#end-interaction");
   btn.attr("id", "end-turn");
   btn.text("End Turn");
@@ -465,7 +475,9 @@ function checkCellar(imgElement) {
 
 function checkChapel(imgElement) {
   if (thisPlayer.state == "chapel") {
-    $(imgElement).toggleClass('highlight-trash');
+    if ($(".highlight-trash").length < 4 || $(imgElement).hasClass('highlight-trash')) {
+      $(imgElement).toggleClass('highlight-trash');
+    }
   }
 };
 
@@ -531,20 +543,38 @@ function resolveCellar() {
   for (var i = 0; i < handLength; i++) {
     cardElement = $("#area-player-hand img:nth-child(" + (i + 1) + ")");
     if ($(cardElement).hasClass("highlight-discard")) {
-      // console.log(thisPlayer.hand[i]);
       thisPlayer.discardPile.push(thisPlayer.hand[i]);
       cardsToRemove.push(i);
-      $(cardElement).remove();
       newCards++;
     }
   }
-  cardsToRemove.forEach(function(cardIndex) {
-    thisPlayer.hand.splice(cardIndex, 1);
-  })
-  console.log(thisPlayer);
-  console.log(newCards);
+  for (var j = 0; j < cardsToRemove.length; j++) {
+    thisPlayer.hand.splice(cardsToRemove[j], 1);
+    for (var k = j + 1; k < cardsToRemove.length; k++) {
+      cardsToRemove[k]--;
+    }
+  }
   thisPlayer.drawCard(newCards);
 };
+
+function resolveChapel() {
+  console.log("resolving chapel");
+  var handLength = thisPlayer.hand.length;
+  var cardsToRemove = [];
+  for (var i = 0; i < handLength; i++) {
+    cardElement = $("#area-player-hand img:nth-child(" + (i + 1) + ")");
+    if ($(cardElement).hasClass("highlight-trash")) {
+      cardsToRemove.push(i);
+    }
+  }
+  for (var j = 0; j < cardsToRemove.length; j++) {
+    thisPlayer.hand.splice(cardsToRemove[j], 1);
+    for (var k = j + 1; k < cardsToRemove.length; k++) {
+      cardsToRemove[k]--;
+    }
+  }
+  thisPlayer.showHand();
+}
 
 $(function(){
   initCardDisplay();
