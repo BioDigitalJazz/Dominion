@@ -70,6 +70,8 @@ var io = require('socket.io')(server);
 
 var players = [];
 var whosReady = [];
+var playersPoints = [];
+var winners = [];
 var messages = [];
 var randomCards = ['AdventurerCard', 'FeastCard', 'MineCard', 
     'MoneylenderCard', 'MarketCard', 'MoatCard', 'VillageCard', 
@@ -117,8 +119,27 @@ io.on('connection', function (socket) {
     socket.broadcast.emit('you are being attacked', cardName);
   });
 
-  socket.on('next player', function(data) {
-    io.emit('update DB next player', data);
+  socket.on('next player', function(log) {
+    io.emit('update DB next player', log);
+  });
+
+  socket.on('end game', function(log) {
+    io.emit('end game calculate victory points', log);
+  });
+
+  socket.on('victory points', function(playerID, vicPoints) {
+    playersPoints[playerID] = vicPoints;
+    var hasPoints = playersPoints.filter(function(value) { return value !== undefined; });
+
+    if (hasPoints.length === players.length) {
+      var highestPoints = Math.max.apply(null, playersPoints);
+      var winnerIndex = playersPoints.indexOf(highestPoints);
+      while (winnerIndex != -1) {
+        winners.push(winnerIndex);
+        winnerIndex = playersPoints.indexOf(highestPoints, winnerIndex + 1);
+      };
+      io.emit('end game announce winner', playersPoints, winners);
+    };
   });
 });
 
