@@ -129,24 +129,15 @@ io.on('connection', function (socket) {
 
   socket.on('victory points', function(playerID, vicPoints) {
     playersPoints[playerID] = vicPoints;
+    var hasPoints = playersPoints.filter(function(value) { return value !== undefined; });
 
-    console.log('Victory Points');
-    console.log(playerID);
-    console.log(vicPoints);
-    console.log(players);
-    console.log(playersPoints);
-
-    if (playersPoints.length === players.length) {
+    if (hasPoints.length === players.length) {
       var highestPoints = Math.max.apply(null, playersPoints);
       var winnerIndex = playersPoints.indexOf(highestPoints);
       while (winnerIndex != -1) {
         winners.push(winnerIndex);
         winnerIndex = playersPoints.indexOf(highestPoints, winnerIndex + 1);
       };
-
-      console.log(highestPoints);
-      console.log(winners);
-
       io.emit('end game announce winner', playersPoints, winners);
     };
   });

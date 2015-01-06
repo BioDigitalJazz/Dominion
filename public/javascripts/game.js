@@ -348,7 +348,10 @@ socket.on('end game announce winner', function(playersPoints, winners) {
     return prevMsg + game.players[index] + ' - ' + points + '<br>'; 
   }, 'Victory Points:<br>');
 
-  // var msg = "Winner: " + winnerName + ", with victory points " + winner.points;
+  if (winners.length > 1)
+    msg += "It's a tie!";
+  else
+    msg += "Winner: " + game.players[winners[0]];
   game.addLog("End Game", msg);
 });
 
