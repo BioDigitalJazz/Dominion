@@ -71,6 +71,7 @@ var io = require('socket.io')(server);
 var players = [];
 var whosReady = [];
 var playersPoints = [];
+var winners = [];
 var messages = [];
 var randomCards = ['AdventurerCard', 'FeastCard', 'MineCard', 
     'MoneylenderCard', 'MarketCard', 'MoatCard', 'VillageCard', 
@@ -138,11 +139,15 @@ io.on('connection', function (socket) {
     if (playersPoints.length === players.length) {
       var highestPoints = Math.max.apply(null, playersPoints);
       var winnerIndex = playersPoints.indexOf(highestPoints);
+      while (winnerIndex != -1) {
+        winners.push(winnerIndex);
+        winnerIndex = playersPoints.indexOf(highestPoints, winnerIndex + 1);
+      };
 
       console.log(highestPoints);
-      console.log(winnerIndex);
-      
-      io.emit('end game announce winner', { id: winnerIndex, points: highestPoints });
+      console.log(winners);
+
+      io.emit('end game announce winner', playersPoints, winners);
     };
   });
 });

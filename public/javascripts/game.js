@@ -341,10 +341,14 @@ socket.on('end game calculate victory points', function(log) {
   socket.emit('victory points', playerID, thisPlayer.calcVictoryPoints());
 });
 
-socket.on('end game announce winner', function(winner) {
-  console.log(winner);
-  var winnerName = game.players[winner.id];
-  var msg = "Winner: " + winnerName + ", with victory points " + winner.points;
+socket.on('end game announce winner', function(playersPoints, winners) {
+  console.log(playersPoints);
+  console.log(winners);
+  var msg = playersPoints.reduce( function(prevMsg, points, index) {
+    return prevMsg + game.players[index] + ' - ' + points + '<br>'; 
+  }, 'Victory Points:<br>');
+
+  // var msg = "Winner: " + winnerName + ", with victory points " + winner.points;
   game.addLog("End Game", msg);
 });
 
