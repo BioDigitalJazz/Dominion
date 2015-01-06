@@ -151,6 +151,7 @@ ActionCard.prototype.play = function(player) {
                               player.discardPile.push(player.deck.pop());
                             }
                           };
+                          player.game.showMyHand();
                         };
 
   if (ef["cellar"]) { player.setState("cellar")};
