@@ -4,7 +4,7 @@ function Game(kingdomCards){
   this.round = 0;
   this.supply = {};
   
-  this.supply['ProvinceCard'] = 8;
+  this.supply['ProvinceCard'] = 2;
   this.supply['DuchyCard'] = 8;
   this.supply['EstateCard'] = 14;
   this.supply['GoldCard'] = 30;
@@ -78,45 +78,23 @@ Game.prototype.displayMessage = function(message) {
   $('#play-prompt').text(message);
 };
 
-Game.prototype.cleanUp = function() {
+Game.prototype.cleanUp = function(endGame) {
   $( ".handcard" ).remove();
   $( ".hand-to-play" ).remove();
-  $("#actionCount").text("1");
-  $("#buyCount").text("1");
-  $("#coinCount").text("0");
-};
 
-Game.prototype.nextPlayer = function(){
-  if (this.currentPlayerIndex == Number(playerID)) {
-    this.cleanUp();
-    thisPlayer.cleanUpPhase();
-    // setTimeout(function() { showMyHand(); }, 1200);
-  };
-
-  if (this.currentPlayerIndex == this.players.length - 1) {
-    this.currentPlayerIndex = 0;
-    this.round++;
+  if (endGame) {
+    $("#turn-stats").empty();
   } else {
-    this.currentPlayerIndex++;
-  };
-
-  if(this.currentPlayerIndex == Number(playerID)) {
-    this.displayMessage("It is your turn. Play an action, buy a card, or end the turn.");
-    game.logTitle = thisPlayer.name ;
-  } else {
-    this.displayMessage("Not your turn, please wait.");
+    $("#actionCount").text("1");
+    $("#buyCount").text("1");
+    $("#coinCount").text("0");
   };
 };
 
-Game.prototype.gameEnd = function(){
-  return (supply['province'] == 0);
-};
 
 // Game.prototype.triggerShowHand = function() {
 //   showMyHand();
 // };
-
-
 
 // Game.prototype.makePlayerReveal(targetPlayer, numOfCards) {
 
@@ -305,10 +283,70 @@ socket.on('update DB gain', function(supplyName) {
 
 var endTurn = function() {
   if (playerID === game.currentPlayerIndex) {
+    if (game.checkEndGame())
+      return;
     adviseServerNextPlayer();
     game.logContent = "";
   };
 }; // endTurn
+
+var adviseServerNextPlayer = function() {
+  socket.emit('next player', { logTitle: game.logTitle, logContent: game.logContent });
+};
+
+socket.on('update DB next player', function(log) {
+  game.addLog(log.logTitle, log.logContent);
+  game.nextPlayer();
+});
+
+Game.prototype.nextPlayer = function(){
+  if (this.currentPlayerIndex == Number(playerID)) {
+    this.cleanUp();
+    thisPlayer.cleanUpPhase();
+    // setTimeout(function() { showMyHand(); }, 1200);
+  };
+
+  if (this.currentPlayerIndex == this.players.length - 1) {
+    this.currentPlayerIndex = 0;
+    this.round++;
+  } else {
+    this.currentPlayerIndex++;
+  };
+
+  if(this.currentPlayerIndex == Number(playerID)) {
+    this.displayMessage("It is your turn. Play an action, buy a card, or end the turn.");
+    game.logTitle = thisPlayer.name ;
+  } else {
+    this.displayMessage("Not your turn, please wait.");
+  };
+}; // Game.prototype.nextPlayer
+
+Game.prototype.checkEndGame = function(endNow){
+  if (this.supply['ProvinceCard'] === 0) {
+    adviseServerEndGame();
+    return true;
+  } else {
+    return false;
+  };
+};
+
+var adviseServerEndGame = function() {
+  socket.emit('end game', { logTitle: game.logTitle, logContent: game.logContent });
+};
+
+socket.on('end game calculate victory points', function(log) {
+  game.addLog(log.logTitle, log.logContent);
+  game.cleanUp(true);
+  thisPlayer.cleanUpPhase(true);
+  socket.emit('victory points', playerID, thisPlayer.calcVictoryPoints());
+});
+
+socket.on('end game announce winner', function(winner) {
+  console.log(winner);
+  var winnerName = game.players[winner.id];
+  var msg = "Winner: " + winnerName + ", with victory points " + winner.points;
+  game.addLog("End Game", msg);
+});
 
 
 Game.prototype.otherPlayerAction = function(cardName) {
@@ -351,14 +389,6 @@ socket.on('you are being attacked', function(cardName) {
   };
 });
 
-var adviseServerNextPlayer = function() {
-  socket.emit('next player', { logTitle: game.logTitle, logContent: game.logContent });
-};
-
-socket.on('update DB next player', function(data) {
-  game.addLog(data.logTitle, data.logContent);
-  game.nextPlayer();
-});
 
 // capitalize card name
 function capStr(str) {

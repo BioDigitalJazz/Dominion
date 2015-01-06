@@ -53,7 +53,7 @@ Player.prototype.startTurn = function() {
   }
 }
 
-Player.prototype.cleanUpPhase = function(waitTime) {
+Player.prototype.cleanUpPhase = function(endGame) {
   var theDiscardPile = this.discardPile;
   var theHand = this.hand;
   var thePlayArea = this.playArea;
@@ -68,8 +68,24 @@ Player.prototype.cleanUpPhase = function(waitTime) {
     theDiscardPile.push(theHand.pop());
   }
   this.hand = [];
-  this.drawCard(5, 800);
-}
+
+  if (endGame)
+    this.replenishDeck();
+  else
+    this.drawCard(5, 800);
+}; // Player.prototype.cleanUpPhase
+
+Player.prototype.calcVictoryPoints = function() {
+  var vicPoints = this.deck.reduce( function(total, card) {
+    if (card.types.Victory)
+      return total + card.getVictoryPoints();
+    else
+      return total;
+  }, 0);
+
+  return vicPoints;
+};
+
 
 Player.prototype.gainCard = function (cardName) {
   this.game.supply[cardName]--;
@@ -132,10 +148,10 @@ Player.prototype.replenishDeck = function() {
   };
   this.shuffleDeck();
   if (this.game.round > 0)
-    moveDiscardToDeck(this);
+    this.moveDiscardToDeck();
 };
 
-function moveDiscardToDeck(player) {
+Player.prototype.moveDiscardToDeck = function() {
   var discardP = $("img#discard-pile");
   var moveElem = discardP.clone().appendTo('#area-discard-pile');
   
@@ -192,7 +208,7 @@ Player.prototype.displayTrash = function(cardName, cardArea) {
   setTimeout(function() { cardToTrash.remove(); }, 400);
 };
 
-Player.prototype.shuffleDeck = function(){ //v1.0
+Player.prototype.shuffleDeck = function() { //v1.0
   var deck = this.deck;
   for(var j, x, i = deck.length; i; j = 0) {
     j= Math.floor(Math.random() * i);
@@ -201,6 +217,7 @@ Player.prototype.shuffleDeck = function(){ //v1.0
     deck[j] = x;
   }
 };
+
 
 // return the path to the cropped card img
 function getCardPath(cardName, noCrop) {
