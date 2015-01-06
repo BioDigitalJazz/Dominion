@@ -405,6 +405,7 @@ var adviseServerAttack = function(cardName) {
 
 socket.on('you are being attacked', function(cardName) {
   if (!thisPlayer.handContains("Moat")) {
+    
     switch (cardName) {
       case "witch":
         adviseServerGain("CurseCard"); 
