@@ -142,13 +142,25 @@ ActionCard.prototype.play = function(player) {
 
   if (ef["adventurer"]) { var treasures = 0;
                           while (treasures < 2) {
-                            if (player.deck.length == 0) {
+                            if (player.deck.length === 0) {
                               player.replenishDeck();
-                            } else if (player.deck[player.deck.length -1].types["Treasure"]) {
-                              player.drawCard(1);
+                            } else if (player.deck[player.deck.length - 1].types["Treasure"]) {
+                              console.log('Adventurer now: ');
+                              // var len = player.deck.length;
+                              // console.log(len);
+                              // console.log(player.deck);
+                              // console.log(player.deck[len - 1]);
+                              // len = player.deck.length;
+                              // console.log("Again:");
+                              // console.log(len);
+                              if (treasures === 0)
+                                player.drawCard(1, 0, true);
+                              else
+                                player.drawCard(1, 1200);
                               treasures++;
                             } else {
                               player.discardPile.push(player.deck.pop());
+                              $('img#deck').prev().text(player.deck.length);
                             }
                           };
                         };
@@ -166,7 +178,7 @@ ActionCard.prototype.play = function(player) {
 
 
 function AdventurerCard() {
-  ActionCard.call(this, 8, 'Adventurer', 6, '/images/cards/adventurer.jpg');
+  ActionCard.call(this, 8, 'Adventurer', 2, '/images/cards/adventurer.jpg');
   this.types.action = true;
   this.effects["adventurer"] = true;
 

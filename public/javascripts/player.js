@@ -83,21 +83,26 @@ Player.prototype.gainCard = function (cardName) {
     displayDiscard(this, cardName);
 };
 
-Player.prototype.drawCard = function(num, waitTime) {
+Player.prototype.drawCard = function(num, waitTime, dontShowHand) {
   var theHand = this.hand;
   var theDiscardPile = this.discardPile;
   var theDeck = this.deck;
 
   for (var i = 1; i <= num; i++) {
-    if (theDeck.length == 0) {
+    if (theDeck.length === 0) {
       this.replenishDeck();
       waitTime = 1200;
     };
     theHand.push(theDeck.pop());
   };
-  
+
+  console.log("drawCard");  
+  console.log(theDeck.length);
+  console.log(theHand.length);
+
   $('img#deck').prev().text(theDeck.length);
-  this.showHand(waitTime);
+  if (dontShowHand === undefined)
+    this.showHand(waitTime);
 };
 
 Player.prototype.showHand = function(waitTime) {
@@ -105,6 +110,9 @@ Player.prototype.showHand = function(waitTime) {
   $(".handcard").hide(wait);
   var thePlayer = this;
   var theHand = this.hand;
+
+  console.log("showHand");
+  console.log(theHand.length);
 
   setTimeout(function() {
     $(".handcard").remove();
@@ -119,6 +127,9 @@ Player.prototype.addToHand = function (index) {
   var imgId = "handcard" + index;
   var imgClass = "handcard";
 
+  console.log("addToHand");
+  console.log(index);
+
   setTimeout( function() {
     handArea.append('<img src= \"' + imgSrc + '\" class=\"' + imgClass + '\" id=\"' + imgId + '\">');
   }, index * 100);
@@ -132,7 +143,7 @@ Player.prototype.replenishDeck = function() {
   this.shuffleDeck();
   if (this.game.round > 0)
     moveDiscardToDeck(this);
-}
+};
 
 function moveDiscardToDeck(player) {
   var discardP = $("img#discard-pile");
