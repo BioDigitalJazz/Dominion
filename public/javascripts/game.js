@@ -322,7 +322,7 @@ var adviseServerOtherPlayerAction = function(cardName) {
 socket.on('the other player makes you act', function(cardName) {
   switch (cardName) {
     case "councilroom":
-      thisPlayer.drawCard(1);
+      thisPlayer.drawCard(1, 600);
       game.displayMessage("Opponent played a CouncilRoom card. You draw a card.");
       break;
   }; // switch
@@ -450,6 +450,7 @@ function checkFeast(card) {
     var cardToGain = new cardConstructors[supplyName]();
 
     if (cardToGain.cost <= 5 && game.supply[supplyName] > 0) {
+      adviseServerGain(supplyName);
       thisPlayer.gainCard(supplyName);
       thisPlayer.playArea.pop();
       thisPlayer.displayTrash("FeastCard", "#play-area");

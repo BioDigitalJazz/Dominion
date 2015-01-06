@@ -74,6 +74,7 @@ Player.prototype.cleanUpPhase = function(waitTime) {
 Player.prototype.gainCard = function (cardName) {
   this.game.supply[cardName]--;
   updateCardCount(cardName);
+  console.log(cardName);
 
   var newCard = new cardConstructors[cardName]();
   this.discardPile.push(newCard);
