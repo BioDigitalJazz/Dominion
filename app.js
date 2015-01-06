@@ -73,7 +73,7 @@ var whosReady = [];
 var messages = [];
 var randomCards = ['AdventurerCard', 'FeastCard', 'MineCard', 
     'MoneylenderCard', 'MarketCard', 'MoatCard', 'VillageCard', 
-    'WitchCard', 'ThroneroomCard', 'WorkshopCard'];
+    'WitchCard', 'ThroneroomCard', 'CouncilroomCard'];
 
 io.on('connection', function (socket) {
   // socket.emit('You are connected!');
@@ -107,6 +107,10 @@ io.on('connection', function (socket) {
 
   socket.on('player gain', function(supplyName) {
     socket.broadcast.emit('update DB gain', supplyName);
+  });
+
+  socket.on('make the other player act', function(cardName) {
+    socket.broadcast.emit('the other player makes you act', cardName);
   });
 
   socket.on('attack', function(cardName) {

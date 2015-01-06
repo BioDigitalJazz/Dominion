@@ -311,6 +311,23 @@ var endTurn = function() {
 }; // endTurn
 
 
+Game.prototype.otherPlayerAction = function(cardName) {
+  adviseServerOtherPlayerAction(cardName);
+};
+
+var adviseServerOtherPlayerAction = function(cardName) {
+  socket.emit('make the other player act', cardName);
+};
+
+socket.on('the other player makes you act', function(cardName) {
+  switch (cardName) {
+    case "councilroom":
+      thisPlayer.drawCard(1);
+      game.displayMessage("Opponent played a CouncilRoom card. You draw a card.");
+      break;
+  }; // switch
+});
+
 Game.prototype.playerAttack = function(cardName) {
   // this.displayMessage("");
   adviseServerAttack(cardName);
@@ -330,7 +347,6 @@ socket.on('you are being attacked', function(cardName) {
         break;
     };
   } else {
-    // console.log("Moat card for the win!!!");
     game.displayMessage("Opponent played an attack card. Your Moat card protects you.");
   };
 });

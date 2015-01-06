@@ -153,6 +153,8 @@ ActionCard.prototype.play = function(player) {
                           };
                         };
 
+  if (ef["councilroom"]) { player.game.otherPlayerAction("councilroom"); };
+
   if (ef["feast"]) { player.setState("feast"); };
 
   if (ef["mine"]) { player.setState("mine"); };
@@ -232,6 +234,7 @@ function CouncilroomCard() {
   this.types.action = true;
   this.effects["drawCard"]    = 4;
   this.effects["gainBuy"]     = 1;
+  this.effects["councilroom"] = true;
 
   // Special Function
   
