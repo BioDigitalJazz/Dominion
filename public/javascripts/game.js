@@ -189,6 +189,14 @@ var checkPlayerState = function() {
       game.displayMessage("Trash a Copper card from your hand. If you do, +3 coins.");
       requireInteraction("Cancel");
       break;
+    case "cellar":
+      game.displayMessage("Discard any number of cards.  +1 Card per card discarded.");
+      requireInteraction("Done");
+      break;
+    case "chapel":
+      game.displayMessage("Trash up to 4 cards from your hand.");
+      requireInteraction("Done");
+      break;
   }; // switch
 }; // checkPlayerState
 
@@ -222,11 +230,24 @@ var highlightCards = function(details) {
 }; // highlightCards 
 
 var endInteraction = function(noCancel) {
+
+  switch (thisPlayer.state) {
+    case "cellar":
+      resolveCellar();
+      break;
+    case "chapel":
+      resolveChapel();
+      break;
+  }; // switch
+
+  console.log("this runs");
+
   afterAction();
   unHighlightCards();
-  if (noCancel)
+  if (noCancel === true) {
+    console.log("but it returns here");
     return;
-
+  }
   var btn = $("button#end-interaction");
   btn.attr("id", "end-turn");
   btn.text("End Turn");
@@ -437,6 +458,7 @@ function initCardDisplay() {
 
 
 function clickHandCard() {
+  var imgElement = this;
   if (playerID !== game.currentPlayerIndex)
     return;
 
@@ -445,6 +467,8 @@ function clickHandCard() {
   if (thisPlayer.state == "normal") {
     playCard(handIndex);
   } else {
+    checkCellar(imgElement);
+    checkChapel(imgElement);
     checkMine(handIndex);
     checkMoneylender(handIndex);
   };
@@ -479,6 +503,20 @@ function clickNonactionCard() {
     checkFeast(cardName);
   }; 
 }; // clickNonactionCard
+
+function checkCellar(imgElement) {
+  if (thisPlayer.state == "cellar") {
+    $(imgElement).toggleClass('highlight-discard');
+  }
+};
+
+function checkChapel(imgElement) {
+  if (thisPlayer.state == "chapel") {
+    if ($(".highlight-trash").length < 4 || $(imgElement).hasClass('highlight-trash')) {
+      $(imgElement).toggleClass('highlight-trash');
+    }
+  }
+};
 
 function checkFeast(card) {
   if (thisPlayer.state == "feast") {
@@ -535,6 +573,45 @@ function checkMoneylender(handIndex) {
   };
 }; // checkMoneylender
 
+function resolveCellar() {
+  var handLength = thisPlayer.hand.length;
+  var newCards = 0;
+  var cardsToRemove = [];
+  for (var i = 0; i < handLength; i++) {
+    cardElement = $("#area-player-hand img:nth-child(" + (i + 1) + ")");
+    if ($(cardElement).hasClass("highlight-discard")) {
+      thisPlayer.discardPile.push(thisPlayer.hand[i]);
+      cardsToRemove.push(i);
+      newCards++;
+    }
+  }
+  for (var j = 0; j < cardsToRemove.length; j++) {
+    thisPlayer.hand.splice(cardsToRemove[j], 1);
+    for (var k = j + 1; k < cardsToRemove.length; k++) {
+      cardsToRemove[k]--;
+    }
+  }
+  thisPlayer.drawCard(newCards);
+};
+
+function resolveChapel() {
+  console.log("resolving chapel");
+  var handLength = thisPlayer.hand.length;
+  var cardsToRemove = [];
+  for (var i = 0; i < handLength; i++) {
+    cardElement = $("#area-player-hand img:nth-child(" + (i + 1) + ")");
+    if ($(cardElement).hasClass("highlight-trash")) {
+      cardsToRemove.push(i);
+    }
+  }
+  for (var j = 0; j < cardsToRemove.length; j++) {
+    thisPlayer.hand.splice(cardsToRemove[j], 1);
+    for (var k = j + 1; k < cardsToRemove.length; k++) {
+      cardsToRemove[k]--;
+    }
+  }
+  thisPlayer.showHand();
+}
 
 $(function(){
   initCardDisplay();
