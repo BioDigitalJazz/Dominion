@@ -73,9 +73,9 @@ var whosReady = [];
 var playersPoints = [];
 var winners = [];
 var messages = [];
-var randomCards = ['AdventurerCard', 'FeastCard', 'MineCard', 
-    'MoneylenderCard', 'MarketCard', 'MoatCard', 'VillageCard', 
-    'WitchCard', 'ThroneroomCard', 'CouncilroomCard'];
+
+var randomCards = ['MoatCard', 'CellarCard', 'ChapelCard', 'FeastCard', 'MoneylenderCard', 
+                   'MineCard', 'MarketCard', 'WitchCard',  'CouncilroomCard', 'AdventurerCard'];
 
 io.on('connection', function (socket) {
   // socket.emit('You are connected!');

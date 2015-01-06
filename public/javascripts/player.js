@@ -90,7 +90,6 @@ Player.prototype.calcVictoryPoints = function() {
 Player.prototype.gainCard = function (cardName) {
   this.game.supply[cardName]--;
   updateCardCount(cardName);
-  console.log(cardName);
 
   var newCard = new cardConstructors[cardName]();
   this.discardPile.push(newCard);
@@ -103,6 +102,7 @@ Player.prototype.drawCard = function(num, waitTime, dontShowHand) {
   var theHand = this.hand;
   var theDiscardPile = this.discardPile;
   var theDeck = this.deck;
+  console.log("Drawing cards: " + num);
 
   for (var i = 1; i <= num; i++) {
     if (theDeck.length === 0) {

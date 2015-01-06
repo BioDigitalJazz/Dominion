@@ -144,6 +144,10 @@ ActionCard.prototype.play = function(player) {
 
   if (ef["councilroom"]) { player.game.otherPlayerAction("councilroom"); };
 
+  if (ef["cellar"]) { player.setState("cellar")};
+
+  if (ef["chapel"]) { player.setState("chapel")};
+
   if (ef["feast"]) { player.setState("feast"); };
 
   if (ef["mine"]) { player.setState("mine"); };
@@ -199,6 +203,7 @@ function CellarCard() {
   ActionCard.call(this, 10, 'Cellar', 2, '/images/cards/cellar.jpg');
   this.types.action = true;
   this.effects["gainAction"]  = 1;
+  this.effects["cellar"]       = true;
   
   // Special Function
   
@@ -224,6 +229,7 @@ ChancellorCard.prototype.constructor = ChancellorCard;
 function ChapelCard() {
   ActionCard.call(this, 12, 'Chapel', 2, '/images/cards/chapel.jpg');
   this.types.action = true;
+  this.effects["chapel"] = true;
   
   // Special Function
   
