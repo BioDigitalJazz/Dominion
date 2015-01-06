@@ -96,10 +96,6 @@ Player.prototype.drawCard = function(num, waitTime, dontShowHand) {
     theHand.push(theDeck.pop());
   };
 
-  console.log("drawCard");  
-  console.log(theDeck.length);
-  console.log(theHand.length);
-
   $('img#deck').prev().text(theDeck.length);
   if (dontShowHand === undefined)
     this.showHand(waitTime);
@@ -110,9 +106,6 @@ Player.prototype.showHand = function(waitTime) {
   $(".handcard").hide(wait);
   var thePlayer = this;
   var theHand = this.hand;
-
-  console.log("showHand");
-  console.log(theHand.length);
 
   setTimeout(function() {
     $(".handcard").remove();
@@ -126,9 +119,6 @@ Player.prototype.addToHand = function (index) {
   var imgSrc = "/images/cards/" + this.hand[index].name.toLowerCase() + ".jpg";
   var imgId = "handcard" + index;
   var imgClass = "handcard";
-
-  console.log("addToHand");
-  console.log(index);
 
   setTimeout( function() {
     handArea.append('<img src= \"' + imgSrc + '\" class=\"' + imgClass + '\" id=\"' + imgId + '\">');
