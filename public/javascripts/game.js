@@ -4,7 +4,7 @@ function Game(kingdomCards){
   this.round = 0;
   this.supply = {};
   
-  this.supply['ProvinceCard'] = 2;
+  this.supply['ProvinceCard'] = 8;
   this.supply['DuchyCard'] = 8;
   this.supply['EstateCard'] = 14;
   this.supply['GoldCard'] = 30;
@@ -400,21 +400,35 @@ Game.prototype.playerAttack = function(cardName) {
 };
 
 var adviseServerAttack = function(cardName) {
-  socket.emit('attack', cardName)
+  socket.emit('attack', cardName, playerID)
 };
 
-socket.on('you are being attacked', function(cardName) {
+socket.on('you are being attacked', function(cardName, attackerID) {
+  var attacker = game.players[attackerID];
+
   if (!thisPlayer.handContains("Moat")) {
     switch (cardName) {
       case "witch":
         adviseServerGain("CurseCard"); 
         thisPlayer.gainCard("CurseCard");
-        game.displayMessage("Opponent played a Witch card. You gain a Curse.");
+        game.displayMessage(attacker + " played a Witch card. You gain a Curse.");
         break;
     };
   } else {
-    game.logCard("Moat", "Reaction");
-    game.displayMessage("Opponent played an attack card. Your Moat card protects you.");
+    // game.logCard("Moat", "Reaction");
+    adviseServerMoat(attackerID);
+    game.displayMessage(attacker + " played an attack card. Your Moat card protects you.");
+  };
+});
+
+var adviseServerMoat = function(attackerID) {
+  socket.emit('moat', playerID, attackerID);
+};
+
+socket.on('moat negates attack', function(defenderID, attackerID) {
+  if (playerID === attackerID) {
+    var defender = game.players[defenderID];
+    game.logContent += ("<br>" + defender + " negated attack with a Moat<br>");
   };
 });
 
