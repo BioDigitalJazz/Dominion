@@ -413,6 +413,7 @@ socket.on('you are being attacked', function(cardName) {
         break;
     };
   } else {
+    game.logCard("Moat", "Reaction");
     game.displayMessage("Opponent played an attack card. Your Moat card protects you.");
   };
 });
@@ -603,7 +604,12 @@ function resolveChapel() {
       cardsToRemove.push(i);
     }
   }
+
   for (var j = 0; j < cardsToRemove.length; j++) {
+    console.log(cardsToRemove[j]);
+    console.log(thisPlayer.hand[cardsToRemove[j]]);
+    var trashCardName = thisPlayer.hand[cardsToRemove[j]].name;
+    game.logCard(trashCardName, "Trash");
     thisPlayer.hand.splice(cardsToRemove[j], 1);
     for (var k = j + 1; k < cardsToRemove.length; k++) {
       cardsToRemove[k]--;
