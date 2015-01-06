@@ -119,7 +119,12 @@ io.on('connection', function (socket) {
     socket.broadcast.emit('you are being attacked', cardName, attackerID);
   });
 
-  socket.on('moat', function(defenderID, attackerID) {
+
+  socket.on('defender gains curse', function(defenderID, attackerID) {
+    socket.broadcast.emit('defender gains curse', defenderID, attackerID);
+  });
+
+  socket.on('defender has moat', function(defenderID, attackerID) {
     socket.broadcast.emit('moat negates attack', defenderID, attackerID);
   });
 

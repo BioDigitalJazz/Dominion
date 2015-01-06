@@ -409,20 +409,31 @@ socket.on('you are being attacked', function(cardName, attackerID) {
   if (!thisPlayer.handContains("Moat")) {
     switch (cardName) {
       case "witch":
-        adviseServerGain("CurseCard"); 
+        adviseServerGainCurse(attackerID); 
         thisPlayer.gainCard("CurseCard");
         game.displayMessage(attacker + " played a Witch card. You gain a Curse.");
         break;
     };
   } else {
-    // game.logCard("Moat", "Reaction");
     adviseServerMoat(attackerID);
     game.displayMessage(attacker + " played an attack card. Your Moat card protects you.");
   };
 });
 
+var adviseServerGainCurse = function(attackerID) {
+  socket.emit('defender gains curse', playerID, attackerID);
+};
+
+socket.on('defender gains curse', function(defenderID, attackerID) {
+  if (playerID === attackerID) {
+    var defender = game.players[defenderID];
+    game.logContent += ("<br>" + defender + " gained a Curse<br>");
+  };
+});
+
+
 var adviseServerMoat = function(attackerID) {
-  socket.emit('moat', playerID, attackerID);
+  socket.emit('defender has moat', playerID, attackerID);
 };
 
 socket.on('moat negates attack', function(defenderID, attackerID) {
