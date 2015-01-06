@@ -74,6 +74,7 @@ Player.prototype.cleanUpPhase = function(waitTime) {
 Player.prototype.gainCard = function (cardName) {
   this.game.supply[cardName]--;
   updateCardCount(cardName);
+  console.log(cardName);
 
   var newCard = new cardConstructors[cardName]();
   this.discardPile.push(newCard);
@@ -82,21 +83,22 @@ Player.prototype.gainCard = function (cardName) {
     displayDiscard(this, cardName);
 };
 
-Player.prototype.drawCard = function(num, waitTime) {
+Player.prototype.drawCard = function(num, waitTime, dontShowHand) {
   var theHand = this.hand;
   var theDiscardPile = this.discardPile;
   var theDeck = this.deck;
 
   for (var i = 1; i <= num; i++) {
-    if (theDeck.length == 0) {
+    if (theDeck.length === 0) {
       this.replenishDeck();
       waitTime = 1200;
     };
     theHand.push(theDeck.pop());
   };
-  
+
   $('img#deck').prev().text(theDeck.length);
-  this.showHand(waitTime);
+  if (dontShowHand === undefined)
+    this.showHand(waitTime);
 };
 
 Player.prototype.showHand = function(waitTime) {
@@ -131,7 +133,7 @@ Player.prototype.replenishDeck = function() {
   this.shuffleDeck();
   if (this.game.round > 0)
     moveDiscardToDeck(this);
-}
+};
 
 function moveDiscardToDeck(player) {
   var discardP = $("img#discard-pile");

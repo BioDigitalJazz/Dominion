@@ -140,18 +140,9 @@ ActionCard.prototype.play = function(player) {
   if (ef["discard"])    { player.discard(ef["discard"]); };
   if (ef["trash"])      { player.trash(ef["trash"]); };
 
-  if (ef["adventurer"]) { var treasures = 0;
-                          while (treasures < 2) {
-                            if (player.deck.length == 0) {
-                              player.replenishDeck();
-                            } else if (player.deck[player.deck.length -1].types["Treasure"]) {
-                              player.drawCard(1);
-                              treasures++;
-                            } else {
-                              player.discardPile.push(player.deck.pop());
-                            }
-                          };
-                        };
+  if (ef["adventurer"]) { this.specialAction(player); };
+
+  if (ef["councilroom"]) { player.game.otherPlayerAction("councilroom"); };
 
   if (ef["feast"]) { player.setState("feast"); };
 
@@ -167,13 +158,28 @@ function AdventurerCard() {
   ActionCard.call(this, 8, 'Adventurer', 6, '/images/cards/adventurer.jpg');
   this.types.action = true;
   this.effects["adventurer"] = true;
-
-  // Special Function
-  
 };
 
 AdventurerCard.prototype = Object.create(ActionCard.prototype);
 AdventurerCard.prototype.constructor = AdventurerCard;
+
+AdventurerCard.prototype.specialAction = function(player) {
+  var treasures = 0;
+  while (treasures < 2) {
+    if (player.deck.length === 0) {
+      player.replenishDeck();
+    } else if (player.deck[player.deck.length - 1].types["Treasure"]) {
+      if (treasures === 0)
+        player.drawCard(1, 0, true);
+      else
+        player.drawCard(1, 1200);
+      treasures++;
+    } else {
+      player.discardPile.push(player.deck.pop());
+      $('img#deck').prev().text(player.deck.length);
+    };
+  };
+}; // AdventurerCard.prototype.specialAction
 
 
 function BureaucratCard() {
@@ -232,6 +238,7 @@ function CouncilroomCard() {
   this.types.action = true;
   this.effects["drawCard"]    = 4;
   this.effects["gainBuy"]     = 1;
+  this.effects["councilroom"] = true;
 
   // Special Function
   
