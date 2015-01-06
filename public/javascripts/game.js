@@ -240,14 +240,11 @@ var endInteraction = function(noCancel) {
       break;
   }; // switch
 
-  console.log("this runs");
-
   afterAction();
   unHighlightCards();
-  if (noCancel === true) {
-    console.log("but it returns here");
+  if (noCancel === true)
     return;
-  }
+
   var btn = $("button#end-interaction");
   btn.attr("id", "end-turn");
   btn.text("End Turn");
@@ -363,16 +360,19 @@ socket.on('end game calculate victory points', function(log) {
 });
 
 socket.on('end game announce winner', function(playersPoints, winners) {
-  console.log(playersPoints);
-  console.log(winners);
   var msg = playersPoints.reduce( function(prevMsg, points, index) {
     return prevMsg + game.players[index] + ' - ' + points + '<br>'; 
   }, 'Victory Points:<br>');
 
-  if (winners.length > 1)
-    msg += "It's a tie!";
-  else
-    msg += "Winner: " + game.players[winners[0]];
+  if (winners.length > 1) {
+    game.displayMessage("The game ends. It's a tie!");
+    msg += "It's a tie.";
+  } else {
+    var winnerName = game.players[winners[0]];
+    game.displayMessage("The game ends. Winner: " + winnerName);
+    msg += "Winner: " + winnerName;
+  };
+  $('#area-play-center').find('button').remove();
   game.addLog("End Game", msg);
 });
 
@@ -595,7 +595,6 @@ function resolveCellar() {
 };
 
 function resolveChapel() {
-  console.log("resolving chapel");
   var handLength = thisPlayer.hand.length;
   var cardsToRemove = [];
   for (var i = 0; i < handLength; i++) {
