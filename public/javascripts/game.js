@@ -383,7 +383,7 @@ var buyCard = function(card) {
       endTurn();
     } else {
       $("#buyCount").text(Number($("#buyCount").text()) - 1);
-      game.displayMessage("still more buys:" + $("#buyCount").text());
+      game.displayMessage("still more buys: " + $("#buyCount").text());
     };
   };
 }; // buyCard
