@@ -425,12 +425,14 @@ var adviseServerGainCurse = function(attackerID) {
 };
 
 socket.on('defender gains curse', function(defenderID, attackerID) {
+  game.supply["CurseCard"]--;
+  updateCardCount("CurseCard");
+
   if (playerID === attackerID) {
     var defender = game.players[defenderID];
     game.logContent += ("<br>" + defender + " gained a Curse<br>");
   };
 });
-
 
 var adviseServerMoat = function(attackerID) {
   socket.emit('defender has moat', playerID, attackerID);
