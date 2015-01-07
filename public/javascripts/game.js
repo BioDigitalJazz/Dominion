@@ -4,7 +4,7 @@ function Game(kingdomCards){
   this.round = 0;
   this.supply = {};
   
-  this.supply['ProvinceCard'] = 2;
+  this.supply['ProvinceCard'] = 8;
   this.supply['DuchyCard'] = 8;
   this.supply['EstateCard'] = 14;
   this.supply['GoldCard'] = 30;
@@ -306,14 +306,11 @@ var endInteraction = function(noCancel) {
       break;
   }; // switch
 
-  console.log("this runs");
-
   afterAction();
   unHighlightCards();
-  if (noCancel === true) {
-    console.log("but it returns here");
+  if (noCancel === true)
     return;
-  }
+
   var btn = $("button#end-interaction");
   btn.attr("id", "end-turn");
   btn.text("End Turn");
@@ -429,16 +426,19 @@ socket.on('end game calculate victory points', function(log) {
 });
 
 socket.on('end game announce winner', function(playersPoints, winners) {
-  console.log(playersPoints);
-  console.log(winners);
   var msg = playersPoints.reduce( function(prevMsg, points, index) {
     return prevMsg + game.players[index] + ' - ' + points + '<br>'; 
   }, 'Victory Points:<br>');
 
-  if (winners.length > 1)
-    msg += "It's a tie!";
-  else
-    msg += "Winner: " + game.players[winners[0]];
+  if (winners.length > 1) {
+    game.displayMessage("The game ends. It's a tie!");
+    msg += "It's a tie.";
+  } else {
+    var winnerName = game.players[winners[0]];
+    game.displayMessage("The game ends. Winner: " + winnerName);
+    msg += "Winner: " + winnerName;
+  };
+  $('#area-play-center').find('button').remove();
   game.addLog("End Game", msg);
 });
 
@@ -466,21 +466,49 @@ Game.prototype.playerAttack = function(cardName) {
 };
 
 var adviseServerAttack = function(cardName) {
-  socket.emit('attack', cardName)
+  socket.emit('attack', cardName, playerID)
 };
 
-socket.on('you are being attacked', function(cardName) {
+socket.on('you are being attacked', function(cardName, attackerID) {
+  var attacker = game.players[attackerID];
+
   if (!thisPlayer.handContains("Moat")) {
     
     switch (cardName) {
       case "witch":
-        adviseServerGain("CurseCard"); 
+        adviseServerGainCurse(attackerID); 
         thisPlayer.gainCard("CurseCard");
-        game.displayMessage("Opponent played a Witch card. You gain a Curse.");
+        game.displayMessage(attacker + " played a Witch card. You gain a Curse.");
         break;
     };
   } else {
-    game.displayMessage("Opponent played an attack card. Your Moat card protects you.");
+    adviseServerMoat(attackerID);
+    game.displayMessage(attacker + " played an attack card. Your Moat card protects you.");
+  };
+});
+
+var adviseServerGainCurse = function(attackerID) {
+  socket.emit('defender gains curse', playerID, attackerID);
+};
+
+socket.on('defender gains curse', function(defenderID, attackerID) {
+  game.supply["CurseCard"]--;
+  updateCardCount("CurseCard");
+
+  if (playerID === attackerID) {
+    var defender = game.players[defenderID];
+    game.logContent += ("<br>" + defender + " gained a Curse<br>");
+  };
+});
+
+var adviseServerMoat = function(attackerID) {
+  socket.emit('defender has moat', playerID, attackerID);
+};
+
+socket.on('moat negates attack', function(defenderID, attackerID) {
+  if (playerID === attackerID) {
+    var defender = game.players[defenderID];
+    game.logContent += ("<br>" + defender + " negated attack with a Moat<br>");
   };
 });
 
@@ -662,7 +690,6 @@ function resolveCellar() {
 };
 
 function resolveChapel() {
-  console.log("resolving chapel");
   var handLength = thisPlayer.hand.length;
   var cardsToRemove = [];
   for (var i = 0; i < handLength; i++) {
@@ -671,7 +698,12 @@ function resolveChapel() {
       cardsToRemove.push(i);
     }
   }
+
   for (var j = 0; j < cardsToRemove.length; j++) {
+    console.log(cardsToRemove[j]);
+    console.log(thisPlayer.hand[cardsToRemove[j]]);
+    var trashCardName = thisPlayer.hand[cardsToRemove[j]].name;
+    game.logCard(trashCardName, "Trash");
     thisPlayer.hand.splice(cardsToRemove[j], 1);
     for (var k = j + 1; k < cardsToRemove.length; k++) {
       cardsToRemove[k]--;

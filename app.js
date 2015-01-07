@@ -115,8 +115,17 @@ io.on('connection', function (socket) {
     socket.broadcast.emit('the other player makes you act', cardName);
   });
 
-  socket.on('attack', function(cardName) {
-    socket.broadcast.emit('you are being attacked', cardName);
+  socket.on('attack', function(cardName, attackerID) {
+    socket.broadcast.emit('you are being attacked', cardName, attackerID);
+  });
+
+
+  socket.on('defender gains curse', function(defenderID, attackerID) {
+    socket.broadcast.emit('defender gains curse', defenderID, attackerID);
+  });
+
+  socket.on('defender has moat', function(defenderID, attackerID) {
+    socket.broadcast.emit('moat negates attack', defenderID, attackerID);
   });
 
   socket.on('next player', function(log) {

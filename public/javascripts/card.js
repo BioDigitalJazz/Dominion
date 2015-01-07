@@ -85,7 +85,7 @@ DuchyCard.prototype.constructor = DuchyCard;
 
 
 function ProvinceCard() {
-  VictoryCard.call(this, 5, 'Province', 2, '/images/cards/province.jpg');
+  VictoryCard.call(this, 5, 'Province', 8, '/images/cards/province.jpg');
   this.victoryPoints = 6;
 };
 
