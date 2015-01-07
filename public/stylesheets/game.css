@@ -259,7 +259,7 @@ img#discard-pile {
 }
 
 img#discard-pile.moveToDeck {
-  left: -500%;
+  left: -240%;
 }
 
 /*#area-control-buttons {
