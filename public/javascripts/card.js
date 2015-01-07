@@ -176,7 +176,10 @@ AdventurerCard.prototype.specialAction = function(player) {
       if (treasures === 0)
         player.drawCard(1, 0, true);
       else
-        player.drawCard(1, 1200);
+        // proper code
+        // player.drawCard(1, 1200);
+        // for demo only
+        player.drawCard(1, 0);
       treasures++;
     } else {
       player.discardPile.push(player.deck.pop());
