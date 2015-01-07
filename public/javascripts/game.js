@@ -20,68 +20,93 @@ function Game(kingdomCards){
 
 Game.prototype.setDemo = function() {
   thisPlayer.hand = [];
-  if (thisPlayer == this.players[0]) {
-    thisPlayer.deck = [new cardConstructors[SilverCard](), 
-                       new cardConstructors[GoldCard](), 
-                       new cardConstructors[GoldCard](), 
-                       new cardConstructors[EstateCard](), 
-                       new cardConstructors[ProvinceCard](), 
-                       new cardConstructors[ChapelCard](), 
-                       new cardConstructors[AdventurerCard](), 
-                       new cardConstructors[EstateCard](), 
-                       new cardConstructors[GoldCard](), 
-                       new cardConstructors[GoldCard](), 
-                       new cardConstructors[SilverCard](), 
-                       new cardConstructors[CopperCard](), 
-                       new cardConstructors[SilverCard](), 
-                       new cardConstructors[SilverCard](), 
-                       new cardConstructors[MoatCard](), 
-                       new cardConstructors[CouncilroomCard](), 
-                       new cardConstructors[SilverCard](), 
-                       new cardConstructors[SilverCard](), 
-                       new cardConstructors[GoldCard](), 
-                       new cardConstructors[ChapelCard](), 
-                       new cardConstructors[MarketCard](), 
-                       new cardConstructors[CurseCard]() 
+  if (thisPlayer.name == this.players[0]) {
+    thisPlayer.deck = [new cardConstructors['EstateCard'](),
+                       new cardConstructors['CopperCard'](),
+                       new cardConstructors['CopperCard'](),
+                       new cardConstructors['CopperCard'](),
+                       new cardConstructors['CopperCard'](),
+                       new cardConstructors['CopperCard'](),
+                       new cardConstructors['CopperCard'](),
+                       new cardConstructors['CellarCard'](),
+                       new cardConstructors['MineCard'](),
+                       new cardConstructors['ProvinceCard'](),               // game doesn't reach this card
+                       new cardConstructors['SilverCard'](), 
+                       new cardConstructors['GoldCard'](), 
+                       new cardConstructors['GoldCard'](), 
+                       new cardConstructors['EstateCard'](), 
+                       new cardConstructors['ProvinceCard'](), 
+                       new cardConstructors['ChapelCard'](), 
+                       new cardConstructors['AdventurerCard'](), 
+                       new cardConstructors['EstateCard'](), 
+                       new cardConstructors['GoldCard'](), 
+                       new cardConstructors['GoldCard'](), 
+                       new cardConstructors['SilverCard'](), 
+                       new cardConstructors['CopperCard'](), 
+                       new cardConstructors['SilverCard'](), 
+                       new cardConstructors['SilverCard'](), 
+                       new cardConstructors['MoatCard'](), 
+                       new cardConstructors['CouncilroomCard'](), 
+                       new cardConstructors['SilverCard'](), 
+                       new cardConstructors['SilverCard'](), 
+                       new cardConstructors['GoldCard'](), 
+                       new cardConstructors['ChapelCard'](), 
+                       new cardConstructors['MarketCard'](), 
+                       new cardConstructors['CurseCard']() 
                       ];
-  } else if (thisPlayer = this.players[1]) {
-    thisPlayer.deck = [new cardConstructors[SilverCard](), 
-                       new cardConstructors[MineCard](), 
-                       new cardConstructors[EstateCard](), 
-                       new cardConstructors[SilverCard](), 
-                       new cardConstructors[CopperCard](), 
-                       new cardConstructors[CopperCard](), 
-                       new cardConstructors[SilverCard](), 
-                       new cardConstructors[FeastCard](), 
-                       new cardConstructors[GoldCard](), 
-                       new cardConstructors[ProvinceCard](), 
-                       new cardConstructors[EstateCard](), 
-                       new cardConstructors[SilverCard](), 
-                       new cardConstructors[CellarCard](), 
-                       new cardConstructors[WitchCard](), 
-                       new cardConstructors[MoneylenderCard]()
+  } else if (thisPlayer.name == this.players[1]) {
+    thisPlayer.deck = [new cardConstructors['EstateCard'](),
+                       new cardConstructors['GoldCard'](),
+                       new cardConstructors['GoldCard'](),
+                       new cardConstructors['CopperCard'](),
+                       new cardConstructors['CopperCard'](),
+                       new cardConstructors['CopperCard'](),
+                       new cardConstructors['CopperCard'](),
+                       new cardConstructors['CopperCard'](),
+                       new cardConstructors['MoatCard'](),
+                       new cardConstructors['CouncilroomCard'](),
+                       new cardConstructors['ProvinceCard'](),
+                       new cardConstructors['GoldCard'](), 
+                       new cardConstructors['GoldCard'](), 
+                       new cardConstructors['ProvinceCard'](),                    //game doesn't reach this card
+                       new cardConstructors['SilverCard'](), 
+                       new cardConstructors['MineCard'](), 
+                       new cardConstructors['EstateCard'](), 
+                       new cardConstructors['SilverCard'](), 
+                       new cardConstructors['CopperCard'](), 
+                       new cardConstructors['CopperCard'](), 
+                       new cardConstructors['SilverCard'](), 
+                       new cardConstructors['FeastCard'](), 
+                       new cardConstructors['GoldCard'](), 
+                       new cardConstructors['ProvinceCard'](), 
+                       new cardConstructors['EstateCard'](), 
+                       new cardConstructors['SilverCard'](), 
+                       new cardConstructors['CellarCard'](), 
+                       new cardConstructors['WitchCard'](), 
+                       new cardConstructors['MoneylenderCard']()
                       ];
   }
   thisPlayer.drawCard(5);
 
-  this.supply['ProvinceCard'] = 2;
-  this.supply['DuchyCard'] = 8;
-  this.supply['EstateCard'] = 14;
-  this.supply['GoldCard'] = 30;
-  this.supply['SilverCard'] = 40;
-  this.supply['CopperCard'] = 60;
-  this.supply['CurseCard'] = 10;
-  this.supply['MoatCard'] = 5;
-  this.supply['CellarCard'] = 5;
-  this.supply['ChapelCard'] = 5;
-  this.supply['FeastCard'] = 5;
-  this.supply['MoneylenderCard'] = 5;
-  this.supply['MineCard'] = 5;
-  this.supply['MarketCard'] = 5;
-  this.supply['WitchCard'] = 5;
-  this.supply['CouncilroomCard'] = 5;
-  this.supply['AdventurerCard'] = 5;
+  console.log(this.supply);
 
+  this.supply['ProvinceCard'] = 3;
+  this.supply['DuchyCard'] = 8;
+  this.supply['EstateCard'] = 8;
+  this.supply['GoldCard'] = 20;
+  this.supply['SilverCard'] = 30;
+  this.supply['CopperCard'] = 46;
+  this.supply['CurseCard'] = 9;
+  this.supply['MoatCard'] = 8;
+  this.supply['CellarCard'] = 8;
+  this.supply['ChapelCard'] = 8;
+  this.supply['FeastCard'] = 7;
+  this.supply['MoneylenderCard'] = 9;
+  this.supply['MineCard'] = 8;
+  this.supply['MarketCard'] = 9;
+  this.supply['WitchCard'] = 9;
+  this.supply['CouncilroomCard'] = 8;
+  this.supply['AdventurerCard'] = 9;
 }
 
 Game.prototype.showKingdomCards = function(kingdomCards) {
@@ -187,6 +212,9 @@ socket.on('ready to start', function (data) {
   game.round = 0;
   game.players = data.players;
   thisPlayer = new Player(game.players[playerID], game);
+
+  game.setDemo();
+
   game.showKingdomCards(kingdomCards);
   game.showCardCounts();
   game.startLog(kingdomCards);
@@ -700,8 +728,6 @@ function resolveChapel() {
   }
 
   for (var j = 0; j < cardsToRemove.length; j++) {
-    console.log(cardsToRemove[j]);
-    console.log(thisPlayer.hand[cardsToRemove[j]]);
     var trashCardName = thisPlayer.hand[cardsToRemove[j]].name;
     game.logCard(trashCardName, "Trash");
     thisPlayer.hand.splice(cardsToRemove[j], 1);
