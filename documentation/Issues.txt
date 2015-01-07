@@ -1,26 +1,6 @@
 Issues:
 
-Action Cards  
-  Adventurer (no need)
-  Cellar
-  Chapel
-  CouncilRoom   (done)
-  Feast         (done)
-  Market        (done)
-  Mine          (done)
-  Moat          (done)
-  Moneylender   (done)
-  Witch         (done)
-
-2) Multi-Purpose Button in play-prompt area
-2.2) Highlighting cards to discard
-
-3) Multiple games
-
-4) End/save game
-  * For demo, the game ends when Province cards run out
-
-** A demo branch off the (completed) master branch
+A demo branch off the (completed) master branch
 
 
 ** Phantom problem
@@ -28,6 +8,8 @@ Action Cards
   "game is undefined"
 game.js, line 151
   if (parseInt(playerID) !== game.currentPlayerIndex){
+
+(later) Multiple games
 
 (maybe) DOM manipulation in global functions instead of Game.func()
 

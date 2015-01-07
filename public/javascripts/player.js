@@ -102,7 +102,6 @@ Player.prototype.drawCard = function(num, waitTime, dontShowHand) {
   var theHand = this.hand;
   var theDiscardPile = this.discardPile;
   var theDeck = this.deck;
-  console.log("Drawing cards: " + num);
 
   for (var i = 1; i <= num; i++) {
     if (theDeck.length === 0) {
