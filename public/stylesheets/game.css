@@ -44,6 +44,12 @@ img.highlight-discard, img.highlight-trash {
   height: 100%;
 }
 
+div.container {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 15px;
+}
+
 div.supply-nonaction {
   position: relative;
   width: 90%;

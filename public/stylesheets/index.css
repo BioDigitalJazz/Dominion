@@ -18,7 +18,7 @@ body {
   width: 1200px;
   height: 700px;
   margin: 15px; 
-  background-color: rgba(159, 159, 159, 0.26);
+  /*background-color: rgba(159, 159, 159, 0.26);*/
 }
 
 @font-face {
