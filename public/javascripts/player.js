@@ -14,7 +14,8 @@ var Player = function (name, game) {
       this.gainCard('EstateCard');
     }
   };
-  this.drawCard(5);
+  // commenting this out for demo. game.setDemo calls drawCard
+  // this.drawCard(5);
 };
 
 Player.prototype.setState = function(state) {

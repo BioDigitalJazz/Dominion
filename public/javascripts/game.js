@@ -111,12 +111,16 @@ Game.prototype.setDemo = function() {
 
 Game.prototype.showKingdomCards = function(kingdomCards) {
   var kCardPiles = $('img.supply-kingdom');
+  var theGame = this;
 
   kingdomCards.forEach( function(card, index) {
     var kCard = kCardPiles.eq(index);
     var cardPath = getCardPath(card);
     kCard.attr('src', cardPath);
-    kCard.prev().text(10);
+    // proper code
+    // kCard.prev().text(10);
+    // for demo only
+    kCard.prev().text(theGame.supply[card]);
   });
 };
 
