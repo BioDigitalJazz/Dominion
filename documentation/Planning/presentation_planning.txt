@@ -1,0 +1,71 @@
+
+Player 1 >
+silver, gold, chapel, market, curse
+play market - gain silver
+play chapel - trash curse
+buy province
+
+Player 2 >
+estate, silver, cellar, witch, moneylender
+play cellar - discard moneylender, estate - gain gold, province
+play witch - gain silver, feast
+buy duchy
+
+Player 1 >
+copper, silver, silver, moat, councilroom
+play councilroom - gain estate, gold, gold, silver
+buy duchy, province
+
+Player 2 >
+mine, estate, silver, copper, copper, silver(additional from councilroom card)
+play mine - upgrade copper
+buy duchy
+
+Player 1 >
+gold, estate, province, chapel, adventurer
+play adventurer - gain silver, gold
+buy province
+
+
+Player 2 deck
+silver
+mine
+estate
+silver
+copper
+coper
+silver
+feast
+gold
+province
+estate
+silver
+celar
+witch
+moneylender
+
+
+Player 1 deck
+silver
+gold
+gold
+estate
+province
+chapel
+adventurer
+estate
+gold
+gold
+silver
+copper
+silver
+silver
+moat
+councilroom
+silver
+silver
+gold
+chapel
+market
+curse
+
