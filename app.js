@@ -150,6 +150,15 @@ io.on('connection', function (socket) {
       io.emit('end game announce winner', playersPoints, winners);
     };
   });
+
+  socket.on('game has ended', function() {
+    players = [];
+    whosReady = [];
+    playersPoints = [];
+    winners = [];
+    messages = [];
+    socket.close();
+  });
 });
 
 // === Ting ===

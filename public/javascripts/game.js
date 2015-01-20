@@ -374,6 +374,7 @@ socket.on('end game announce winner', function(playersPoints, winners) {
   };
   $('#area-play-center').find('button').remove();
   game.addLog("End Game", msg);
+  socket.emit('game has ended');   
 });
 
 
