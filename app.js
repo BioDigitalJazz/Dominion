@@ -94,6 +94,7 @@ io.on('connection', function (socket) {
   socket.on('game created ready to play', function (playerID) {
     whosReady.push(playerID);
     if (players.length == whosReady.length) {
+      players = [];
       io.emit('player turn');
     }
   });

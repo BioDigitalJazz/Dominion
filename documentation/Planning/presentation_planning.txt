@@ -27,24 +27,6 @@ play adventurer - gain silver, gold
 buy province
 
 
-Player 2 deck
-silver
-mine
-estate
-silver
-copper
-coper
-silver
-feast
-gold
-province
-estate
-silver
-celar
-witch
-moneylender
-
-
 Player 1 deck
 silver
 gold
@@ -68,4 +50,22 @@ gold
 chapel
 market
 curse
+
+
+Player 2 deck
+silver
+mine
+estate
+silver
+copper
+coper
+silver
+feast
+gold
+province
+estate
+silver
+celar
+witch
+moneylender
 
