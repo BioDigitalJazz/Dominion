@@ -20,77 +20,31 @@ function Game(kingdomCards){
 
 Game.prototype.setDemo = function() {
   thisPlayer.hand = [];
+  thisPlayer.discardPile = [];
   if (thisPlayer.name == this.players[0]) {
-    thisPlayer.deck = [new cardConstructors['EstateCard'](),
-                       new cardConstructors['CopperCard'](),
-                       new cardConstructors['CopperCard'](),
-                       new cardConstructors['CopperCard'](),
-                       new cardConstructors['CopperCard'](),
-                       new cardConstructors['CopperCard'](),
-                       new cardConstructors['CopperCard'](),
-                       new cardConstructors['CellarCard'](),
-                       new cardConstructors['MineCard'](),
-                       new cardConstructors['ProvinceCard'](),               // game doesn't reach this card
-                       new cardConstructors['SilverCard'](), 
-                       new cardConstructors['GoldCard'](), 
-                       new cardConstructors['GoldCard'](), 
-                       new cardConstructors['EstateCard'](), 
-                       new cardConstructors['ProvinceCard'](), 
-                       new cardConstructors['ChapelCard'](), 
-                       new cardConstructors['AdventurerCard'](), 
-                       new cardConstructors['EstateCard'](), 
-                       new cardConstructors['GoldCard'](), 
-                       new cardConstructors['GoldCard'](), 
-                       new cardConstructors['SilverCard'](), 
-                       new cardConstructors['CopperCard'](), 
-                       new cardConstructors['SilverCard'](), 
-                       new cardConstructors['SilverCard'](), 
-                       new cardConstructors['MoatCard'](), 
-                       new cardConstructors['CouncilroomCard'](), 
-                       new cardConstructors['SilverCard'](), 
-                       new cardConstructors['SilverCard'](), 
-                       new cardConstructors['GoldCard'](), 
-                       new cardConstructors['ChapelCard'](), 
-                       new cardConstructors['MarketCard'](), 
-                       new cardConstructors['CurseCard']() 
+    thisPlayer.deck = [new cardConstructors['GoldCard'](),
+                       new cardConstructors['GoldCard'](),
+                       new cardConstructors['GoldCard'](),
+                       new cardConstructors['GoldCard'](),
+                       new cardConstructors['GoldCard'](),
+                       new cardConstructors['GoldCard'](),
+                       new cardConstructors['GoldCard']()
                       ];
   } else if (thisPlayer.name == this.players[1]) {
-    thisPlayer.deck = [new cardConstructors['EstateCard'](),
+    thisPlayer.deck = [new cardConstructors['GoldCard'](),
                        new cardConstructors['GoldCard'](),
                        new cardConstructors['GoldCard'](),
-                       new cardConstructors['CopperCard'](),
-                       new cardConstructors['CopperCard'](),
-                       new cardConstructors['CopperCard'](),
-                       new cardConstructors['CopperCard'](),
-                       new cardConstructors['CopperCard'](),
-                       new cardConstructors['MoatCard'](),
-                       new cardConstructors['CouncilroomCard'](),
-                       new cardConstructors['ProvinceCard'](),
-                       new cardConstructors['GoldCard'](), 
-                       new cardConstructors['GoldCard'](), 
-                       new cardConstructors['ProvinceCard'](),                    //game doesn't reach this card
-                       new cardConstructors['SilverCard'](), 
-                       new cardConstructors['MineCard'](), 
-                       new cardConstructors['EstateCard'](), 
-                       new cardConstructors['SilverCard'](), 
-                       new cardConstructors['CopperCard'](), 
-                       new cardConstructors['CopperCard'](), 
-                       new cardConstructors['SilverCard'](), 
-                       new cardConstructors['FeastCard'](), 
-                       new cardConstructors['GoldCard'](), 
-                       new cardConstructors['ProvinceCard'](), 
-                       new cardConstructors['EstateCard'](), 
-                       new cardConstructors['SilverCard'](), 
-                       new cardConstructors['CellarCard'](), 
-                       new cardConstructors['WitchCard'](), 
-                       new cardConstructors['MoneylenderCard']()
+                       new cardConstructors['GoldCard'](),
+                       new cardConstructors['GoldCard'](),
+                       new cardConstructors['GoldCard'](),
+                       new cardConstructors['GoldCard']()
                       ];
   }
   thisPlayer.drawCard(5);
 
   console.log(this.supply);
 
-  this.supply['ProvinceCard'] = 3;
+  this.supply['ProvinceCard'] = 1;
   this.supply['DuchyCard'] = 8;
   this.supply['EstateCard'] = 8;
   this.supply['GoldCard'] = 20;
@@ -399,8 +353,9 @@ socket.on('update DB gain', function(supplyName) {
 
 var endTurn = function() {
   if (playerID === game.currentPlayerIndex) {
-    if (game.checkEndGame())
+    if (game.checkEndGame()) {
       return;
+    }
     adviseServerNextPlayer();
     game.logContent = "";
   };
@@ -447,6 +402,7 @@ Game.prototype.checkEndGame = function(endNow){
 };
 
 var adviseServerEndGame = function() {
+  console.log("game ending");
   socket.emit('end game', { logTitle: game.logTitle, logContent: game.logContent });
 };
 
@@ -455,7 +411,14 @@ socket.on('end game calculate victory points', function(log) {
   game.cleanUp(true);
   thisPlayer.cleanUpPhase(true);
   socket.emit('victory points', playerID, thisPlayer.calcVictoryPoints());
+  console.log("calculating victory points?");
 });
+
+socket.on('game cancelled', function() {
+  game.displayMessage("A player has left the game.  Game cancelled.");
+  thisPlayer.setState("cancelled");
+  socket.emit('game has ended');
+})
 
 socket.on('end game announce winner', function(playersPoints, winners) {
   var msg = playersPoints.reduce( function(prevMsg, points, index) {

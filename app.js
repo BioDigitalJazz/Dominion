@@ -94,7 +94,6 @@ io.on('connection', function (socket) {
   socket.on('game created ready to play', function (playerID) {
     whosReady.push(playerID);
     if (players.length == whosReady.length) {
-      players = [];
       io.emit('player turn');
     }
   });
@@ -138,8 +137,12 @@ io.on('connection', function (socket) {
   });
 
   socket.on('victory points', function(playerID, vicPoints) {
+    console.log("calculating victory points");
     playersPoints[playerID] = vicPoints;
     var hasPoints = playersPoints.filter(function(value) { return value !== undefined; });
+
+    console.log(hasPoints.length);
+    console.log(players.length);
 
     if (hasPoints.length === players.length) {
       var highestPoints = Math.max.apply(null, playersPoints);
@@ -153,12 +156,23 @@ io.on('connection', function (socket) {
   });
 
   socket.on('game has ended', function() {
+    console.log("clearing player info");
     players = [];
     whosReady = [];
     playersPoints = [];
     winners = [];
     messages = [];
-    socket.close();
+    socket.disconnect(true);
+  });
+
+  socket.on('disconnect', function(endedProperly) {
+    console.log("disconnecting...")
+    if (this.handshake.headers.referer == "http://" + this.handshake.headers.host + "/") {
+      console.log("Just from the login")
+    } else if (endedProperly != true) {
+      console.log("because game was cancelled");
+      io.emit('game cancelled');
+    }
   });
 });
 
