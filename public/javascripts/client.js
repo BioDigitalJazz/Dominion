@@ -8,25 +8,33 @@ var objStore = 'game';
 
 var pInputs = $('.joined-players');
 var btnStart = $('#btn-start-game');
+var btnClicked;
 btnStart.hide();
 
 $('#btn-join-game').on('click', function() {
   var input = $(this).prev();
+  btnClicked = $(this);
   myPlayerName = input.val();
-  socket.emit('player joins', myPlayerName);
+  socket.emit('player joins', myPlayerName);+
   input.prop('disabled', true);
   $(this).hide();
 });
 
 socket.on('player joined', function (data) {
-  players = data.curPlayers;
-  myPlayerID = players.indexOf(myPlayerName);
-  sessionStorage.playerID = myPlayerID;
+  if (data.gameInProgress) {
+    window.alert("There is a game in progress.  Please try again later.");
+    $(btnClicked).show();
+    $(btnClicked).prev().prop('disabled', false);
+  } else {
+    players = data.curPlayers;
+    myPlayerID = players.indexOf(myPlayerName);
+    sessionStorage.playerID = myPlayerID;
 
-  players.forEach( function (player, index) {
-    pInputs.eq(index).val(player);
-  });
-  if (players.length >= 2) { btnStart.show(); }
+    players.forEach( function (player, index) {
+      pInputs.eq(index).val(player);
+    });
+    if (players.length >= 2) { btnStart.show(); }
+  }
 });
 
 

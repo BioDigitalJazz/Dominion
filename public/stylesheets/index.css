@@ -12,6 +12,7 @@ body {
   margin: auto;*/
   /*border: 1px solid black;*/
   font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
+  text-shadow: 0 0 2px #fff;
 }
 
 .container {

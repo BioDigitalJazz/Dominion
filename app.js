@@ -73,6 +73,9 @@ var whosReady = [];
 var playersPoints = [];
 var winners = [];
 var messages = [];
+var gameHasEnded = false;
+var gameIsStarting = false;
+var gameInProgress = false;
 
 var randomCards = ['MoatCard', 'CellarCard', 'ChapelCard', 'FeastCard', 'MoneylenderCard', 
                    'MineCard', 'MarketCard', 'WitchCard',  'CouncilroomCard', 'AdventurerCard'];
@@ -82,19 +85,23 @@ io.on('connection', function (socket) {
   console.log('New connection!');
 
   socket.on('player joins', function (playerName) {
+    gameHasEnded = false;
     players.push(playerName);
-    io.emit('player joined', { curPlayers: players });
+    io.emit('player joined', { curPlayers: players, gameInProgress: gameInProgress });
   });
 
   socket.on('start game', function () {
     console.log('Game starts');
+    gameIsStarting = true;
     io.emit('game starts');
+    gameInProgress = true;
   });
 
   socket.on('game created ready to play', function (playerID) {
     whosReady.push(playerID);
     if (players.length == whosReady.length) {
       io.emit('player turn');
+      gameIsStarting = false;
     }
   });
 
@@ -137,12 +144,8 @@ io.on('connection', function (socket) {
   });
 
   socket.on('victory points', function(playerID, vicPoints) {
-    console.log("calculating victory points");
     playersPoints[playerID] = vicPoints;
     var hasPoints = playersPoints.filter(function(value) { return value !== undefined; });
-
-    console.log(hasPoints.length);
-    console.log(players.length);
 
     if (hasPoints.length === players.length) {
       var highestPoints = Math.max.apply(null, playersPoints);
@@ -155,22 +158,32 @@ io.on('connection', function (socket) {
     };
   });
 
-  socket.on('game has ended', function() {
-    console.log("clearing player info");
+  var clearArrays = function() {
     players = [];
     whosReady = [];
     playersPoints = [];
     winners = [];
     messages = [];
-    socket.disconnect(true);
+    gameInProgress = false;
+  };
+
+  socket.on('game has ended', function() {
+    // console.log("clearing player info");
+    clearArrays();
+    gameHasEnded = true;
+    socket.disconnect();
   });
 
-  socket.on('disconnect', function(endedProperly) {
-    console.log("disconnecting...")
+  socket.on('disconnect', function() {
+    // console.log("disconnecting...")
     if (this.handshake.headers.referer == "http://" + this.handshake.headers.host + "/") {
-      console.log("Just from the login")
-    } else if (endedProperly != true) {
-      console.log("because game was cancelled");
+      // console.log("Just from the login")
+      if (!gameIsStarting  && !gameInProgress) {
+        clearArrays();
+      }
+    } else if (!gameHasEnded) {
+      // console.log("because game was cancelled");
+      clearArrays();
       io.emit('game cancelled');
     }
   });

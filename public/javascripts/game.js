@@ -18,7 +18,7 @@ function Game(kingdomCards){
   });
 };
 
-Game.prototype.setDemo = function() {
+Game.prototype.setDemo = function() {        // setDemo is used for testing and demonstr
   thisPlayer.hand = [];
   thisPlayer.discardPile = [];
   if (thisPlayer.name == this.players[0]) {
@@ -171,7 +171,9 @@ socket.on('ready to start', function (data) {
   game.players = data.players;
   thisPlayer = new Player(game.players[playerID], game);
 
-  game.setDemo();
+  thisPlayer.drawCard(5);
+
+  // game.setDemo();              //setDemo is used for testing and demonstration purposes
 
   game.showKingdomCards(kingdomCards);
   game.showCardCounts();
